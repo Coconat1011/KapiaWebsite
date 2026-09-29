@@ -217,21 +217,6 @@
       }
 
       /* Admin login centered with max-width on mobile */
-      #admin-login > div {
-        max-width: calc(100vw - 32px) !important;
-        padding: 24px !important;
-      }
-
-      /* Admin dashboard — allow scrolling */
-      #admin-dashboard { overflow-y: auto; -webkit-overflow-scrolling: touch; }
-
-      /* Product form — full width */
-      #product-form-modal > div {
-        margin: 16px auto !important;
-        max-width: calc(100vw - 32px) !important;
-        padding: 20px !important;
-      }
-
       /* Payment page — single column */
       #payment-page > div { padding: 16px 12px 80px !important; }
 
@@ -340,7 +325,7 @@
 
     /* ─── Print styles ─── */
     @media print {
-      #order-panel-fixed, .category-tab, button[onclick*="openAdminLogin"],
+      #order-panel-fixed, .category-tab,
       #payment-page .add-to-order-btn, #payment-page button:not(#pay-confirm-btn) {
         display: none !important;
       }
@@ -359,10 +344,7 @@
       <span class="text-orange-400 font-semibold tracking-widest text-sm uppercase mb-2">Welcome to</span>
       <h1 data-template-id="restaurant-name" class="canva-text font-display" style="color: rgb(255, 255, 255); font-weight: 700; font-style: normal; font-size: clamp(2.5rem, 7vw, 5.5rem); line-height: 1.15; margin-bottom: 0.5rem;">Kapia Farm Cafe</h1>
       <p class="text-gray-200 max-w-xl text-base sm:text-lg mb-6">Premium agricultural fertilizers, high-performance feeds, and delicious farm-to-table food and beverages.</p>
-      <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
-        <button data-template-id="order-now-btn" class="canva-button" style="background: rgb(255, 148, 62); color: rgb(0, 0, 0); border: 2px solid rgb(0, 0, 0); border-radius: 9999px; padding: 0.75rem 2.25rem; font-weight: 700; font-size: 18px; font-style: normal; cursor: pointer;" onclick="applyBounce(this); scrollToCategories();">Order Now</button>
-        <a href="./admin.html" style="display:inline-flex;align-items:center;background:#fff;color:#111;border:2px solid #fff;border-radius:9999px;padding:0.75rem 2.25rem;font-weight:700;font-size:18px;text-decoration:none;">Admin Login</a>
-      </div>
+      <button data-template-id="order-now-btn" class="canva-button" style="background: rgb(255, 148, 62); color: rgb(0, 0, 0); border: 2px solid rgb(0, 0, 0); border-radius: 9999px; padding: 0.75rem 2.25rem; font-weight: 700; font-size: 18px; font-style: normal; cursor: pointer;" onclick="applyBounce(this); scrollToCategories();">Order Now</button>
     </div>
 
     <!-- Customer Details Modal -->
@@ -514,113 +496,6 @@
       </button>
     </div>
   </template>
-
-  <!-- Admin Login Modal -->
-  <div id="admin-login" style="display:none;position:fixed;inset:0;z-index:220;background:rgba(0,0,0,.75);padding:20px;align-items:center;justify-content:center;">
-    <div style="width:100%;max-width:400px;background:#fff;padding:30px;border-radius:18px;box-shadow:0 20px 70px rgba(0,0,0,.35);">
-      <div style="text-align:center">
-        <div style="font-size:42px;margin-bottom:4px;">🔐</div>
-        <h2 style="font-size:26px;font-weight:700;margin:4px 0">Admin Login</h2>
-        <p style="color:#666;font-size:14px;margin:0;">Kapia Farm Cafe Management</p>
-      </div>
-      <label style="font-weight:700;display:block;margin:16px 0 6px;font-size:14px;">Password</label>
-      <input id="admin-password" type="password" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')adminLogin()" style="width:100%;box-sizing:border-box;padding:12px;border:1px solid #ccc;border-radius:10px;font-size:15px;">
-      <p id="admin-login-error" style="display:none;color:#c62828;margin:8px 0 0;font-size:13px;font-weight:600;">Incorrect password. Please try again.</p>
-      <div style="display:flex;gap:10px;margin-top:20px">
-        <button onclick="closeAdminLogin()" style="flex:1;padding:12px;border:2px solid #111;border-radius:10px;background:#fff;font-weight:700;cursor:pointer;">Cancel</button>
-        <button onclick="adminLogin()" style="flex:1;padding:12px;border:2px solid #111;border-radius:10px;background:#ff943e;font-weight:700;cursor:pointer;">Login</button>
-      </div>
-      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Default password: <b>password</b></p>
-    </div>
-  </div>
-
-  <!-- Admin Dashboard Modal -->
-  <div id="admin-dashboard" style="display:none;position:fixed;inset:0;z-index:215;background:#f7f6f3;overflow-y:auto;-webkit-overflow-scrolling:touch;">
-    <div style="max-width:1200px;margin:auto;padding:16px;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;border-bottom:2px solid #111;padding-bottom:16px;padding-top:8px;">
-        <div>
-          <small style="font-weight:700;color:#777;letter-spacing:1px;text-transform:uppercase;">Kapia Farm Cafe</small>
-          <h2 style="font-size:clamp(20px,5vw,28px);font-weight:700;margin:3px 0;">Admin Dashboard</h2>
-          <p style="margin:0;color:#666;font-size:13px;">Manage products, prices, and view customer orders.</p>
-        </div>
-        <div style="display:flex;gap:8px;flex-shrink:0;">
-          <button onclick="adminLogout()" style="padding:11px 14px;border:2px solid #111;border-radius:10px;background:#fff;font-weight:700;cursor:pointer;min-height:44px;font-size:14px;">Logout</button>
-          <button onclick="closeAdminDashboard()" style="padding:11px 14px;border:2px solid #111;border-radius:10px;background:#ff943e;font-weight:700;cursor:pointer;min-height:44px;font-size:14px;">← Store</button>
-        </div>
-      </div>
-      <div style="display:flex;gap:10px;margin:16px 0;flex-wrap:wrap;">
-        <button id="admin-tab-products" onclick="showAdminTab('products')" style="padding:10px 20px;border:2px solid #111;border-radius:999px;background:#ff943e;font-weight:700;cursor:pointer;min-height:44px;">Products</button>
-        <button id="admin-tab-orders" onclick="showAdminTab('orders')" style="padding:10px 20px;border:2px solid #111;border-radius:999px;background:#fff;font-weight:700;cursor:pointer;min-height:44px;">Orders (<span id="admin-order-count">0</span>)</button>
-      </div>
-
-      <!-- Admin Products Tab -->
-      <section id="admin-products-panel">
-        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:16px;">
-          <div>
-            <h3 style="font-size:18px;font-weight:700;margin:0;">Store Products</h3>
-            <p style="color:#666;margin:4px 0 0;font-size:13px;">Add new items, update pictures, edit prices or remove products.</p>
-          </div>
-          <button onclick="openProductForm()" style="padding:11px 16px;border:2px solid #111;border-radius:10px;background:#ff943e;font-weight:700;cursor:pointer;min-height:44px;white-space:nowrap;">＋ Add Product</button>
-        </div>
-        <div id="admin-products-list" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;"></div>
-      </section>
-
-      <!-- Admin Orders Tab -->
-      <section id="admin-orders-panel" style="display:none;">
-        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:16px;">
-          <div>
-            <h3 style="font-size:18px;font-weight:700;margin:0;">Customer Orders</h3>
-            <p style="color:#666;margin:4px 0 0;font-size:13px;">Live customer orders stored in this system.</p>
-          </div>
-          <button onclick="clearAllOrders()" style="padding:10px 14px;border:2px solid #b91c1c;border-radius:10px;background:#fff;color:#b91c1c;font-weight:700;cursor:pointer;min-height:44px;white-space:nowrap;">Clear All Orders</button>
-        </div>
-        <div id="admin-orders-list"></div>
-      </section>
-    </div>
-  </div>
-
-  <!-- Product Add / Edit Modal -->
-  <div id="product-form-modal" style="display:none;position:fixed;inset:0;z-index:230;background:rgba(0,0,0,.75);padding:16px;overflow-y:auto;-webkit-overflow-scrolling:touch;">
-    <div style="max-width:580px;margin:20px auto 40px;background:#fff;padding:24px;border-radius:18px;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
-        <h3 id="product-form-title" style="font-size:20px;font-weight:700;margin:0;">Add Product</h3>
-        <button onclick="closeProductForm()" style="background:none;border:none;font-size:28px;cursor:pointer;color:#666;line-height:1;padding:4px 8px;min-height:44px;min-width:44px;display:flex;align-items:center;justify-content:center;">&times;</button>
-      </div>
-      <input id="product-edit-id" type="hidden">
-      
-      <label style="font-weight:700;display:block;margin:14px 0 6px;font-size:14px;">Product Name</label>
-      <input id="product-name-input" placeholder="e.g. Complete Fertilizer 14-14-14" style="width:100%;box-sizing:border-box;padding:11px;border:1px solid #ccc;border-radius:10px;font-size:14px;">
-      
-      <label style="font-weight:700;display:block;margin:14px 0 6px;font-size:14px;">Category</label>
-      <select id="product-category-input" style="width:100%;padding:11px;border:1px solid #ccc;border-radius:10px;background:#fff;font-size:14px;">
-        <option value="fertilizer">Fertilizer</option>
-        <option value="feeds">Feeds</option>
-        <option value="foods_drinks">Foods &amp; Drinks</option>
-      </select>
-      
-      <label style="font-weight:700;display:block;margin:14px 0 6px;font-size:14px;">Price (₱)</label>
-      <input id="product-price-input" type="number" min="0" step="any" placeholder="e.g. 850" style="width:100%;box-sizing:border-box;padding:11px;border:1px solid #ccc;border-radius:10px;font-size:14px;">
-      
-      <label style="font-weight:700;display:block;margin:14px 0 6px;font-size:14px;">Description</label>
-      <textarea id="product-desc-input" rows="3" placeholder="Brief description of the product..." style="width:100%;box-sizing:border-box;padding:11px;border:1px solid #ccc;border-radius:10px;font-size:14px;"></textarea>
-      
-      <label style="font-weight:700;display:block;margin:14px 0 6px;font-size:14px;">Image URL</label>
-      <input id="product-image-url-input" placeholder="Paste an image URL" oninput="handleImageUrlInput(this.value)" style="width:100%;box-sizing:border-box;padding:11px;border:1px solid #ccc;border-radius:10px;font-size:14px;">
-      
-      <div style="font-size:12px;color:#666;margin:10px 0 4px;font-weight:600;">Or upload an image file:</div>
-      <input id="product-image-input" type="file" accept="image/*" style="width:100%;padding:8px;border:1px solid #ccc;border-radius:10px;font-size:13px;">
-      
-      <div id="product-image-container" style="margin-top:10px;display:none;">
-        <img id="product-image-preview" style="width:100%;height:180px;object-fit:cover;border-radius:10px;border:1px solid #ddd;">
-        <button type="button" onclick="clearProductImage()" style="margin-top:8px;padding:6px 12px;border:1px solid #ddd;border-radius:6px;background:#f9f9f9;font-size:12px;cursor:pointer;">Remove Picture</button>
-      </div>
-
-      <div style="display:flex;gap:10px;margin-top:22px">
-        <button onclick="closeProductForm()" style="flex:1;padding:12px;border:2px solid #111;border-radius:10px;background:#fff;font-weight:700;cursor:pointer;">Cancel</button>
-        <button onclick="saveProductFromForm()" style="flex:1;padding:12px;border:2px solid #111;border-radius:10px;background:#ff943e;font-weight:700;cursor:pointer;">Save Product</button>
-      </div>
-    </div>
-  </div>
 
   <!-- Payment Page Screen (Full Page Checkout & Receipt View) -->
   <div id="payment-page" style="display:none;position:fixed;inset:0;z-index:250;background:#f7f6f3;overflow-y:auto;">
@@ -907,203 +782,6 @@
       });
     }
 
-    function saveProducts(productsList) {
-      try {
-        localStorage.setItem('kapia-products', JSON.stringify(productsList));
-      } catch (err) {
-        alert('Browser storage is full! Please upload smaller images or delete unused products.');
-        return;
-      }
-      syncMenuFromProducts(productsList);
-      renderMenuGrid();
-    }
-
-    // Admin authentication & panels
-    const ADMIN_PASSWORD = 'password';
-    let adminLoggedIn = sessionStorage.getItem('kapia-admin') === 'true';
-    let editingImageData = '';
-
-    function openAdminLogin() {
-      if (adminLoggedIn) return openAdminDashboard();
-      document.getElementById('admin-login').style.display = 'flex';
-      setTimeout(() => document.getElementById('admin-password').focus(), 60);
-    }
-
-    function closeAdminLogin() {
-      document.getElementById('admin-login').style.display = 'none';
-      document.getElementById('admin-password').value = '';
-      document.getElementById('admin-login-error').style.display = 'none';
-    }
-
-    function adminLogin() {
-      const val = document.getElementById('admin-password').value;
-      if (val === ADMIN_PASSWORD) {
-        adminLoggedIn = true;
-        sessionStorage.setItem('kapia-admin', 'true');
-        closeAdminLogin();
-        openAdminDashboard();
-      } else {
-        document.getElementById('admin-login-error').style.display = 'block';
-      }
-    }
-
-    function adminLogout() {
-      adminLoggedIn = false;
-      sessionStorage.removeItem('kapia-admin');
-      closeAdminDashboard();
-    }
-
-    function openAdminDashboard() {
-      if (!adminLoggedIn) return openAdminLogin();
-      document.getElementById('admin-dashboard').style.display = 'block';
-      showAdminTab('products');
-      updateOrderCount();
-    }
-
-    function closeAdminDashboard() {
-      document.getElementById('admin-dashboard').style.display = 'none';
-    }
-
-    function showAdminTab(tab) {
-      document.getElementById('admin-products-panel').style.display = tab === 'products' ? 'block' : 'none';
-      document.getElementById('admin-orders-panel').style.display = tab === 'orders' ? 'block' : 'none';
-      document.getElementById('admin-tab-products').style.background = tab === 'products' ? '#ff943e' : '#fff';
-      document.getElementById('admin-tab-orders').style.background = tab === 'orders' ? '#ff943e' : '#fff';
-      if (tab === 'products') renderAdminProducts();
-      else renderAdminOrders();
-      updateOrderCount();
-    }
-
-    function renderAdminProducts() {
-      const list = document.getElementById('admin-products-list');
-      list.innerHTML = '';
-      const products = getProducts();
-      if (!products.length) {
-        list.innerHTML = '<div style="background:#fff;padding:30px;border-radius:14px;text-align:center;color:#777;grid-column:1/-1;">No products found. Click "＋ Add Product" to add one.</div>';
-        return;
-      }
-      products.forEach(p => {
-        const card = document.createElement('div');
-        card.style.cssText = 'background:#fff;border:1px solid #ddd;border-radius:14px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 2px 5px rgba(0,0,0,0.03);';
-        const catLabel = p.category === 'fertilizer' ? 'Fertilizer' : p.category === 'feeds' ? 'Feeds' : 'Foods & Drinks';
-        const imgHtml = p.image
-          ? `<img loading="lazy" decoding="async" fetchpriority="low" src="${esc(getProductImageUrl(p.image))}" onerror="this.onerror=null;this.src='${DEFAULT_PLACEHOLDER_IMAGE}'" style="width:100%;height:170px;object-fit:cover;display:block;">`
-          : `<div style="height:170px;background:#f3f4f6;display:flex;align-items:center;justify-content:center;font-size:38px;color:#9ca3af;">📷</div>`;
-        
-        card.innerHTML = `
-          ${imgHtml}
-          <div style="padding:15px;display:flex;flex-direction:column;flex:1;">
-            <small style="font-weight:700;color:#777;text-transform:uppercase;letter-spacing:0.5px;">${esc(catLabel)}</small>
-            <h4 style="font-size:18px;font-weight:700;margin:4px 0 6px;">${esc(p.name)}</h4>
-            <div style="font-size:17px;font-weight:700;color:#ff6105;margin-bottom:6px;">${CURRENCY}${Number(p.price || 0).toFixed(2)}</div>
-            <p style="color:#666;font-size:13px;line-height:1.4;margin:0 0 14px;flex:1;">${esc(p.desc || '')}</p>
-            <div style="display:flex;gap:8px;margin-top:auto;">
-              <button onclick="openProductForm('${p.id}')" style="flex:1;padding:8px 12px;border:2px solid #111;border-radius:8px;background:#ff943e;font-weight:700;cursor:pointer;">Edit</button>
-              <button onclick="deleteProduct('${p.id}')" style="flex:1;padding:8px 12px;border:2px solid #b91c1c;border-radius:8px;background:#fff;color:#b91c1c;font-weight:700;cursor:pointer;">Delete</button>
-            </div>
-          </div>
-        `;
-        list.appendChild(card);
-      });
-    }
-
-    function openProductForm(id = '') {
-      if (!adminLoggedIn) return openAdminLogin();
-      const products = getProducts();
-      const p = products.find(x => x.id === id);
-      document.getElementById('product-form-modal').style.display = 'block';
-      document.getElementById('product-form-title').textContent = id ? 'Edit Product' : 'Add Product';
-      document.getElementById('product-edit-id').value = id;
-      document.getElementById('product-name-input').value = p ? p.name : '';
-      document.getElementById('product-category-input').value = p ? p.category : 'fertilizer';
-      document.getElementById('product-price-input').value = p ? p.price : '';
-      document.getElementById('product-desc-input').value = p ? (p.desc || '') : '';
-      
-      editingImageData = p ? (p.image || '') : '';
-      const urlInput = document.getElementById('product-image-url-input');
-      if (urlInput) urlInput.value = editingImageData;
-
-      const preview = document.getElementById('product-image-preview');
-      const container = document.getElementById('product-image-container');
-      if (editingImageData) {
-        preview.src = getProductImageUrl(editingImageData);
-        container.style.display = 'block';
-      } else {
-        preview.src = '';
-        container.style.display = 'none';
-      }
-      document.getElementById('product-image-input').value = '';
-    }
-
-    function handleImageUrlInput(url) {
-      const trimmed = url.trim();
-      editingImageData = trimmed;
-      const preview = document.getElementById('product-image-preview');
-      const container = document.getElementById('product-image-container');
-      if (trimmed) {
-        preview.src = getProductImageUrl(trimmed);
-        container.style.display = 'block';
-      } else {
-        preview.src = '';
-        container.style.display = 'none';
-      }
-    }
-
-    function clearProductImage() {
-      editingImageData = '';
-      document.getElementById('product-image-preview').src = '';
-      document.getElementById('product-image-container').style.display = 'none';
-      document.getElementById('product-image-input').value = '';
-      const urlInput = document.getElementById('product-image-url-input');
-      if (urlInput) urlInput.value = '';
-    }
-
-    function closeProductForm() {
-      document.getElementById('product-form-modal').style.display = 'none';
-    }
-
-    function saveProductFromForm() {
-      const name = document.getElementById('product-name-input').value.trim();
-      const category = document.getElementById('product-category-input').value;
-      const price = Number(document.getElementById('product-price-input').value);
-      const desc = document.getElementById('product-desc-input').value.trim();
-      const id = document.getElementById('product-edit-id').value;
-
-      if (!name) return alert('Please enter a product name.');
-      if (!Number.isFinite(price) || price < 0) return alert('Please enter a valid price (₱).');
-
-      const products = getProducts();
-      const existing = products.find(x => x.id === id);
-      if (existing) {
-        existing.name = name;
-        existing.category = category;
-        existing.price = price;
-        existing.desc = desc;
-        if (editingImageData !== undefined) {
-          existing.image = editingImageData;
-        }
-      } else {
-        products.push({
-          id: 'custom-' + Date.now(),
-          category: category,
-          name: name,
-          price: price,
-          desc: desc,
-          image: editingImageData || ''
-        });
-      }
-      saveProducts(products);
-      closeProductForm();
-      renderAdminProducts();
-    }
-
-    function deleteProduct(id) {
-      if (!confirm('Are you sure you want to delete this product?')) return;
-      const products = getProducts().filter(x => x.id !== id);
-      saveProducts(products);
-      renderAdminProducts();
-    }
-
     // Orders management
     function getOrders() {
       try {
@@ -1111,88 +789,6 @@
       } catch (e) {
         return [];
       }
-    }
-
-    function updateOrderCount() {
-      const count = getOrders().length;
-      const el = document.getElementById('admin-order-count');
-      if (el) el.textContent = count;
-    }
-
-    function toggleOrderStatus(orderId) {
-      const orders = getOrders();
-      const order = orders.find(o => o.id === orderId);
-      if (order) {
-        order.status = order.status === 'Completed' ? 'Pending' : 'Completed';
-        localStorage.setItem('kapia-orders', JSON.stringify(orders));
-        renderAdminOrders();
-      }
-    }
-
-    function deleteSingleOrder(orderId) {
-      if (!confirm('Delete this order record?')) return;
-      const orders = getOrders().filter(o => o.id !== orderId);
-      localStorage.setItem('kapia-orders', JSON.stringify(orders));
-      renderAdminOrders();
-      updateOrderCount();
-    }
-
-    function clearAllOrders() {
-      if (!confirm('Delete all customer orders saved in this browser?')) return;
-      localStorage.removeItem('kapia-orders');
-      renderAdminOrders();
-      updateOrderCount();
-    }
-
-    function renderAdminOrders() {
-      const orders = getOrders();
-      const list = document.getElementById('admin-orders-list');
-      if (!orders.length) {
-        list.innerHTML = '<div style="background:#fff;padding:40px;border-radius:14px;text-align:center;color:#777;">No customer orders yet.</div>';
-        return;
-      }
-      list.innerHTML = orders.map((o, idx) => {
-        const isCompleted = o.status === 'Completed';
-        const isPaid = o.status === 'Paid - Verified';
-        const isCod = o.status === 'Awaiting COD / Pickup';
-        const statusBg = isPaid ? '#dcfce7' : isCompleted ? '#ecfdf5' : isCod ? '#eff6ff' : '#fffbeb';
-        const statusColor = isPaid ? '#15803d' : isCompleted ? '#065f46' : isCod ? '#1d4ed8' : '#92400e';
-        const statusText = o.status || 'Awaiting Payment';
-        const itemsHtml = (o.items || []).map(item => {
-          const addons = item.addons && item.addons.length ? `<span style="color:#666;font-size:12px;"> (+ ${item.addons.map(a => esc(a.name)).join(', ')})</span>` : '';
-          return `<li style="margin-bottom:5px;font-size:14px;"><b>${esc(item.name)}</b>${addons} × ${item.qty || 1} — <span style="color:#ff6105;font-weight:600;">${CURRENCY}${Number(item.lineTotal || (item.unitPrice || 0) * (item.qty || 1)).toFixed(2)}</span></li>`;
-        }).join('');
-
-        return `
-          <div style="background:#fff;border:1px solid #ddd;border-radius:14px;padding:20px;margin-bottom:14px;box-shadow:0 2px 6px rgba(0,0,0,0.04);">
-            <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;margin-bottom:12px;border-bottom:1px solid #eee;padding-bottom:12px;">
-              <div>
-                <div style="display:flex;align-items:center;gap:10px;">
-                  <span style="font-size:18px;font-weight:700;">Order #${esc(o.id || idx + 1)}</span>
-                  <span style="background:${statusBg};color:${statusColor};font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;">${statusText}</span>
-                </div>
-                <small style="color:#888;">${esc(o.date || '')}</small>
-              </div>
-              <div style="display:flex;gap:8px;">
-                <button onclick="toggleOrderStatus('${esc(o.id)}')" style="padding:6px 12px;border:1px solid #ccc;border-radius:6px;background:#f5f5f5;font-size:12px;font-weight:600;cursor:pointer;">${isCompleted ? 'Mark Pending' : 'Mark Completed'}</button>
-                <button onclick="deleteSingleOrder('${esc(o.id)}')" style="padding:6px 10px;border:1px solid #fca5a5;border-radius:6px;background:#fef2f2;color:#b91c1c;font-size:12px;font-weight:600;cursor:pointer;">Delete</button>
-              </div>
-            </div>
-            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:14px;font-size:14px;">
-              <div><b>Customer:</b> ${esc(o.customerName || 'Guest')}</div>
-              <div><b>Email:</b> ${esc(o.customerEmail || '—')}</div>
-              <div><b>Payment:</b> ${esc(o.paymentMethod || 'Checkout')}</div>
-              <div><b>Order Total:</b> <span style="font-size:16px;font-weight:700;color:#ff6105;">${CURRENCY}${Number(o.total || 0).toFixed(2)}</span></div>
-            </div>
-            <div style="background:#fafafa;padding:12px 16px;border-radius:8px;border:1px solid #eee;">
-              <b style="font-size:13px;color:#555;text-transform:uppercase;letter-spacing:0.5px;">Ordered Items:</b>
-              <ul style="margin:8px 0 0 18px;padding:0;">
-                ${itemsHtml}
-              </ul>
-            </div>
-          </div>
-        `;
-      }).join('');
     }
 
     function esc(v) {
@@ -1544,7 +1140,6 @@
         const orders = getOrders();
         orders.unshift(orderRecord);
         localStorage.setItem('kapia-orders', JSON.stringify(orders));
-        updateOrderCount();
         return orderRecord;
       } catch (e) {
         console.warn('Error saving order snapshot:', e);
@@ -1787,10 +1382,6 @@
       syncMenuFromProducts(products);
       renderMenuGrid();
       renderOrder();
-      updateOrderCount();
-      if (new URLSearchParams(window.location.search).has('admin')) {
-        openAdminLogin();
-      }
     });
   </script>
 </body>
