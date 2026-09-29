@@ -21,6 +21,12 @@ const DEFAULT_PRODUCTS = [
   { id: 'fdri5', category: 'foods_drinks', name: 'Banana Bread', desc: 'Soft homemade banana bread.', price: 75, image: 'https://images.pexels.com/photos/5441033/pexels-photo-5441033.jpeg' },
   { id: 'fdri6', category: 'foods_drinks', name: 'Fresh Fruit Shake', desc: 'Refreshing shake made with fresh fruit.', price: 110, image: 'https://images.pexels.com/photos/8743884/pexels-photo-8743884.jpeg' }
 ];
+const LEGACY_CATEGORY_ADDONS = [
+  { id: 'ad1', name: 'Extra Shot', price: 25 },
+  { id: 'ad2', name: 'Oat Milk', price: 30 },
+  { id: 'ad3', name: 'Extra Syrup', price: 15 },
+  { id: 'ad4', name: 'Extra Cheese', price: 20 }
+];
 
 let editingImage = '';
 
@@ -163,6 +169,24 @@ function showLogin() {
   document.getElementById('admin-password').focus();
 }
 
+function addAddonRow(addon = {}) {
+  const row = document.createElement('div');
+  row.className = 'addon-row';
+  row.innerHTML = '<input class="addon-id" type="hidden"><label>Name<input class="addon-name" required></label><label>Price<input class="addon-price" type="number" min="0" step="any" required></label><button class="button button-danger" type="button" data-remove-addon>Remove</button>';
+  row.querySelector('.addon-id').value = addon.id || '';
+  row.querySelector('.addon-name').value = addon.name || '';
+  row.querySelector('.addon-price').value = addon.price ?? '';
+  document.getElementById('product-addons-list').appendChild(row);
+}
+
+function getFormAddons() {
+  return [...document.querySelectorAll('#product-addons-list .addon-row')].map((row, index) => ({
+    id: row.querySelector('.addon-id').value || `addon-${Date.now()}-${index}`,
+    name: row.querySelector('.addon-name').value.trim(),
+    price: Number(row.querySelector('.addon-price').value)
+  })).filter(addon => addon.name && Number.isFinite(addon.price) && addon.price >= 0);
+}
+
 function openProductForm(productId = '') {
   const product = getProducts().find(entry => entry.id === productId);
   const form = document.getElementById('product-form');
@@ -173,6 +197,12 @@ function openProductForm(productId = '') {
   document.getElementById('product-category-input').value = product?.category || 'fertilizer';
   document.getElementById('product-price-input').value = product?.price ?? '';
   document.getElementById('product-desc-input').value = product?.desc || '';
+  const productAddons = Array.isArray(product?.addons)
+    ? product.addons
+    : product?.category === 'foods_drinks' ? LEGACY_CATEGORY_ADDONS : [];
+  const addonList = document.getElementById('product-addons-list');
+  addonList.replaceChildren();
+  productAddons.forEach(addon => addAddonRow(addon));
   editingImage = product?.image || '';
   document.getElementById('product-image-url-input').value = editingImage.startsWith('data:') ? '' : editingImage;
   updateImagePreview();
@@ -204,7 +234,8 @@ function saveProduct(event) {
     name,
     price,
     desc: document.getElementById('product-desc-input').value.trim(),
-    image: editingImage
+    image: editingImage,
+    addons: getFormAddons()
   };
   if (product) Object.assign(product, values);
   else products.push({ id: 'custom-' + Date.now(), ...values });
@@ -255,6 +286,10 @@ document.getElementById('admin-logout').addEventListener('click', () => {
 document.getElementById('admin-tab-products').addEventListener('click', () => showTab('products'));
 document.getElementById('admin-tab-orders').addEventListener('click', () => showTab('orders'));
 document.getElementById('add-product').addEventListener('click', () => openProductForm());
+document.getElementById('add-product-addon').addEventListener('click', () => addAddonRow());
+document.getElementById('product-addons-list').addEventListener('click', event => {
+  if (event.target.closest('[data-remove-addon]')) event.target.closest('.addon-row').remove();
+});
 document.getElementById('clear-orders').addEventListener('click', clearAllOrders);
 document.getElementById('product-form').addEventListener('submit', saveProduct);
 document.querySelectorAll('[data-close-product-form]').forEach(button => button.addEventListener('click', closeProductForm));

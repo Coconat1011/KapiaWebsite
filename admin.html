@@ -67,6 +67,13 @@
     .modal-heading h2 { margin: 0; font-size: 20px; }
     .form-actions { display: flex; gap: 8px; margin-top: 20px; }
     .form-actions .button { flex: 1; }
+    .addon-editor { margin: 18px 0 0; padding: 14px; border: 1px solid var(--line); border-radius: 8px; }
+    .addon-editor legend { padding: 0 6px; font-size: 14px; font-weight: 700; }
+    .addon-list { display: grid; gap: 10px; }
+    .addon-row { display: grid; grid-template-columns: minmax(0, 1fr) 120px auto; gap: 8px; align-items: end; }
+    .addon-row label { margin-top: 0; }
+    .addon-row .button { min-height: 44px; }
+    .addon-add { margin-top: 10px; }
     .preview { display: block; width: 100%; height: 180px; margin-top: 10px; border: 1px solid var(--line); border-radius: 7px; object-fit: cover; }
     .error { margin: 12px 0 0; color: var(--red); font-size: 13px; font-weight: 700; }
     @media (max-width: 560px) {
@@ -141,6 +148,11 @@
         <input id="product-price-input" type="number" min="0" step="any" required>
         <label for="product-desc-input">Description</label>
         <textarea id="product-desc-input" rows="3"></textarea>
+        <fieldset class="addon-editor">
+          <legend>Product add-ons</legend>
+          <div id="product-addons-list" class="addon-list"></div>
+          <button id="add-product-addon" class="button addon-add" type="button">Add add-on</button>
+        </fieldset>
         <label for="product-image-url-input">Image URL</label>
         <input id="product-image-url-input" type="url" placeholder="https://...">
         <label for="product-image-input">Or upload an image (max 2 MB)</label>

@@ -890,17 +890,27 @@
       const addonsSection = document.getElementById('addons-section');
       const addonsList = document.getElementById('addons-list');
       addonsList.innerHTML = '';
+      const productAddons = Array.isArray(modalItem.addons) ? modalItem.addons : catData.addons;
 
-      if (catData.addons && catData.addons.length > 0) {
+      if (productAddons && productAddons.length > 0) {
         addonsSection.classList.remove('hidden');
-        catData.addons.forEach(addon => {
+        productAddons.forEach((addon, index) => {
+          const addonId = addon.id || `${modalItem.id}-addon-${index}`;
           const label = document.createElement('label');
           label.className = 'flex items-center gap-3 p-3 rounded-xl bg-gray-50 hover:bg-gray-100 cursor-pointer transition-colors';
-          label.innerHTML = `
-            <input type="checkbox" class="w-4 h-4 rounded text-orange-500 focus:ring-orange-400" onchange="toggleAddon('${addon.id}','${esc(addon.name)}',${addon.price},this.checked)">
-            <span class="flex-1 font-medium text-sm" style="color:var(--ink);">${esc(addon.name)}</span>
-            <span class="font-semibold text-sm" style="color:var(--stone);">+${CURRENCY}${Number(addon.price).toFixed(2)}</span>
-          `;
+          const checkbox = document.createElement('input');
+          checkbox.type = 'checkbox';
+          checkbox.className = 'w-4 h-4 rounded text-orange-500 focus:ring-orange-400';
+          checkbox.addEventListener('change', () => toggleAddon(addonId, addon.name, Number(addon.price), checkbox.checked));
+          const name = document.createElement('span');
+          name.className = 'flex-1 font-medium text-sm';
+          name.style.color = 'var(--ink)';
+          name.textContent = addon.name;
+          const price = document.createElement('span');
+          price.className = 'font-semibold text-sm';
+          price.style.color = 'var(--stone)';
+          price.textContent = `+${CURRENCY}${Number(addon.price).toFixed(2)}`;
+          label.append(checkbox, name, price);
           addonsList.appendChild(label);
         });
       } else {
