@@ -1376,6 +1376,40 @@
       btn.textContent = '✓ Payment Recorded';
     }
 
+    window.addEventListener('storage', event => {
+      if (event.key !== 'kapia-products') return;
+
+      const products = getProducts();
+      syncMenuFromProducts(products);
+      const currentProducts = new Map(products.map(product => [product.id, product]));
+
+      order = order.filter(item => {
+        const product = currentProducts.get(item.itemId);
+        if (!product) return false;
+        item.name = product.name;
+        item.basePrice = Number(product.price);
+        item.category = product.category || 'fertilizer';
+        return true;
+      });
+
+      if (modalItem) {
+        const product = currentProducts.get(modalItem.id);
+        if (!product) {
+          closeModal();
+        } else {
+          modalItem = { ...product };
+          modalCategory = product.category || 'fertilizer';
+          document.getElementById('modal-item-name').textContent = modalItem.name;
+          document.getElementById('modal-item-desc').textContent = modalItem.desc;
+          document.getElementById('modal-base-price').textContent = `${CURRENCY}${Number(modalItem.price).toFixed(2)}`;
+          updateModalTotal();
+        }
+      }
+
+      renderMenuGrid();
+      renderOrder();
+    });
+
     // App Initialization
     window.addEventListener('DOMContentLoaded', () => {
       const products = getProducts();

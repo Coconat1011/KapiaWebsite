@@ -1,5 +1,5 @@
 const CURRENCY = '\u20b1';
-const ADMIN_PASSWORD = 'password';
+const ADMIN_PASSWORD = 'kapiaadmin';
 const PLACEHOLDER_IMAGE = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="400" height="256" viewBox="0 0 400 256"><rect width="100%" height="100%" fill="#eee"/><text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" fill="#888" font-family="sans-serif" font-size="16">Kapia Farm Cafe</text></svg>');
 const DEFAULT_PRODUCTS = [
   { id: 'f1', category: 'fertilizer', name: 'Complete Fertilizer 14-14-14', desc: 'Balanced fertilizer for healthy crop growth.', price: 850, image: 'https://images.pexels.com/photos/7768447/pexels-photo-7768447.jpeg' },
