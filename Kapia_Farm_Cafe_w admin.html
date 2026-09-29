@@ -1,0 +1,1405 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <script>window["__codeletBootstrap__"]=JSON.parse('{"A":"A","B":"20260925-05-46ec85d","C":{"Abril Fatface":"YACgEZbkUVE,0","Alfa Slab One":"YACgEYS9sJU,0","Anton":"YACgEcYqQ-A,0","Archivo":"YACgEZulLoA,0","Arial Narrow":"YAGyDvJ_4Ts,0","Arial Rounded MT Bold":"YAFcfoaHu-s,0","Arial":"YAGyDvJ_4Ts,0","Avenir Next":"YAFcfmNq6UY,0","Baloo 2":"YADK30bC6HQ,0","Bebas Neue":"YACgESME5ew,0","Bricolage Grotesque":"YAFyMcdwzpc,0","Broken Glyph":"YADZ-exUkv0,0","Canva Sans":"YAFdJjTk5UU,1","Caveat":"YALBs2ploWQ,0","Comic Sans MS":"YAFcfvtOAUY,1","Cormorant Garamond":"YAFdJhX-538,0","Courier New":"YAGzXiGs0_8,0","Courier Prime":"YAD1aFjegN8,0","DM Sans":"YAD1aU3sLnI,0","DM Serif Display":"YAD1aYG82rc,0","Forum":"YACgEcnnqB4,0","Fraunces":"YAFdJpU7Kkk,0","Georgia":"YAGzXkO0pEM,0","Ghost Mono":"YAHQutsX00Q,0","Hanken Grotesk":"YAFcfhwp99E,0","Helvetica Neue":"YAFcf6CtJfI,0","Helvetica":"YAFcf6CtJfI,0","IBM Plex Mono":"YAFdJkmvhGI,0","Impact":"YAFcfnjI7Vk,0","Instrument Serif":"YAHFeOnZNEk,0","Inter":"YAFdJvSyp_k,3","Iowan Old Style":"YAGNIFa8j9o,0","Jacques Francois":"YADK3zbC6RM,0","JetBrains Mono":"YAFdJksXcAk,0","Josefin Sans":"YAFdJjvw9Ps,0","Lato":"YAFdJuFCnaw,0","Libre Baskerville":"YACgEUFdPdA,0","Lobster":"YAD8SnSjSFI,0","Lora":"YACgEXvxf8Q,0","Merriweather":"YACgEXvHxxs,0","Montserrat":"YAFdtQi73Xs,0","Nunito":"YAFdJoNRMmU,1","Oleo Script":"YACgEQQ14jI,0","Oswald":"YACgEQY10lw,0","Pacifico":"YADLjORQ1u4,0","Phantom Sans":"YAFdJvgJ5TU,0","Playfair Display":"YAFdJhem5V8,1","Plus Jakarta Sans":"YAGvf3_u0_Q,0","Poppins":"YAFdJjbTu24,1","Press Start 2P":"YAFyGr-8pmQ,0","Quicksand":"YAFdJpYtCxE,1","Raleway":"YAFdJhmxbVQ,1","Roboto Slab":"YAFdJswIKAg,0","Rockwell":"YAFcfyVZnN0,0","Rye":"YACgEdQP21k,0","Segoe UI":"YAHNdRD1Klw,0","Source Sans 3":"YAG4lO1Mj10,0","Source Serif 4":"YACgEfdj394,0","Space Grotesk":"YADZ-dYEmhg,0","Space Mono":"YADW1-vpsoc,0","Times New Roman":"YAGzXW3gftg,0","Times":"YAGzXW3gftg,0","Trebuchet MS":"YAFcfrglpVA,0","UV Display":"YAEdVfSSpYo,0","UV Sans":"YAFdJvgJ5TU,0","Ubuntu":"YACgERDU--Q,0","Verdana":"YAGzXTctYtQ,0","Work Sans":"YAGXhLOKv44,0","Yellowtail":"YACgEYG4kG4,0","ui-monospace":"YAD1aFjegN8,0","ui-sans-serif":"YACkoD1yZN0,0"}}');</script>
+  <script src="/_sdk/6542d56fbfe7a3eb.telemetry_sdk.js" integrity="sha512-ECdM0nK7EkwDuOqho2qxgyRQXyBHk9hZqRKMBr+Xsu6zjeHlt+qkO2N2YRiHN7Kg4e1fEHDhjIp4bGJYVypv1g=="></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kapia Farm Cafe</title>
+  <script defer src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&amp;family=DM+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --lime: #ff943e;
+      --lime-hover: #ff6105;
+      --ink: #1A1A2E;
+      --stone: #4A4A5A;
+      --mist: #F7F6F3;
+      --coral: #E8735A;
+      --coral-light: #FFF0ED;
+      --sage: #2e7d32;
+      --sage-light: #EDF5EF;
+      --plum: #7e57c2;
+      --plum-light: #F3EEFB;
+      /* Mobile safe areas */
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+      --safe-top: env(safe-area-inset-top, 0px);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body { font-family: 'DM Sans', sans-serif; -webkit-font-smoothing: antialiased; }
+    .font-display { font-family: 'Playfair Display', Georgia, serif; }
+
+    /* ─── Tap highlight removal for interactive elements ─── */
+    button, a, [onclick] {
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+
+    #submit-order-btn {
+      background-color: #ff943e !important;
+      color: #000 !important;
+      border: 2px solid #000 !important;
+    }
+
+    /* ─── Category tabs — horizontal scroll on mobile ─── */
+    .category-tabs-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      padding-bottom: 4px;
+    }
+    .category-tabs-wrap::-webkit-scrollbar { display: none; }
+
+    .category-tab {
+      transition: all 0.25s ease;
+      border: 2px solid #000;
+      background: transparent;
+      color: #000;
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .category-tab.active {
+      background: var(--lime);
+      color: #000;
+      border-color: #000;
+    }
+    .category-tab:not(.active):hover { background: rgba(255,148,62,0.3); }
+
+    /* ─── Menu cards ─── */
+    .menu-card {
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      border-radius: 14px;
+      min-width: 0;
+      width: 100%;
+    }
+    .menu-card:active { transform: scale(0.98); }
+    @media (hover: hover) {
+      .menu-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 28px -8px rgba(0,0,0,0.12);
+      }
+    }
+
+    /* ─── Modals ─── */
+    .modal-overlay {
+      background: rgba(26,26,46,0.6);
+      backdrop-filter: blur(4px);
+      animation: fadeIn 0.2s ease;
+    }
+    .modal-content { animation: slideUp 0.3s cubic-bezier(0.4,0,0.2,1); }
+
+    @keyframes fadeIn  { from{opacity:0}                                             to{opacity:1} }
+    @keyframes slideUp { from{opacity:0;transform:translate(-50%,-50%) translateY(20px)} to{opacity:1;transform:translate(-50%,-50%) translateY(0)} }
+    @keyframes slideUpSheet { from{transform:translateY(100%)} to{transform:translateY(0)} }
+    @keyframes cardIn  { from{opacity:0;transform:translateY(12px)}                  to{opacity:1;transform:translateY(0)} }
+
+    .card-animate { animation: cardIn 0.35s ease forwards; }
+    .order-item-enter { animation: cardIn 0.3s ease forwards; }
+
+    /* ─── Quantity buttons ─── */
+    .qty-btn {
+      width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 50%; font-weight: 700; font-size: 18px;
+      transition: all 0.15s ease;
+      cursor: pointer; border: 1.5px solid #d1d5db;
+      background: #fff; color: var(--stone);
+      min-width: 36px;          /* prevent shrinking */
+    }
+    .qty-btn:hover, .qty-btn:active { background:var(--ink); color:#fff; border-color:var(--ink); }
+
+    .add-to-order-btn { transition: all 0.2s ease; cursor: pointer; }
+    .add-to-order-btn:active { transform: scale(0.96); }
+    @media (hover: hover) {
+      .add-to-order-btn:hover { background-color: #ff6105 !important; }
+    }
+
+    @keyframes btnPop {
+      0%   { transform: scale(1); }
+      50%  { transform: scale(0.95); }
+      100% { transform: scale(1); }
+    }
+    .btn-click { animation: btnPop 0.3s ease-out; }
+
+    /* ─── Scrollbar ─── */
+    .scrollbar-thin::-webkit-scrollbar { width: 5px; }
+    .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
+    .scrollbar-thin::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 10px; }
+
+    /* ═══════════════════════════════════
+       MOBILE (< 1024px) — bottom sheet cart
+    ═══════════════════════════════════ */
+    #order-panel-fixed {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      z-index: 40;
+      background: #fff;
+      border-top: 2px solid #000;
+      color: #000;
+      transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1);
+      max-height: 72px;
+      overflow: hidden;
+      /* Account for iPhone home indicator */
+      padding-bottom: var(--safe-bottom);
+    }
+    #order-panel-fixed.panel-open {
+      max-height: calc(100dvh - 16px) !important;
+      overflow-y: auto;
+    }
+
+    /* Drag handle pill for mobile sheet */
+    #panel-drag-handle {
+      display: flex;
+      justify-content: center;
+      padding: 8px 0 4px;
+      cursor: grab;
+    }
+    #panel-drag-handle::before {
+      content: '';
+      width: 40px; height: 4px;
+      background: #ccc;
+      border-radius: 99px;
+    }
+
+    @media (max-width: 1023px) {
+      /* Extra bottom padding so content isn't hidden behind the cart bar */
+      .main-content-wrapper {
+        padding-bottom: calc(90px + var(--safe-bottom)) !important;
+      }
+
+      #order-panel-fixed .canva-panel {
+        height: 72px !important;
+        min-height: 72px;
+      }
+
+      /* Mobile hero — slightly less tall */
+      header[data-template-id="header-section"] {
+        min-height: 50vh !important;
+      }
+
+      /* 2-column grid on phones ≥ 380px */
+      @media (min-width: 380px) {
+        #menu-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+      }
+
+      /* Item modal as full-height bottom sheet on mobile */
+      #customization-modal .modal-content {
+        position: fixed !important;
+        top: auto !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        transform: none !important;
+        width: 100% !important;
+        max-height: 92dvh !important;
+        border-radius: 20px 20px 0 0 !important;
+        animation: slideUpSheet 0.3s cubic-bezier(0.4,0,0.2,1) !important;
+        padding-bottom: var(--safe-bottom);
+      }
+
+      /* Customer info modal — bottom sheet */
+      #name-modal > div:last-child {
+        position: fixed !important;
+        top: auto !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        transform: none !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        border-radius: 20px 20px 0 0 !important;
+        padding-bottom: calc(16px + var(--safe-bottom));
+      }
+
+      /* Admin login centered with max-width on mobile */
+      /* Payment page — single column */
+      #payment-page > div { padding: 16px 12px 80px !important; }
+
+      /* Category tabs on small screens */
+      nav[data-template-id="category-tabs"] {
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        padding-bottom: 4px;
+      }
+      nav[data-template-id="category-tabs"]::-webkit-scrollbar { display: none; }
+      .category-tab { min-width: max-content !important; flex: 0 0 auto !important; }
+
+      /* Compact card image on mobile */
+      .menu-card .card-image-wrap { height: 160px !important; }
+
+      /* Admin product grid — 1 col on very small, 2 on larger mobile */
+      #admin-products-list { grid-template-columns: 1fr !important; }
+      @media (min-width: 480px) {
+        #admin-products-list { grid-template-columns: repeat(2, 1fr) !important; }
+      }
+    }
+
+    /* ═══════════════════════════════════
+       DESKTOP (≥ 1024px) — sidebar cart
+    ═══════════════════════════════════ */
+    @media (min-width: 1024px) {
+      body {
+        display: grid;
+        grid-template-columns: 1fr 360px;
+        grid-template-rows: auto 1fr;
+        min-height: 100vh;
+      }
+      header[data-template-id="header-section"] { grid-column: 1 / -1; }
+      .main-content-wrapper {
+        grid-column: 1; grid-row: 2;
+        min-width: 0; overflow: hidden;
+        max-width: 100% !important; width: 100%;
+        padding-top: 30px; padding-bottom: 30px;
+      }
+      #order-panel-wrapper { grid-column: 2; grid-row: 2; padding-right: 30px; padding-bottom: 30px; margin-top: 30px; }
+      #order-panel-fixed {
+        position: sticky !important;
+        top: 20px;
+        height: calc(100vh - 50px);
+        max-height: none !important;
+        border: 2px solid #000;
+        border-radius: 16px;
+        overflow-y: hidden !important;
+        display: flex; flex-direction: column;
+      }
+      #order-panel-fixed.panel-open { max-height: none !important; }
+      #panel-toggle-btn { display: none !important; }
+      #panel-drag-handle { display: none !important; }
+      #order-panel-fixed .canva-panel { height: 70px !important; }
+      #order-items-container { flex: 1; overflow-y: auto; min-height: 0; }
+      #menu-grid { grid-template-columns: repeat(3, 1fr); width: 100%; min-width: 0; }
+    }
+
+    #contact-footer {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      padding: 18px 16px calc(18px + var(--safe-bottom));
+      border-top: 1px solid #deded9;
+      background: #fff;
+      color: var(--ink);
+    }
+
+    #contact-footer a {
+      display: inline-flex;
+      min-height: 44px;
+      align-items: center;
+      justify-content: center;
+      padding: 0 20px;
+      border: 2px solid #111;
+      border-radius: 999px;
+      background: #ff943e;
+      color: #111;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    #contact-footer a:hover { background: #ffad69; }
+
+    @media (max-width: 1023px) {
+      body { display: flex; flex-direction: column; }
+      #contact-footer { margin-top: auto; }
+    }
+
+    /* ─── Mobile-specific utility improvements ─── */
+    @media (max-width: 640px) {
+      .qty-btn { width: 40px; height: 40px; font-size: 20px; }
+      /* Bigger "Add" button on card for touch */
+      .add-to-order-btn { padding: 10px 16px !important; font-size: 14px !important; border-radius: 12px !important; }
+      /* Bigger Submit button */
+      #submit-order-btn { padding: 14px !important; font-size: 17px !important; }
+      /* Tighter hero text */
+      header[data-template-id="header-section"] { min-height: 44vh !important; }
+      /* Payment page nav bar — stack on very small */
+      #payment-page > div > div:first-child { flex-direction: column !important; gap: 8px !important; }
+    }
+
+    /* ─── Print styles ─── */
+    @media print {
+      #order-panel-fixed, .category-tab,
+      #payment-page .add-to-order-btn, #payment-page button:not(#pay-confirm-btn) {
+        display: none !important;
+      }
+    }
+  </style>
+  <script src="/_sdk/6c2ecc939521f244.data_sdk.js" integrity="sha512-gRx8s+XsZDN6mSIQu2sivLZysbV0WHhb5kXNUWlgVb5lCMU1foJYukyMEDPv8Tnoocb8iwqB4XdRrWc7oEGzIQ=="></script>
+  <script src="/_sdk/ddcab3e45959c817.resizing_sdk.js" type="text/javascript" integrity="sha512-VAviUKfZVzugWBSeULYjSljTX+nb84wc6Zzbx5GQaQgh6X2ISSjXi8eIiCDGdwDh10esJMY0+QFQgUy9NcrTlQ=="></script>
+</head>
+<body data-template-id="__page-root" class="min-h-screen w-full" style="background: rgb(247, 246, 243);">
+
+  <!-- Hero Header Section -->
+  <header data-template-id="header-section" class="canva-header w-full relative overflow-hidden" style="min-height: 65vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, rgb(26, 26, 46), rgb(45, 45, 68));">
+    <img data-template-id="hero-image" loading="eager" fetchpriority="high" decoding="async" class="canva-image absolute inset-0 w-full h-full object-cover" src="https://images.pexels.com/photos/39814920/pexels-photo-39814920.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Kapia Farm Cafe surrounded by green farm fields" onerror="this.style.display='none'">
+    <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/75"></div>
+    <div class="relative max-w-7xl w-full mx-auto px-4 sm:px-6 flex flex-col items-center text-center py-16">
+      <span class="text-orange-400 font-semibold tracking-widest text-sm uppercase mb-2">Welcome to</span>
+      <h1 data-template-id="restaurant-name" class="canva-text font-display" style="color: rgb(255, 255, 255); font-weight: 700; font-style: normal; font-size: clamp(2.5rem, 7vw, 5.5rem); line-height: 1.15; margin-bottom: 0.5rem;">Kapia Farm Cafe</h1>
+      <p class="text-gray-200 max-w-xl text-base sm:text-lg mb-6">Premium agricultural fertilizers, high-performance feeds, and delicious farm-to-table food and beverages.</p>
+      <button data-template-id="order-now-btn" class="canva-button" style="background: rgb(255, 148, 62); color: rgb(0, 0, 0); border: 2px solid rgb(0, 0, 0); border-radius: 9999px; padding: 0.75rem 2.25rem; font-weight: 700; font-size: 18px; font-style: normal; cursor: pointer;" onclick="applyBounce(this); scrollToCategories();">Order Now</button>
+    </div>
+
+    <!-- Customer Details Modal -->
+    <div id="name-modal" class="hidden" style="position:fixed;inset:0;z-index:200;">
+      <div class="modal-overlay absolute inset-0" onclick="closeNameModal()"></div>
+      <div class="bg-white rounded-2xl shadow-2xl overflow-hidden" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:min(calc(100vw - 2rem),24rem);max-height:90vh;overflow-y:auto;z-index:201;">
+        <div class="p-6">
+          <h3 class="text-2xl font-bold mb-2" style="color:var(--ink);">Customer Information</h3>
+          <p class="text-sm mb-4" style="color:var(--stone);">Please provide your name to submit your order. Email is optional.</p>
+          <input id="name-input" type="text" placeholder="Enter your full name" class="w-full px-4 py-3 rounded-xl border-2 border-gray-300 font-medium mb-3 focus:outline-none focus:border-black" style="color:var(--ink);">
+          <label for="email-input" class="sr-only">Email address (optional)</label>
+          <input id="email-input" type="email" placeholder="Email address (optional)" autocomplete="email" class="w-full px-4 py-3 rounded-xl border-2 border-gray-300 font-medium mb-4 focus:outline-none focus:border-black" style="color:var(--ink);">
+          <div id="name-error" class="hidden text-red-600 text-sm mb-3 font-semibold"></div>
+          <div class="flex gap-3">
+            <button id="name-cancel-btn" data-template-id="name-modal-cancel-btn" onclick="closeNameModal()" class="flex-1 py-3 rounded-xl font-semibold border-2 border-gray-300 text-sm transition-colors hover:bg-gray-100 canva-button" style="color: rgb(74, 74, 90); background: rgb(243, 244, 246); font-weight: 600; font-style: normal; font-size: 15px; cursor: pointer;">Cancel</button>
+            <button id="name-submit-btn" onclick="applyBounce(this); confirmNameAndSubmit()" class="flex-1 py-3 rounded-xl font-semibold text-sm transition-colors cursor-pointer" style="background-color:#ff943e;color:#000;border:2px solid #000;">Confirm Order</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content & Catalog -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 main-content-wrapper" style="padding-bottom: 30px;">
+    <main>
+      <nav data-template-id="category-tabs" class="canva-tabs flex gap-2 sm:gap-3 mb-6" role="tablist" aria-label="Menu categories" style="background: transparent;">
+        <button class="category-tab active flex-1 py-3 px-4 rounded-full font-semibold text-sm sm:text-base" role="tab" aria-selected="true" data-category="fertilizer" onclick="switchCategory('fertilizer')">Fertilizer</button>
+        <button class="category-tab flex-1 py-3 px-4 rounded-full font-semibold text-sm sm:text-base" role="tab" aria-selected="false" data-category="feeds" onclick="switchCategory('feeds')">Feeds</button>
+        <button class="category-tab flex-1 py-3 px-4 rounded-full font-semibold text-sm sm:text-base" role="tab" aria-selected="false" data-category="foods_drinks" onclick="switchCategory('foods_drinks')">Foods &amp; Drinks</button>
+      </nav>
+      <section id="menu-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-5" aria-label="Menu items" role="tabpanel"></section>
+    </main>
+  </div>
+
+  <!-- Cart / Order Panel -->
+  <div id="order-panel-wrapper">
+    <aside id="order-panel-fixed">
+      <!-- Drag handle (visible on mobile only) -->
+      <div id="panel-drag-handle" onclick="toggleOrderPanel()" aria-label="Toggle order panel"></div>
+      <div data-template-id="order-summary" class="canva-panel" style="background:#ff943e;display:flex;align-items:center;justify-content:space-between;padding:0 1.25rem;flex-shrink:0;">
+        <div style="display:flex;align-items:center;">
+          <h2 data-template-id="order-title" class="canva-text font-display" style="color: rgb(0, 0, 0); font-weight: 700; font-style: normal; font-size: 26px;">Your Order</h2>
+          <span id="order-count" class="ml-2 text-xs font-bold px-2.5 py-1 rounded-full" style="background:#000;color:#fff;">0</span>
+        </div>
+        <button id="panel-toggle-btn" onclick="toggleOrderPanel()" style="display:flex;align-items:center;justify-content:center;padding:0.5rem 1.2rem;border-radius:9999px;background:#000;border:none;cursor:pointer;transition:all 0.3s ease;flex-shrink:0;font-weight:700;font-size:13px;color:#fff;font-family:'DM Sans',sans-serif;min-height:44px;" aria-label="Toggle order panel" aria-expanded="false">View Order</button>
+      </div>
+      <div style="display:flex;flex-direction:column;flex:1;min-height:0;">
+        <div class="flex-1 overflow-y-auto scrollbar-thin px-5 pb-3" id="order-items-container" style="color:#000;min-height:0;">
+          <p id="empty-order" class="text-center py-8 text-gray-400 text-sm italic">Your order is empty</p>
+        </div>
+        <div data-template-id="order-footer" class="canva-section border-t border-gray-200 px-5 py-4 flex-shrink-0" style="background:#fff;color:#000;margin-top:auto;">
+          <div class="flex justify-between items-center mb-4">
+            <span data-template-id="subtotal-label" class="canva-text font-semibold text-gray-700" style="font-size: 15px;">Subtotal</span>
+            <span id="order-subtotal" class="font-bold text-xl" style="color:#000;">₱0.00</span>
+          </div>
+          <div id="submit-error" class="hidden bg-red-50 border border-red-200 text-red-700 text-sm px-3 py-2 rounded-lg mb-3"></div>
+          <div id="submit-success" class="hidden bg-green-50 border border-green-200 text-green-700 text-sm px-3 py-2 rounded-lg mb-3 flex items-center gap-2">
+            <i data-lucide="check-circle" style="width:16px;height:16px;"></i><span>Order submitted successfully! ✓</span>
+          </div>
+          <button id="submit-order-btn" data-template-id="submit-order-btn" onclick="applyBounce(this); submitOrder()" class="canva-button w-full py-3 font-semibold text-sm transition-colors cursor-pointer" style="border-radius: 9999px; background: rgb(255, 148, 62); color: rgb(0, 0, 0); font-weight: 700; font-size: 16px;">Submit Order</button>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <footer id="contact-footer">
+    <span>Need help with your order?</span>
+    <a href="https://www.facebook.com/profile.php?id=61594672631776" target="_blank" rel="noopener noreferrer">Contact us</a>
+  </footer>
+
+  <!-- Menu Item Card Template -->
+  <template id="menu-card-template">
+    <article class="menu-card card-animate bg-white overflow-hidden flex flex-col shadow-sm border border-gray-200" style="border-radius:14px;width:100%;">
+      <div class="card-image-wrap" style="width:100%;height:200px;overflow:hidden;background:#f3f4f6;position:relative;">
+        <img loading="lazy" decoding="async" fetchpriority="low" class="canva-image" style="width:100%;height:100%;object-fit:cover;display:block;">
+      </div>
+      <div class="p-4 flex flex-col flex-1" style="background:#ffffff;">
+        <h3 class="font-bold text-base mb-1" style="color:var(--ink);"></h3>
+        <p class="text-xs leading-relaxed flex-1 mb-3" style="color:var(--stone);"></p>
+        <div class="flex items-center justify-between mt-auto">
+          <span class="font-bold text-lg" style="color:var(--ink);"></span>
+          <button class="add-to-order-btn font-semibold text-sm px-4 py-2 rounded-xl transition-colors cursor-pointer" style="background-color:#ff943e;color:#000;border:2px solid #000;">
+            <i data-lucide="plus" style="width:16px;height:16px;display:inline-block;vertical-align:-3px;margin-right:4px;"></i>Add
+          </button>
+        </div>
+      </div>
+    </article>
+  </template>
+
+  <!-- Customization / Quantity Modal -->
+  <div id="customization-modal" class="hidden" style="position:fixed;inset:0;z-index:100;">
+    <div class="modal-overlay absolute inset-0" onclick="closeModal()"></div>
+    <div class="modal-content bg-white rounded-2xl shadow-2xl overflow-hidden" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:min(calc(100vw - 2rem),28rem);max-height:90vh;overflow-y:auto;z-index:101;">
+      <div class="p-6">
+        <div class="flex justify-between items-start mb-4">
+          <div>
+            <h3 id="modal-item-name" class="text-2xl font-bold" style="color:var(--ink);font-family:'DM Sans',sans-serif;font-weight:700;"></h3>
+            <p id="modal-item-desc" class="text-sm mt-1" style="color:var(--stone);"></p>
+          </div>
+          <button onclick="closeModal()" class="p-1 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer" aria-label="Close modal">
+            <i data-lucide="x" style="width:20px;height:20px;color:var(--stone);"></i>
+          </button>
+        </div>
+        <div class="flex items-center mb-5">
+          <span data-template-id="modal-base-price-label" class="canva-text text-sm font-medium" style="color: rgb(74, 74, 90); font-weight: 400; font-style: normal; font-size: 14px;">Base price:</span>
+          <span id="modal-base-price" class="ml-2 font-bold text-lg" style="color:var(--ink);"></span>
+        </div>
+        <div id="addons-section" class="hidden mb-5">
+          <h4 class="font-semibold text-sm uppercase tracking-wider mb-3" style="color:var(--stone);">Add-Ons</h4>
+          <div id="addons-list" class="space-y-2"></div>
+        </div>
+        <div class="flex items-center justify-between mb-6 bg-gray-50 rounded-xl p-4">
+          <span data-template-id="modal-qty-label" class="canva-text font-semibold text-sm" style="color: rgb(74, 74, 90); font-weight: 400; font-style: normal; font-size: 14px;">Quantity</span>
+          <div class="flex items-center gap-3">
+            <button class="qty-btn" onclick="changeModalQty(-1)" aria-label="Decrease quantity">−</button>
+            <span id="modal-qty" class="font-bold text-lg w-8 text-center" style="color:var(--ink);">1</span>
+            <button class="qty-btn" onclick="changeModalQty(1)" aria-label="Increase quantity">+</button>
+          </div>
+        </div>
+        <div class="flex items-center justify-between mb-4">
+          <span data-template-id="modal-total-label" class="canva-text font-semibold" style="color: rgb(74, 74, 90); font-weight: 400; font-style: normal; font-size: 14px;">Item Total:</span>
+          <span id="modal-total" class="font-bold text-2xl" style="color:var(--ink);"></span>
+        </div>
+        <div class="flex gap-3">
+          <button data-template-id="modal-cancel-btn" onclick="closeModal()" class="canva-button flex-1 py-3 rounded-xl font-semibold border-2 border-gray-200 text-sm transition-colors hover:bg-gray-100 cursor-pointer" style="color: rgb(74, 74, 90); background: rgb(243, 244, 246); font-weight: 600; font-style: normal; font-size: 16px;">Cancel</button>
+          <button data-template-id="modal-add-btn" id="modal-add-btn" onclick="applyBounce(this); confirmAddToOrder()" class="canva-button flex-1 py-3 rounded-xl font-semibold text-sm transition-colors cursor-pointer" style="background: rgb(255, 148, 62); color: rgb(0, 0, 0); border: 2px solid rgb(0, 0, 0); font-weight: 600; font-style: normal; font-size: 16px;">Add to Order</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Order Item Cart Row Template -->
+  <template id="order-item-template">
+    <div class="order-item-enter flex items-start gap-3 py-3 border-b border-gray-100 last:border-0">
+      <div class="flex-1 min-w-0">
+        <p class="font-semibold text-sm truncate" style="color:var(--ink);"></p>
+        <div class="flex items-center gap-2 mt-1">
+          <span class="order-item-category text-xs font-semibold px-2.5 py-1 rounded-full"></span>
+          <p class="order-item-addons text-xs" style="color:var(--stone);"></p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 shrink-0">
+        <button class="qty-btn qty-minus" aria-label="Decrease quantity">−</button>
+        <span class="order-item-qty font-bold text-sm w-5 text-center" style="color:var(--ink);"></span>
+        <button class="qty-btn qty-plus" aria-label="Increase quantity">+</button>
+      </div>
+      <span class="order-item-price font-bold text-sm shrink-0 w-20 text-right" style="color:var(--ink);"></span>
+      <button class="remove-btn p-1 rounded-lg hover:bg-red-50 transition-colors shrink-0 cursor-pointer" aria-label="Remove item">
+        <i data-lucide="trash-2" style="width:15px;height:15px;color:#EF4444;"></i>
+      </button>
+    </div>
+  </template>
+
+  <!-- Payment Page Screen (Full Page Checkout & Receipt View) -->
+  <div id="payment-page" style="display:none;position:fixed;inset:0;z-index:250;background:#f7f6f3;overflow-y:auto;">
+    <div style="max-width:1100px;margin:auto;padding:24px 16px 60px;">
+      
+      <!-- Top Navigation Bar -->
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:24px;border-bottom:2px solid #e5e7eb;padding-bottom:16px;">
+        <button onclick="closePaymentPage()" style="display:flex;align-items:center;gap:6px;padding:9px 16px;border:2px solid #111;border-radius:10px;background:#fff;font-weight:700;cursor:pointer;font-size:14px;transition:background 0.2s;">
+          ← Back to Store
+        </button>
+        <div style="text-align:center;">
+          <h2 style="font-size:22px;font-weight:700;margin:0;font-family:'DM Sans',sans-serif;">Kapia Farm Cafe</h2>
+          <span style="font-size:13px;color:#666;font-weight:600;">Payment &amp; Order Confirmation</span>
+        </div>
+        <button onclick="window.print()" style="display:flex;align-items:center;gap:6px;padding:9px 16px;border:2px solid #111;border-radius:10px;background:#fff;font-weight:700;cursor:pointer;font-size:14px;transition:background 0.2s;">
+          🖨️ Print Receipt
+        </button>
+      </div>
+
+      <!-- Payment Alert / Progress Banner -->
+      <div style="background:#fff7ed;border:2px solid #ff943e;border-radius:14px;padding:16px 20px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="width:40px;height:40px;border-radius:50%;background:#ff943e;color:#000;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:bold;">✓</div>
+          <div>
+            <div style="font-weight:700;font-size:16px;color:#9a3412;">Order Submitted Successfully!</div>
+            <div style="font-size:13px;color:#7c2d12;">Please scan the randomized QR code below to complete your payment.</div>
+          </div>
+        </div>
+        <div id="payment-status-badge" style="background:#fef3c7;color:#92400e;padding:6px 16px;border-radius:999px;font-size:13px;font-weight:700;">
+          Awaiting Payment
+        </div>
+      </div>
+
+      <!-- 2-Column Responsive Layout -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:24px;align-items:start;">
+        
+        <!-- Left Column: Order Summary Receipt -->
+        <div style="background:#fff;border:2px solid #111;border-radius:16px;padding:24px;box-shadow:0 6px 20px rgba(0,0,0,0.04);">
+          <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px dashed #ccc;padding-bottom:12px;margin-bottom:16px;">
+            <div>
+              <span style="font-size:12px;font-weight:700;color:#777;text-transform:uppercase;letter-spacing:0.5px;">Order Receipt</span>
+              <h3 id="pay-order-id" style="font-size:20px;font-weight:700;margin:2px 0 0;">#KAP-000000</h3>
+            </div>
+            <div id="pay-order-date" style="font-size:13px;color:#666;text-align:right;"></div>
+          </div>
+
+          <div style="font-size:14px;margin-bottom:18px;background:#f9f9f9;padding:12px;border-radius:10px;border:1px solid #eee;">
+            <div style="margin-bottom:4px;"><b>Customer:</b> <span id="pay-customer-name">—</span></div>
+            <div><b>Email:</b> <span id="pay-customer-email">—</span></div>
+          </div>
+
+          <h4 style="font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#555;margin:0 0 10px;">Ordered Items</h4>
+          <div id="pay-items-list" style="margin-bottom:20px;max-height:280px;overflow-y:auto;" class="scrollbar-thin">
+            <!-- Items populated by JS -->
+          </div>
+
+          <div style="border-top:2px solid #111;padding-top:14px;display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-size:18px;font-weight:700;">Total Amount Due</span>
+            <span id="pay-total-amount" style="font-size:26px;font-weight:800;color:#ff6105;">₱0.00</span>
+          </div>
+        </div>
+
+        <!-- Right Column: Payment & Randomized QR -->
+        <div style="background:#fff;border:2px solid #111;border-radius:16px;padding:24px;box-shadow:0 6px 20px rgba(0,0,0,0.04);">
+          
+          <h3 style="font-size:20px;font-weight:700;margin:0 0 6px;">Select Payment Method</h3>
+          <p style="color:#666;font-size:13px;margin:0 0 16px;">Choose how you would like to settle this order:</p>
+
+          <!-- Payment Options Tabs -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;">
+            <button id="pay-opt-qr" onclick="selectPaymentMethod('qr')" style="padding:10px;border:2px solid #111;border-radius:10px;background:#ff943e;font-weight:700;font-size:13px;cursor:pointer;text-align:center;">
+              📱 QR PH / GCash / Maya
+            </button>
+            <button id="pay-opt-cod" onclick="selectPaymentMethod('cod')" style="padding:10px;border:2px solid #111;border-radius:10px;background:#fff;font-weight:700;font-size:13px;cursor:pointer;text-align:center;">
+              💵 Cash on Delivery / Pickup
+            </button>
+          </div>
+
+          <!-- QR Section -->
+          <div id="payment-qr-section">
+            <div style="background:#fafafa;border:2px solid #111;border-radius:16px;padding:20px;text-align:center;position:relative;">
+              <span style="display:inline-block;background:#000;color:#fff;font-size:11px;font-weight:700;padding:3px 12px;border-radius:999px;margin-bottom:12px;text-transform:uppercase;letter-spacing:1px;">
+                Scan to Pay (QR PH)
+              </span>
+
+              <!-- QR Display Area -->
+              <div style="width:230px;height:230px;margin:0 auto 12px;background:#fff;border:2px solid #ddd;border-radius:12px;display:flex;align-items:center;justify-content:center;padding:10px;box-shadow:0 4px 12px rgba(0,0,0,0.06);position:relative;">
+                <canvas id="qr-canvas" width="210" height="210" style="display:block;width:210px;height:210px;border-radius:6px;"></canvas>
+                <img id="qr-img" style="display:none;width:210px;height:210px;object-fit:contain;border-radius:6px;" alt="Randomized QR Code">
+              </div>
+
+              <!-- Randomize QR Button -->
+              <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:12px;">
+                <button type="button" onclick="randomizeCurrentQR()" style="padding:6px 14px;border:1.5px solid #111;border-radius:8px;background:#fff;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:5px;box-shadow:0 2px 4px rgba(0,0,0,0.05);">
+                  🔀 Randomize QR Code
+                </button>
+              </div>
+
+              <div style="font-size:15px;font-weight:700;color:#111;margin-bottom:2px;">Account: Kapia Farm Cafe</div>
+              <div style="font-size:13px;color:#555;margin-bottom:10px;">Reference Code: <b id="pay-qr-ref">REF-000000</b></div>
+              
+              <div style="background:#fff;border:1px solid #ddd;border-radius:10px;padding:10px 14px;font-size:13px;color:#444;text-align:left;line-height:1.4;">
+                <b>Payment Instructions:</b>
+                <ol style="margin:4px 0 0 16px;padding:0;">
+                  <li>Open GCash, Maya, or any QRPH-supported banking app.</li>
+                  <li>Scan the QR code and confirm amount: <b id="pay-qr-amount" style="color:#ff6105;">₱0.00</b>.</li>
+                  <li>After paying, enter your reference number below and report the payment for cafe verification.</li>
+                </ol>
+              </div>
+            </div>
+
+            <!-- Reference Number Input -->
+            <div style="margin-top:16px;">
+              <label style="font-weight:700;display:block;margin-bottom:6px;font-size:14px;">GCash / Maya Reference No. (Optional)</label>
+              <input id="pay-ref-input" type="text" placeholder="e.g. 1029 4819 0284" style="width:100%;box-sizing:border-box;padding:11px 14px;border:1px solid #ccc;border-radius:10px;font-size:14px;font-family:monospace;">
+            </div>
+          </div>
+
+          <!-- Cash on Delivery Section -->
+          <div id="payment-cod-section" style="display:none;background:#fafafa;border:2px solid #111;border-radius:16px;padding:20px;">
+            <div style="text-align:center;font-size:42px;margin-bottom:8px;">📦</div>
+            <h4 style="font-size:18px;font-weight:700;text-align:center;margin:0 0 8px;">Cash on Delivery / Pickup</h4>
+            <p style="font-size:14px;color:#555;line-height:1.5;text-align:center;margin:0 0 14px;">
+              You can pay in cash upon receiving your order or when picking it up directly at Kapia Farm Cafe.
+            </p>
+            <div style="background:#fff;border:1px solid #ddd;border-radius:10px;padding:12px;font-size:13px;color:#333;">
+              ✓ Please prepare exact cash amount: <b id="pay-cod-amount" style="color:#ff6105;">₱0.00</b><br>
+              ✓ Our team will contact your provided email/phone to coordinate fulfillment.
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div style="margin-top:20px;display:flex;flex-direction:column;gap:10px;">
+            <button id="pay-confirm-btn" onclick="confirmPaymentComplete()" style="width:100%;padding:14px;border:2px solid #111;border-radius:999px;background:#ff943e;color:#000;font-weight:700;font-size:16px;cursor:pointer;transition:all 0.2s ease;">
+              ✓ I Have Completed Payment
+            </button>
+            <button onclick="closePaymentPage()" style="width:100%;padding:12px;border:2px solid #ccc;border-radius:999px;background:#fff;color:#555;font-weight:700;font-size:14px;cursor:pointer;">
+              Return to Store
+            </button>
+          </div>
+
+          <!-- Success Confirmation Banner -->
+          <div id="payment-success-banner" style="display:none;margin-top:16px;background:#ecfdf5;border:2px solid #059669;border-radius:12px;padding:16px;text-align:center;">
+            <div style="font-size:28px;margin-bottom:4px;">🎉</div>
+            <div id="payment-success-title" style="font-weight:700;color:#065f46;font-size:16px;">Payment reported</div>
+            <p id="payment-success-message" style="color:#047857;font-size:13px;margin:4px 0 10px;">Your payment report will be verified by the cafe.</p>
+            <button onclick="closePaymentPage()" style="padding:8px 18px;border:2px solid #065f46;border-radius:8px;background:#fff;color:#065f46;font-weight:700;font-size:13px;cursor:pointer;">
+              Done &amp; Return to Store
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/_sdk/ef0304cb8c7ed696.editing_sdk.js" integrity="sha512-kmL9L5Yuj57MQaequKbMA3aGpT/5lBUp10iGA3e3qnmMLs2ZZQ0poCcIfdd5rTgrhEvNPe4HK0ohePW7ZpgAFg=="></script>
+  <script>
+    const CURRENCY = '₱';
+    const DEFAULT_PLACEHOLDER_IMAGE = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="400" height="256" viewBox="0 0 400 256"><rect width="100%" height="100%" fill="#eee"/><text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" fill="#888" font-family="sans-serif" font-size="16">Kapia Farm Cafe</text></svg>');
+
+    // Initial default catalog with Pexels stock images
+    const menuData = {
+      fertilizer: {
+        color: 'coral',
+        items: [
+          { id: 'f1', name: 'Complete Fertilizer 14-14-14', desc: 'Balanced fertilizer for healthy crop growth.', price: 850, image: 'https://images.pexels.com/photos/7768447/pexels-photo-7768447.jpeg?cs=srgb&dl=pexels-freestockpro-7768447.jpg&fm=jpg' },
+          { id: 'f2', name: 'Urea 46-0-0', desc: 'Nitrogen fertilizer for vigorous plant growth.', price: 900, image: 'https://images.pexels.com/photos/31673795/pexels-photo-31673795.jpeg?cs=srgb&dl=pexels-kkwritesofficial-31673795.jpg&fm=jpg' },
+          { id: 'f3', name: 'Organic Compost', desc: 'Organic soil conditioner for garden and farm crops.', price: 250, image: 'https://images.pexels.com/photos/32938346/pexels-photo-32938346.jpeg?cs=srgb&dl=pexels-drphotographer152-32938346.jpg&fm=jpg' },
+          { id: 'f4', name: 'Complete Fertilizer 16-16-16', desc: 'All-purpose fertilizer for a wide range of crops.', price: 880, image: 'https://images.pexels.com/photos/11996941/pexels-photo-11996941.jpeg?cs=srgb&dl=pexels-mirkofabian-11996941.jpg&fm=jpg' },
+          { id: 'f5', name: 'Ammonium Phosphate', desc: 'Phosphorus and nitrogen fertilizer.', price: 950, image: 'https://images.pexels.com/photos/15388810/pexels-photo-15388810.jpeg?cs=srgb&dl=pexels-amresh444-15388810.jpg&fm=jpg' },
+          { id: 'f6', name: 'Vermicast', desc: 'Natural organic fertilizer for healthier soil.', price: 180, image: 'https://images.pexels.com/photos/25974981/pexels-photo-25974981.jpeg?cs=srgb&dl=pexels-leiliane-dutra-1841922-25974981.jpg&fm=jpg' }
+        ],
+        addons: []
+      },
+      feeds: {
+        color: 'sage',
+        items: [
+          { id: 'fd1', name: 'Hog Starter Feed', desc: 'Starter feed for young pigs.', price: 1200, image: 'https://images.pexels.com/photos/6192537/pexels-photo-6192537.jpeg?cs=srgb&dl=pexels-topeasokere-6192537.jpg&fm=jpg' },
+          { id: 'fd2', name: 'Hog Grower Feed', desc: 'Feed for growing pigs.', price: 1150, image: 'https://images.pexels.com/photos/5216150/pexels-photo-5216150.jpeg?cs=srgb&dl=pexels-yankrukov-5216150.jpg&fm=jpg' },
+          { id: 'fd3', name: 'Broiler Starter Feed', desc: 'Starter feed for young broilers.', price: 1100, image: 'https://images.pexels.com/photos/32653692/pexels-photo-32653692.jpeg?cs=srgb&dl=pexels-wanas-rosa-1295016-32653692.jpg&fm=jpg' },
+          { id: 'fd4', name: 'Broiler Finisher Feed', desc: 'Finisher feed for broilers.', price: 1050, image: 'https://images.pexels.com/photos/11350102/pexels-photo-11350102.jpeg?cs=srgb&dl=pexels-towfiqu-barbhuiya-3440682-11350102.jpg&fm=jpg' },
+          { id: 'fd5', name: 'Layer Feed', desc: 'Feed formulated for laying hens.', price: 980, image: 'https://images.pexels.com/photos/6724094/pexels-photo-6724094.jpeg?cs=srgb&dl=pexels-andrianyn-6724094.jpg&fm=jpg' },
+          { id: 'fd6', name: 'Cattle Feed', desc: 'Nutritious feed for cattle.', price: 1300, image: 'https://images.pexels.com/photos/4840958/pexels-photo-4840958.jpeg?cs=srgb&dl=pexels-alwi-hafizh-al-mumtaz-3211525-4840958.jpg&fm=jpg' }
+        ],
+        addons: []
+      },
+      foods_drinks: {
+        color: 'plum',
+        items: [
+          { id: 'fdri1', name: 'Kapia Farm Coffee', desc: 'Freshly brewed farm cafe coffee.', price: 80, image: 'https://images.pexels.com/photos/459489/pexels-photo-459489.jpeg?cs=srgb&dl=pexels-pixabay-459489.jpg&fm=jpg' },
+          { id: 'fdri2', name: 'Iced Coffee', desc: 'Cold and refreshing coffee.', price: 95, image: 'https://images.pexels.com/photos/9715331/pexels-photo-9715331.jpeg?cs=srgb&dl=pexels-thegr8ossab-9715331.jpg&fm=jpg' },
+          { id: 'fdri3', name: 'Farm Breakfast', desc: 'Hearty breakfast with local ingredients.', price: 180, image: 'https://images.pexels.com/photos/18972781/pexels-photo-18972781.jpeg?cs=srgb&dl=pexels-the-design-lady-746806315-18972781.jpg&fm=jpg' },
+          { id: 'fdri4', name: 'Chicken Sandwich', desc: 'Freshly prepared chicken sandwich.', price: 150, image: 'https://images.pexels.com/photos/9240536/pexels-photo-9240536.jpeg?cs=srgb&dl=pexels-akilvigneshjr-9240536.jpg&fm=jpg' },
+          { id: 'fdri5', name: 'Banana Bread', desc: 'Soft homemade banana bread.', price: 75, image: 'https://images.pexels.com/photos/5441033/pexels-photo-5441033.jpeg?cs=srgb&dl=pexels-rachel-loughman-3513722-5441033.jpg&fm=jpg' },
+          { id: 'fdri6', name: 'Fresh Fruit Shake', desc: 'Refreshing shake made with fresh fruit.', price: 110, image: 'https://images.pexels.com/photos/8743884/pexels-photo-8743884.jpeg?cs=srgb&dl=pexels-farhad-8743884.jpg&fm=jpg' }
+        ],
+        addons: [
+          { id: 'ad1', name: 'Extra Shot', price: 25 },
+          { id: 'ad2', name: 'Oat Milk', price: 30 },
+          { id: 'ad3', name: 'Extra Syrup', price: 15 },
+          { id: 'ad4', name: 'Extra Cheese', price: 20 }
+        ]
+      }
+    };
+
+    // Migrate cached legacy image URLs to the current stock defaults.
+    try {
+      if (!localStorage.getItem('kapia-products') && localStorage.getItem('kapia-menu-data')) {
+        const old = JSON.parse(localStorage.getItem('kapia-menu-data'));
+        if (old && typeof old === 'object') {
+          const migrated = [];
+          Object.keys(old).forEach(c => {
+            if (old[c]?.items && Array.isArray(old[c].items)) {
+              old[c].items.forEach(item => {
+                const savedImg = localStorage.getItem(`kapia-image-${item.id}`);
+                migrated.push({ ...item, category: c, image: savedImg || item.image || '' });
+              });
+            }
+          });
+          if (migrated.length) {
+            localStorage.setItem('kapia-products', JSON.stringify(migrated));
+          }
+        }
+      }
+
+      // Keep custom image URLs while replacing broken sample-image hosts.
+      const storedRaw = localStorage.getItem('kapia-products');
+      if (storedRaw) {
+        const storedProducts = JSON.parse(storedRaw);
+        if (Array.isArray(storedProducts)) {
+          let hasLegacyImage = false;
+          storedProducts.forEach(p => {
+            if (!p.image || /imgur\.com|unsplash\.com/.test(p.image)) {
+              const def = defaultProducts().find(d => d.id === p.id);
+              if (def && def.image) {
+                p.image = def.image;
+                hasLegacyImage = true;
+              }
+            }
+          });
+          if (hasLegacyImage) {
+            localStorage.setItem('kapia-products', JSON.stringify(storedProducts));
+          }
+        }
+      }
+    } catch (e) {}
+
+    // Product synchronization helpers
+    function defaultProducts() {
+      const list = [];
+      Object.keys(menuData).forEach(cat => {
+        menuData[cat].items.forEach(item => {
+          list.push({ ...item, category: cat });
+        });
+      });
+      return list;
+    }
+
+    function getProducts() {
+      try {
+        const raw = localStorage.getItem('kapia-products');
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed)) return parsed;
+        }
+      } catch (e) {
+        console.warn('Error parsing kapia-products:', e);
+      }
+      return defaultProducts();
+    }
+
+    function syncMenuFromProducts(productsList) {
+      Object.keys(menuData).forEach(k => {
+        menuData[k].items = [];
+      });
+      productsList.forEach(p => {
+        const cat = p.category || 'fertilizer';
+        if (!menuData[cat]) {
+          menuData[cat] = { color: 'coral', items: [], addons: [] };
+        }
+        const savedImg = localStorage.getItem(`kapia-image-${p.id}`);
+        menuData[cat].items.push({ ...p, image: p.image || savedImg || '' });
+      });
+    }
+
+    function esc(v) {
+      return String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[c]));
+    }
+
+    // Customer store variables
+    let currentCategory = 'fertilizer';
+    let order = [];
+    let orderIdCounter = 0;
+    let modalItem = null, modalCategory = null, modalQty = 1, modalAddons = {};
+    let customerName = '';
+    let customerEmail = '';
+
+    function switchCategory(cat) {
+      currentCategory = cat;
+      document.querySelectorAll('.category-tab').forEach(tab => {
+        const c = tab.dataset.category === cat;
+        tab.classList.toggle('active', c);
+        tab.setAttribute('aria-selected', c);
+      });
+      renderMenuGrid();
+    }
+
+    function renderMenuGrid() {
+      const grid = document.getElementById('menu-grid');
+      if (!grid) return;
+      grid.innerHTML = '';
+      const catData = menuData[currentCategory];
+      if (!catData || !catData.items) return;
+      const template = document.getElementById('menu-card-template');
+
+      catData.items.forEach((item, i) => {
+        const clone = template.content.cloneNode(true);
+        const article = clone.querySelector('article');
+        article.style.animationDelay = window.innerWidth <= 640 ? '0ms' : `${i * 40}ms`;
+        article.style.opacity = '0';
+
+        const img = clone.querySelector('img');
+        img.dataset.templateId = `${item.id}-image`;
+        img.alt = item.name;
+        img.src = getProductImageUrl(item.image);
+        img.onerror = function() {
+          this.onerror = null;
+          this.src = DEFAULT_PLACEHOLDER_IMAGE;
+        };
+
+        const nameEl = clone.querySelector('h3');
+        nameEl.dataset.templateId = `${item.id}-name`;
+        nameEl.textContent = item.name;
+
+        const descEl = clone.querySelector('p');
+        descEl.dataset.templateId = `${item.id}-desc`;
+        descEl.textContent = item.desc;
+
+        const priceEl = clone.querySelector('span');
+        priceEl.dataset.templateId = `${item.id}-price`;
+        priceEl.textContent = `${CURRENCY}${Number(item.price).toFixed(2)}`;
+
+        const btn = clone.querySelector('.add-to-order-btn');
+        btn.setAttribute('onclick', `applyBounce(this); openModal('${currentCategory}','${item.id}')`);
+
+        grid.appendChild(clone);
+      });
+
+      if (window.lucide && typeof lucide.createIcons === 'function') {
+        lucide.createIcons({ root: grid });
+      }
+    }
+
+    function getProductImageUrl(source) {
+      if (!source) return DEFAULT_PLACEHOLDER_IMAGE;
+      if (!source.startsWith('https://images.pexels.com/')) return source;
+
+      const imageUrl = new URL(source);
+      imageUrl.search = '';
+      imageUrl.searchParams.set('auto', 'compress');
+      imageUrl.searchParams.set('cs', 'tinysrgb');
+      imageUrl.searchParams.set('w', window.innerWidth <= 640 ? '480' : '800');
+      return imageUrl.toString();
+    }
+
+    function openModal(category, itemId) {
+      const catData = menuData[category];
+      if (!catData) return;
+      const item = catData.items.find(i => i.id === itemId);
+      if (!item) return;
+
+      modalItem = { ...item };
+      modalCategory = category;
+      modalQty = 1;
+      modalAddons = {};
+
+      document.getElementById('modal-item-name').textContent = modalItem.name;
+      document.getElementById('modal-item-desc').textContent = modalItem.desc;
+      document.getElementById('modal-base-price').textContent = `${CURRENCY}${Number(modalItem.price).toFixed(2)}`;
+      document.getElementById('modal-qty').textContent = '1';
+
+      const addonsSection = document.getElementById('addons-section');
+      const addonsList = document.getElementById('addons-list');
+      addonsList.innerHTML = '';
+      const productAddons = Array.isArray(modalItem.addons) ? modalItem.addons : catData.addons;
+
+      if (productAddons && productAddons.length > 0) {
+        addonsSection.classList.remove('hidden');
+        productAddons.forEach((addon, index) => {
+          const addonId = addon.id || `${modalItem.id}-addon-${index}`;
+          const label = document.createElement('label');
+          label.className = 'flex items-center gap-3 p-3 rounded-xl bg-gray-50 hover:bg-gray-100 cursor-pointer transition-colors';
+          const checkbox = document.createElement('input');
+          checkbox.type = 'checkbox';
+          checkbox.className = 'w-4 h-4 rounded text-orange-500 focus:ring-orange-400';
+          checkbox.addEventListener('change', () => toggleAddon(addonId, addon.name, Number(addon.price), checkbox.checked));
+          const name = document.createElement('span');
+          name.className = 'flex-1 font-medium text-sm';
+          name.style.color = 'var(--ink)';
+          name.textContent = addon.name;
+          const price = document.createElement('span');
+          price.className = 'font-semibold text-sm';
+          price.style.color = 'var(--stone)';
+          price.textContent = `+${CURRENCY}${Number(addon.price).toFixed(2)}`;
+          label.append(checkbox, name, price);
+          addonsList.appendChild(label);
+        });
+      } else {
+        addonsSection.classList.add('hidden');
+      }
+
+      updateModalTotal();
+      document.getElementById('customization-modal').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      document.getElementById('customization-modal').classList.add('hidden');
+      document.body.style.overflow = '';
+      modalItem = null;
+    }
+
+    function toggleAddon(id, name, price, checked) {
+      if (checked) modalAddons[id] = { name, price };
+      else delete modalAddons[id];
+      updateModalTotal();
+    }
+
+    function changeModalQty(d) {
+      modalQty = Math.max(1, modalQty + d);
+      document.getElementById('modal-qty').textContent = modalQty;
+      updateModalTotal();
+    }
+
+    function updateModalTotal() {
+      if (!modalItem) return;
+      const at = Object.values(modalAddons).reduce((s, a) => s + (Number(a.price) || 0), 0);
+      const total = (Number(modalItem.price) + at) * modalQty;
+      document.getElementById('modal-total').textContent = `${CURRENCY}${total.toFixed(2)}`;
+    }
+
+    function confirmAddToOrder() {
+      if (!modalItem) return;
+      const newAddons = Object.values(modalAddons).map(a => ({ name: a.name, price: a.price }));
+      const addonsKey = JSON.stringify([...newAddons].sort((a, b) => a.name.localeCompare(b.name)));
+      const existingItem = order.find(o => o.itemId === modalItem.id && JSON.stringify([...o.addons].sort((a, b) => a.name.localeCompare(b.name))) === addonsKey);
+      
+      if (existingItem) {
+        existingItem.qty += modalQty;
+      } else {
+        order.push({
+          orderId: ++orderIdCounter,
+          itemId: modalItem.id,
+          name: modalItem.name,
+          basePrice: Number(modalItem.price),
+          addons: newAddons,
+          qty: modalQty,
+          category: modalCategory
+        });
+      }
+      closeModal();
+      renderOrder();
+
+      if (window.innerWidth < 1024) {
+        const panel = document.getElementById('order-panel-fixed');
+        const btn = document.getElementById('panel-toggle-btn');
+        panel.classList.add('panel-open');
+        btn.textContent = 'Close';
+        btn.setAttribute('aria-expanded', 'true');
+        panel.style.maxHeight = 'calc(100vh - 20px)';
+      }
+    }
+
+    function renderOrder() {
+      const container = document.getElementById('order-items-container');
+      const emptyMsg = document.getElementById('empty-order');
+      const template = document.getElementById('order-item-template');
+      const existingEls = new Map();
+      container.querySelectorAll('[data-order-id]').forEach(el => existingEls.set(parseInt(el.dataset.orderId), el));
+      const currentIds = new Set(order.map(o => o.orderId));
+      existingEls.forEach((el, id) => { if (!currentIds.has(id)) el.remove(); });
+
+      order.forEach(item => {
+        const addonsPrice = item.addons.reduce((s, a) => s + (Number(a.price) || 0), 0);
+        const itemTotal = (Number(item.basePrice) + addonsPrice) * item.qty;
+        const addonsText = item.addons.length ? '+ ' + item.addons.map(a => a.name).join(', ') : '';
+        const catLabel = item.category === 'fertilizer' ? 'Fertilizer' : item.category === 'feeds' ? 'Feeds' : 'Foods & Drinks';
+        const catColor = item.category === 'fertilizer' ? 'coral' : item.category === 'feeds' ? 'sage' : 'plum';
+
+        if (existingEls.has(item.orderId)) {
+          const el = existingEls.get(item.orderId);
+          el.querySelector('.order-item-qty').textContent = item.qty;
+          el.querySelector('.order-item-price').textContent = `${CURRENCY}${itemTotal.toFixed(2)}`;
+          el.querySelector('.order-item-addons').textContent = addonsText;
+          el.querySelector('.order-item-category').textContent = catLabel;
+          el.querySelector('.order-item-category').style.backgroundColor = `var(--${catColor}-light)`;
+          el.querySelector('.order-item-category').style.color = `var(--${catColor})`;
+        } else {
+          const clone = template.content.cloneNode(true);
+          const wrapper = clone.querySelector('div');
+          wrapper.dataset.orderId = item.orderId;
+          wrapper.querySelector('p.font-semibold').textContent = item.name;
+          wrapper.querySelector('.order-item-category').textContent = catLabel;
+          wrapper.querySelector('.order-item-category').style.backgroundColor = `var(--${catColor}-light)`;
+          wrapper.querySelector('.order-item-category').style.color = `var(--${catColor})`;
+          wrapper.querySelector('.order-item-addons').textContent = addonsText;
+          wrapper.querySelector('.order-item-qty').textContent = item.qty;
+          wrapper.querySelector('.order-item-price').textContent = `${CURRENCY}${itemTotal.toFixed(2)}`;
+          wrapper.querySelector('.qty-minus').setAttribute('onclick', `changeOrderQty(${item.orderId},-1)`);
+          wrapper.querySelector('.qty-plus').setAttribute('onclick', `changeOrderQty(${item.orderId},1)`);
+          wrapper.querySelector('.remove-btn').setAttribute('onclick', `removeOrderItem(${item.orderId})`);
+          container.appendChild(clone);
+        }
+      });
+
+      if (window.lucide && typeof lucide.createIcons === 'function') {
+        lucide.createIcons();
+      }
+
+      emptyMsg.style.display = order.length === 0 ? 'block' : 'none';
+      const subtotal = order.reduce((s, item) => {
+        const addonsPrice = item.addons.reduce((a, ad) => a + (Number(ad.price) || 0), 0);
+        return s + (Number(item.basePrice) + addonsPrice) * item.qty;
+      }, 0);
+      const totalCount = order.reduce((s, item) => s + item.qty, 0);
+      document.getElementById('order-subtotal').textContent = `${CURRENCY}${subtotal.toFixed(2)}`;
+      document.getElementById('order-count').textContent = totalCount;
+    }
+
+    function changeOrderQty(orderId, d) {
+      const item = order.find(o => o.orderId === orderId);
+      if (!item) return;
+      item.qty = Math.max(1, item.qty + d);
+      renderOrder();
+    }
+
+    function removeOrderItem(orderId) {
+      order = order.filter(o => o.orderId !== orderId);
+      renderOrder();
+    }
+
+    function toggleOrderPanel() {
+      if (window.innerWidth < 1024) {
+        const panel = document.getElementById('order-panel-fixed');
+        const btn = document.getElementById('panel-toggle-btn');
+        const isOpen = panel.classList.contains('panel-open');
+        if (isOpen) {
+          panel.classList.remove('panel-open');
+          btn.setAttribute('aria-expanded', 'false');
+          btn.textContent = 'View Order';
+          panel.style.maxHeight = '';
+        } else {
+          panel.classList.add('panel-open');
+          btn.setAttribute('aria-expanded', 'true');
+          btn.textContent = 'Close';
+          panel.style.maxHeight = 'calc(100vh - 20px)';
+        }
+      }
+    }
+
+    function scrollToCategories() {
+      const nav = document.querySelector('nav[data-template-id="category-tabs"]');
+      if (nav) nav.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function applyBounce(element) {
+      element.classList.remove('btn-click');
+      void element.offsetWidth;
+      element.classList.add('btn-click');
+    }
+
+    function submitOrder() {
+      if (order.length === 0) {
+        document.getElementById('submit-error').textContent = 'Your order is empty. Please add items before submitting.';
+        document.getElementById('submit-error').classList.remove('hidden');
+        return;
+      }
+      document.getElementById('submit-error').classList.add('hidden');
+      document.getElementById('name-input').value = '';
+      document.getElementById('email-input').value = '';
+      document.getElementById('name-error').classList.add('hidden');
+      document.getElementById('name-modal').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeNameModal() {
+      document.getElementById('name-modal').classList.add('hidden');
+      document.body.style.overflow = '';
+      document.getElementById('email-input').value = '';
+    }
+
+    function confirmNameAndSubmit() {
+      const nameInput = document.getElementById('name-input').value.trim();
+      const emailInput = document.getElementById('email-input').value.trim();
+      const nameError = document.getElementById('name-error');
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      
+      if (!nameInput) {
+        nameError.textContent = 'Please enter your name';
+        nameError.classList.remove('hidden');
+        return;
+      }
+      if (emailInput && !emailRegex.test(emailInput)) {
+        nameError.textContent = 'Please enter a valid email address';
+        nameError.classList.remove('hidden');
+        return;
+      }
+      
+      customerName = nameInput;
+      customerEmail = emailInput;
+      closeNameModal();
+      performOrderSubmit();
+    }
+
+    async function createOrderRecord() {
+      let response;
+      try {
+        response = await fetch('/api/orders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            customerName,
+            customerEmail,
+            items: order.map(item => ({
+              id: item.itemId,
+              name: item.name,
+              basePrice: Number(item.basePrice),
+              addons: item.addons || [],
+              qty: item.qty || 1,
+              category: item.category || ''
+            }))
+          })
+        });
+      } catch (error) {
+        throw new Error('Cannot reach /api/orders. Confirm the Vercel API is deployed with this website.');
+      }
+
+      const responseText = await response.text();
+      let result;
+      try {
+        result = JSON.parse(responseText);
+      } catch (error) {
+        throw new Error(`Order API returned HTTP ${response.status} without JSON. Confirm /api/orders is deployed on Vercel.`);
+      }
+      if (!response.ok) throw new Error(result.error || `Order API returned HTTP ${response.status}.`);
+      if (!result.order) throw new Error('The order service returned an invalid response.');
+      return result.order;
+    }
+
+    async function performOrderSubmit() {
+      const errorEl = document.getElementById('submit-error');
+      const successEl = document.getElementById('submit-success');
+      const submitBtn = document.getElementById('submit-order-btn');
+      
+      errorEl.classList.add('hidden');
+      successEl.classList.add('hidden');
+      
+      submitBtn.disabled = true;
+      submitBtn.style.opacity = '0.6';
+
+      let savedOrder;
+      try {
+        savedOrder = await createOrderRecord();
+      } catch (error) {
+        errorEl.textContent = error.message || 'Could not submit your order. Please try again.';
+        errorEl.classList.remove('hidden');
+        submitBtn.disabled = false;
+        submitBtn.style.opacity = '1';
+        return;
+      }
+
+      successEl.classList.remove('hidden');
+
+      setTimeout(() => openPaymentPage(savedOrder), 300);
+
+      order = [];
+      orderIdCounter = 0;
+      customerName = '';
+      customerEmail = '';
+      renderOrder();
+      submitBtn.disabled = false;
+      submitBtn.style.opacity = '1';
+      setTimeout(() => successEl.classList.add('hidden'), 4000);
+    }
+
+    // Payment Page & Randomized QR Code Logic
+    let currentPaymentOrder = null;
+    let currentPaymentMethod = 'qr';
+    let currentQRSeed = Date.now();
+
+    function openPaymentPage(orderRecord) {
+      currentPaymentOrder = orderRecord;
+      currentPaymentMethod = 'qr';
+      currentQRSeed = Date.now();
+
+      // Populate Order Receipt Details
+      document.getElementById('pay-order-id').textContent = '#' + (orderRecord.id || 'KAP');
+      document.getElementById('pay-order-date').textContent = orderRecord.date || new Date().toLocaleString();
+      document.getElementById('pay-customer-name').textContent = orderRecord.customerName || 'Guest Customer';
+      document.getElementById('pay-customer-email').textContent = orderRecord.customerEmail || 'N/A';
+      
+      const formattedTotal = CURRENCY + Number(orderRecord.total || 0).toFixed(2);
+      document.getElementById('pay-total-amount').textContent = formattedTotal;
+      document.getElementById('pay-qr-amount').textContent = formattedTotal;
+      document.getElementById('pay-cod-amount').textContent = formattedTotal;
+
+      // Render Itemized Receipt
+      const itemsContainer = document.getElementById('pay-items-list');
+      itemsContainer.innerHTML = (orderRecord.items || []).map(item => {
+        const addons = item.addons && item.addons.length ? `<div style="font-size:11px;color:#777;">+ ${item.addons.map(a => esc(a.name)).join(', ')}</div>` : '';
+        return `
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;padding:8px 0;border-bottom:1px solid #f0f0f0;">
+            <div style="flex:1;min-width:0;padding-right:8px;">
+              <div style="font-weight:600;font-size:14px;color:#111;">${esc(item.name)} <span style="color:#666;font-size:12px;">× ${item.qty || 1}</span></div>
+              ${addons}
+            </div>
+            <div style="font-weight:700;font-size:14px;color:#111;">${CURRENCY}${Number(item.lineTotal || (item.unitPrice || 0) * (item.qty || 1)).toFixed(2)}</div>
+          </div>
+        `;
+      }).join('');
+
+      // Reset Form State
+      document.getElementById('pay-ref-input').value = '';
+      document.getElementById('payment-success-banner').style.display = 'none';
+      document.getElementById('pay-confirm-btn').disabled = false;
+      document.getElementById('pay-confirm-btn').style.opacity = '1';
+      document.getElementById('pay-confirm-btn').textContent = '✓ I Have Completed Payment';
+      
+      const badge = document.getElementById('payment-status-badge');
+      badge.textContent = 'Awaiting Payment';
+      badge.style.background = '#fef3c7';
+      badge.style.color = '#92400e';
+
+      selectPaymentMethod('qr');
+      generateRandomQR(orderRecord.id, orderRecord.total);
+
+      // Display the payment page
+      document.getElementById('payment-page').style.display = 'block';
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closePaymentPage() {
+      document.getElementById('payment-page').style.display = 'none';
+      document.body.style.overflow = '';
+    }
+
+    function selectPaymentMethod(method) {
+      currentPaymentMethod = method;
+      const qrBtn = document.getElementById('pay-opt-qr');
+      const codBtn = document.getElementById('pay-opt-cod');
+      const qrSection = document.getElementById('payment-qr-section');
+      const codSection = document.getElementById('payment-cod-section');
+
+      if (method === 'qr') {
+        qrBtn.style.background = '#ff943e';
+        codBtn.style.background = '#fff';
+        qrSection.style.display = 'block';
+        codSection.style.display = 'none';
+      } else {
+        qrBtn.style.background = '#fff';
+        codBtn.style.background = '#ff943e';
+        qrSection.style.display = 'none';
+        codSection.style.display = 'block';
+      }
+      document.getElementById('pay-confirm-btn').textContent = method === 'cod'
+        ? 'Request cash on delivery / pickup'
+        : '✓ I Have Completed Payment';
+    }
+
+    function randomizeCurrentQR() {
+      currentQRSeed = Math.floor(Math.random() * 899999) + 100000;
+      if (currentPaymentOrder) {
+        generateRandomQR(currentPaymentOrder.id, currentPaymentOrder.total);
+      }
+    }
+
+    function generateRandomQR(orderId, amount) {
+      const canvas = document.getElementById('qr-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const refCode = 'REF-' + (currentQRSeed.toString().slice(-6));
+      document.getElementById('pay-qr-ref').textContent = refCode;
+
+      const size = 210;
+      const gridCount = 21;
+      const cellSize = size / gridCount;
+
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, size, size);
+      ctx.fillStyle = '#000000';
+
+      // Seed-based pseudo-random generator
+      let seed = currentQRSeed + (orderId ? orderId.length : 0);
+      function pseudoRandom() {
+        seed = (seed * 9301 + 49297) % 233280;
+        return seed / 233280;
+      }
+
+      // Draw random matrix data
+      for (let r = 0; r < gridCount; r++) {
+        for (let c = 0; c < gridCount; c++) {
+          const isCorner = (r < 7 && c < 7) || (r < 7 && c >= gridCount - 7) || (r >= gridCount - 7 && c < 7);
+          if (!isCorner && pseudoRandom() > 0.45) {
+            ctx.fillRect(c * cellSize, r * cellSize, cellSize, cellSize);
+          }
+        }
+      }
+
+      // Draw standard QR finder patterns at 3 corners
+      function drawFinder(x, y) {
+        ctx.fillStyle = '#000000';
+        ctx.fillRect(x * cellSize, y * cellSize, 7 * cellSize, 7 * cellSize);
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect((x + 1) * cellSize, (y + 1) * cellSize, 5 * cellSize, 5 * cellSize);
+        ctx.fillStyle = '#ff943e';
+        ctx.fillRect((x + 2) * cellSize, (y + 2) * cellSize, 3 * cellSize, 3 * cellSize);
+      }
+
+      drawFinder(0, 0);
+      drawFinder(gridCount - 7, 0);
+      drawFinder(0, gridCount - 7);
+    }
+
+    async function confirmPaymentComplete() {
+      if (!currentPaymentOrder) return;
+      const refInput = document.getElementById('pay-ref-input').value.trim();
+      const btn = document.getElementById('pay-confirm-btn');
+      btn.disabled = true;
+      const updatedStatus = currentPaymentMethod === 'cod' ? 'Awaiting COD / Pickup' : 'Payment Reported';
+      const methodText = currentPaymentMethod === 'cod'
+        ? 'Cash on Delivery'
+        : refInput ? `QR PH (Ref: ${refInput})` : 'QR PH / GCash (Payment reported)';
+
+      try {
+        const response = await fetch('/api/orders', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: currentPaymentOrder.id, status: updatedStatus, paymentMethod: methodText })
+        });
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(result.error || 'Could not update your order.');
+
+        currentPaymentOrder = result.order;
+        const badge = document.getElementById('payment-status-badge');
+        badge.textContent = updatedStatus;
+        badge.style.background = currentPaymentMethod === 'cod' ? '#eff6ff' : '#fffbeb';
+        badge.style.color = currentPaymentMethod === 'cod' ? '#1d4ed8' : '#92400e';
+
+        document.getElementById('payment-success-title').textContent = currentPaymentMethod === 'cod' ? 'Pickup request received' : 'Payment reported';
+        document.getElementById('payment-success-message').textContent = currentPaymentMethod === 'cod'
+          ? 'Your order is awaiting cash payment at delivery or pickup.'
+          : 'Your payment report was sent to the cafe. The admin will verify it and update your order.';
+        document.getElementById('payment-success-banner').style.display = 'block';
+        btn.style.opacity = '0.5';
+        btn.textContent = '✓ Order updated';
+      } catch (error) {
+        alert(error.message || 'Could not update your order. Please try again.');
+        btn.disabled = false;
+      }
+    }
+
+    window.addEventListener('storage', event => {
+      if (event.key !== 'kapia-products') return;
+
+      const products = getProducts();
+      syncMenuFromProducts(products);
+      const currentProducts = new Map(products.map(product => [product.id, product]));
+
+      order = order.filter(item => {
+        const product = currentProducts.get(item.itemId);
+        if (!product) return false;
+        item.name = product.name;
+        item.basePrice = Number(product.price);
+        item.category = product.category || 'fertilizer';
+        return true;
+      });
+
+      if (modalItem) {
+        const product = currentProducts.get(modalItem.id);
+        if (!product) {
+          closeModal();
+        } else {
+          modalItem = { ...product };
+          modalCategory = product.category || 'fertilizer';
+          document.getElementById('modal-item-name').textContent = modalItem.name;
+          document.getElementById('modal-item-desc').textContent = modalItem.desc;
+          document.getElementById('modal-base-price').textContent = `${CURRENCY}${Number(modalItem.price).toFixed(2)}`;
+          updateModalTotal();
+        }
+      }
+
+      renderMenuGrid();
+      renderOrder();
+    });
+
+    // App Initialization
+    window.addEventListener('DOMContentLoaded', () => {
+      const products = getProducts();
+      syncMenuFromProducts(products);
+      renderMenuGrid();
+      renderOrder();
+    });
+  </script>
+</body>
+</html>
