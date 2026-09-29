@@ -703,48 +703,6 @@
       }
     };
 
-    // Migrate cached legacy image URLs to the current stock defaults.
-    try {
-      if (!localStorage.getItem('kapia-products') && localStorage.getItem('kapia-menu-data')) {
-        const old = JSON.parse(localStorage.getItem('kapia-menu-data'));
-        if (old && typeof old === 'object') {
-          const migrated = [];
-          Object.keys(old).forEach(c => {
-            if (old[c]?.items && Array.isArray(old[c].items)) {
-              old[c].items.forEach(item => {
-                const savedImg = localStorage.getItem(`kapia-image-${item.id}`);
-                migrated.push({ ...item, category: c, image: savedImg || item.image || '' });
-              });
-            }
-          });
-          if (migrated.length) {
-            localStorage.setItem('kapia-products', JSON.stringify(migrated));
-          }
-        }
-      }
-
-      // Keep custom image URLs while replacing broken sample-image hosts.
-      const storedRaw = localStorage.getItem('kapia-products');
-      if (storedRaw) {
-        const storedProducts = JSON.parse(storedRaw);
-        if (Array.isArray(storedProducts)) {
-          let hasLegacyImage = false;
-          storedProducts.forEach(p => {
-            if (!p.image || /imgur\.com|unsplash\.com/.test(p.image)) {
-              const def = defaultProducts().find(d => d.id === p.id);
-              if (def && def.image) {
-                p.image = def.image;
-                hasLegacyImage = true;
-              }
-            }
-          });
-          if (hasLegacyImage) {
-            localStorage.setItem('kapia-products', JSON.stringify(storedProducts));
-          }
-        }
-      }
-    } catch (e) {}
-
     // Product synchronization helpers
     function defaultProducts() {
       const list = [];
@@ -756,19 +714,6 @@
       return list;
     }
 
-    function getProducts() {
-      try {
-        const raw = localStorage.getItem('kapia-products');
-        if (raw) {
-          const parsed = JSON.parse(raw);
-          if (Array.isArray(parsed)) return parsed;
-        }
-      } catch (e) {
-        console.warn('Error parsing kapia-products:', e);
-      }
-      return defaultProducts();
-    }
-
     function syncMenuFromProducts(productsList) {
       Object.keys(menuData).forEach(k => {
         menuData[k].items = [];
@@ -778,9 +723,48 @@
         if (!menuData[cat]) {
           menuData[cat] = { color: 'coral', items: [], addons: [] };
         }
-        const savedImg = localStorage.getItem(`kapia-image-${p.id}`);
-        menuData[cat].items.push({ ...p, image: p.image || savedImg || '' });
+        menuData[cat].items.push({ ...p, image: p.image || '' });
       });
+    }
+
+    async function loadProductCatalog() {
+      const response = await fetch('/api/products', { cache: 'no-store' });
+      const products = await response.json().catch(() => null);
+      if (!response.ok || !Array.isArray(products)) {
+        throw new Error(products?.error || 'Could not load the product catalog.');
+      }
+      return products;
+    }
+
+    function applyProductCatalog(products) {
+      syncMenuFromProducts(products);
+      const currentProducts = new Map(products.map(product => [product.id, product]));
+
+      order = order.filter(item => {
+        const product = currentProducts.get(item.itemId);
+        if (!product) return false;
+        item.name = product.name;
+        item.basePrice = Number(product.price);
+        item.category = product.category || 'fertilizer';
+        return true;
+      });
+
+      if (modalItem) {
+        const product = currentProducts.get(modalItem.id);
+        if (!product) {
+          closeModal();
+        } else {
+          modalItem = { ...product };
+          modalCategory = product.category || 'fertilizer';
+          document.getElementById('modal-item-name').textContent = modalItem.name;
+          document.getElementById('modal-item-desc').textContent = modalItem.desc;
+          document.getElementById('modal-base-price').textContent = `${CURRENCY}${Number(modalItem.price).toFixed(2)}`;
+          updateModalTotal();
+        }
+      }
+
+      renderMenuGrid();
+      renderOrder();
     }
 
     function esc(v) {
@@ -1359,46 +1343,14 @@
       }
     }
 
-    window.addEventListener('storage', event => {
-      if (event.key !== 'kapia-products') return;
-
-      const products = getProducts();
-      syncMenuFromProducts(products);
-      const currentProducts = new Map(products.map(product => [product.id, product]));
-
-      order = order.filter(item => {
-        const product = currentProducts.get(item.itemId);
-        if (!product) return false;
-        item.name = product.name;
-        item.basePrice = Number(product.price);
-        item.category = product.category || 'fertilizer';
-        return true;
-      });
-
-      if (modalItem) {
-        const product = currentProducts.get(modalItem.id);
-        if (!product) {
-          closeModal();
-        } else {
-          modalItem = { ...product };
-          modalCategory = product.category || 'fertilizer';
-          document.getElementById('modal-item-name').textContent = modalItem.name;
-          document.getElementById('modal-item-desc').textContent = modalItem.desc;
-          document.getElementById('modal-base-price').textContent = `${CURRENCY}${Number(modalItem.price).toFixed(2)}`;
-          updateModalTotal();
-        }
-      }
-
-      renderMenuGrid();
-      renderOrder();
-    });
-
     // App Initialization
     window.addEventListener('DOMContentLoaded', () => {
-      const products = getProducts();
-      syncMenuFromProducts(products);
+      syncMenuFromProducts(defaultProducts());
       renderMenuGrid();
       renderOrder();
+      loadProductCatalog().then(applyProductCatalog).catch(error => {
+        console.warn('Could not refresh product catalog:', error);
+      });
     });
   </script>
 </body>

@@ -1,25 +1,5 @@
 const CURRENCY = '\u20b1';
 const PLACEHOLDER_IMAGE = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="400" height="256" viewBox="0 0 400 256"><rect width="100%" height="100%" fill="#eee"/><text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" fill="#888" font-family="sans-serif" font-size="16">Kapia Farm Cafe</text></svg>');
-const DEFAULT_PRODUCTS = [
-  { id: 'f1', category: 'fertilizer', name: 'Complete Fertilizer 14-14-14', desc: 'Balanced fertilizer for healthy crop growth.', price: 850, image: 'https://images.pexels.com/photos/7768447/pexels-photo-7768447.jpeg' },
-  { id: 'f2', category: 'fertilizer', name: 'Urea 46-0-0', desc: 'Nitrogen fertilizer for vigorous plant growth.', price: 900, image: 'https://images.pexels.com/photos/31673795/pexels-photo-31673795.jpeg' },
-  { id: 'f3', category: 'fertilizer', name: 'Organic Compost', desc: 'Organic soil conditioner for garden and farm crops.', price: 250, image: 'https://images.pexels.com/photos/32938346/pexels-photo-32938346.jpeg' },
-  { id: 'f4', category: 'fertilizer', name: 'Complete Fertilizer 16-16-16', desc: 'All-purpose fertilizer for a wide range of crops.', price: 880, image: 'https://images.pexels.com/photos/11996941/pexels-photo-11996941.jpeg' },
-  { id: 'f5', category: 'fertilizer', name: 'Ammonium Phosphate', desc: 'Phosphorus and nitrogen fertilizer.', price: 950, image: 'https://images.pexels.com/photos/15388810/pexels-photo-15388810.jpeg' },
-  { id: 'f6', category: 'fertilizer', name: 'Vermicast', desc: 'Natural organic fertilizer for healthier soil.', price: 180, image: 'https://images.pexels.com/photos/25974981/pexels-photo-25974981.jpeg' },
-  { id: 'fd1', category: 'feeds', name: 'Hog Starter Feed', desc: 'Starter feed for young pigs.', price: 1200, image: 'https://images.pexels.com/photos/6192537/pexels-photo-6192537.jpeg' },
-  { id: 'fd2', category: 'feeds', name: 'Hog Grower Feed', desc: 'Feed for growing pigs.', price: 1150, image: 'https://images.pexels.com/photos/5216150/pexels-photo-5216150.jpeg' },
-  { id: 'fd3', category: 'feeds', name: 'Broiler Starter Feed', desc: 'Starter feed for young broilers.', price: 1100, image: 'https://images.pexels.com/photos/32653692/pexels-photo-32653692.jpeg' },
-  { id: 'fd4', category: 'feeds', name: 'Broiler Finisher Feed', desc: 'Finisher feed for broilers.', price: 1050, image: 'https://images.pexels.com/photos/11350102/pexels-photo-11350102.jpeg' },
-  { id: 'fd5', category: 'feeds', name: 'Layer Feed', desc: 'Feed formulated for laying hens.', price: 980, image: 'https://images.pexels.com/photos/6724094/pexels-photo-6724094.jpeg' },
-  { id: 'fd6', category: 'feeds', name: 'Cattle Feed', desc: 'Nutritious feed for cattle.', price: 1300, image: 'https://images.pexels.com/photos/4840958/pexels-photo-4840958.jpeg' },
-  { id: 'fdri1', category: 'foods_drinks', name: 'Kapia Farm Coffee', desc: 'Freshly brewed farm cafe coffee.', price: 80, image: 'https://images.pexels.com/photos/459489/pexels-photo-459489.jpeg' },
-  { id: 'fdri2', category: 'foods_drinks', name: 'Iced Coffee', desc: 'Cold and refreshing coffee.', price: 95, image: 'https://images.pexels.com/photos/9715331/pexels-photo-9715331.jpeg' },
-  { id: 'fdri3', category: 'foods_drinks', name: 'Farm Breakfast', desc: 'Hearty breakfast with local ingredients.', price: 180, image: 'https://images.pexels.com/photos/18972781/pexels-photo-18972781.jpeg' },
-  { id: 'fdri4', category: 'foods_drinks', name: 'Chicken Sandwich', desc: 'Freshly prepared chicken sandwich.', price: 150, image: 'https://images.pexels.com/photos/9240536/pexels-photo-9240536.jpeg' },
-  { id: 'fdri5', category: 'foods_drinks', name: 'Banana Bread', desc: 'Soft homemade banana bread.', price: 75, image: 'https://images.pexels.com/photos/5441033/pexels-photo-5441033.jpeg' },
-  { id: 'fdri6', category: 'foods_drinks', name: 'Fresh Fruit Shake', desc: 'Refreshing shake made with fresh fruit.', price: 110, image: 'https://images.pexels.com/photos/8743884/pexels-photo-8743884.jpeg' }
-];
 const LEGACY_CATEGORY_ADDONS = [
   { id: 'ad1', name: 'Extra Shot', price: 25 },
   { id: 'ad2', name: 'Oat Milk', price: 30 },
@@ -29,30 +9,10 @@ const LEGACY_CATEGORY_ADDONS = [
 
 let editingImage = '';
 let ordersCache = [];
+let productsCache = [];
 
 function escapeHTML(value) {
   return String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[char]));
-}
-
-function getProducts() {
-  try {
-    const stored = JSON.parse(localStorage.getItem('kapia-products') || 'null');
-    if (Array.isArray(stored)) return stored;
-  } catch (error) {
-    console.warn('Could not read saved products:', error);
-  }
-  return DEFAULT_PRODUCTS.map(product => ({ ...product }));
-}
-
-function saveProducts(products) {
-  try {
-    localStorage.setItem('kapia-products', JSON.stringify(products));
-    renderProducts();
-    return true;
-  } catch (error) {
-    alert('Could not save products. Try a smaller image or remove unused products.');
-    return false;
-  }
 }
 
 function formatPrice(value) {
@@ -69,7 +29,7 @@ function categoryName(category) {
 
 function renderProducts() {
   const list = document.getElementById('admin-products-list');
-  const products = getProducts();
+  const products = productsCache;
   if (!products.length) {
     list.innerHTML = '<p class="empty-state">No products found. Add a product to get started.</p>';
     return;
@@ -91,6 +51,20 @@ function renderProducts() {
   list.querySelectorAll('.product-image').forEach(image => {
     image.addEventListener('error', () => { image.src = PLACEHOLDER_IMAGE; }, { once: true });
   });
+}
+
+async function loadProducts() {
+  const list = document.getElementById('admin-products-list');
+  list.textContent = 'Loading products...';
+  try {
+    const response = await fetch('/api/products', { cache: 'no-store' });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(result.error || 'Could not load products.');
+    productsCache = Array.isArray(result) ? result : [];
+    renderProducts();
+  } catch (error) {
+    list.textContent = error.message || 'Could not connect to the product service.';
+  }
 }
 
 function renderOrders() {
@@ -161,7 +135,7 @@ function showTab(tab) {
   document.getElementById('admin-tab-orders').classList.toggle('active', !productsSelected);
   document.getElementById('admin-tab-products').setAttribute('aria-pressed', productsSelected);
   document.getElementById('admin-tab-orders').setAttribute('aria-pressed', !productsSelected);
-  if (productsSelected) renderProducts();
+  if (productsSelected) loadProducts();
   else loadOrders();
 }
 
@@ -199,7 +173,7 @@ function getFormAddons() {
 }
 
 function openProductForm(productId = '') {
-  const product = getProducts().find(entry => entry.id === productId);
+  const product = productsCache.find(entry => entry.id === productId);
   const form = document.getElementById('product-form');
   form.reset();
   document.getElementById('product-edit-id').value = product?.id || '';
@@ -232,14 +206,12 @@ function closeProductForm() {
   document.getElementById('product-form-modal').hidden = true;
 }
 
-function saveProduct(event) {
+async function saveProduct(event) {
   event.preventDefault();
   const name = document.getElementById('product-name-input').value.trim();
   const price = Number(document.getElementById('product-price-input').value);
   if (!name || !Number.isFinite(price) || price < 0) return;
   const productId = document.getElementById('product-edit-id').value;
-  const products = getProducts();
-  const product = products.find(entry => entry.id === productId);
   const values = {
     category: document.getElementById('product-category-input').value,
     name,
@@ -248,14 +220,55 @@ function saveProduct(event) {
     image: editingImage,
     addons: getFormAddons()
   };
-  if (product) Object.assign(product, values);
-  else products.push({ id: 'custom-' + Date.now(), ...values });
-  if (saveProducts(products)) closeProductForm();
+  const submitButton = document.querySelector('#product-form button[type="submit"]');
+  submitButton.disabled = true;
+  try {
+    const response = await fetch('/api/products', {
+      method: productId ? 'PATCH' : 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${sessionStorage.getItem('kapia-admin-token') || ''}`
+      },
+      body: JSON.stringify(productId ? { id: productId, product: values } : { product: values })
+    });
+    const result = await response.json().catch(() => ({}));
+    if (response.status === 401) {
+      sessionStorage.removeItem('kapia-admin-token');
+      showLogin();
+      throw new Error('Your admin session expired. Please sign in again.');
+    }
+    if (!response.ok) throw new Error(result.error || 'Could not save this product.');
+    closeProductForm();
+    await loadProducts();
+  } catch (error) {
+    alert(error.message || 'Could not connect to the product service.');
+  } finally {
+    submitButton.disabled = false;
+  }
 }
 
-function removeProduct(productId) {
+async function removeProduct(productId) {
   if (!confirm('Delete this product?')) return;
-  saveProducts(getProducts().filter(product => product.id !== productId));
+  try {
+    const response = await fetch('/api/products', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${sessionStorage.getItem('kapia-admin-token') || ''}`
+      },
+      body: JSON.stringify({ id: productId })
+    });
+    const result = await response.json().catch(() => ({}));
+    if (response.status === 401) {
+      sessionStorage.removeItem('kapia-admin-token');
+      showLogin();
+      throw new Error('Your admin session expired. Please sign in again.');
+    }
+    if (!response.ok) throw new Error(result.error || 'Could not delete this product.');
+    await loadProducts();
+  } catch (error) {
+    alert(error.message || 'Could not connect to the product service.');
+  }
 }
 
 async function updateOrder(orderId, action) {
@@ -377,10 +390,6 @@ document.getElementById('product-image-clear').addEventListener('click', () => {
   document.getElementById('product-image-url-input').value = '';
   updateImagePreview();
 });
-window.addEventListener('storage', event => {
-  if (event.key === 'kapia-products') renderProducts();
-});
-
 async function restoreAdminSession() {
   const token = sessionStorage.getItem('kapia-admin-token');
   if (!token) {
