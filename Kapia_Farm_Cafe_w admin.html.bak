@@ -1,0 +1,726 @@
+<!doctype html>
+<html lang="en"><head><script>window["__codeletBootstrap__"]=JSON.parse('{"A":"A","B":"20260925-05-46ec85d","C":{"Abril Fatface":"YACgEZbkUVE,0","Alfa Slab One":"YACgEYS9sJU,0","Anton":"YACgEcYqQ-A,0","Archivo":"YACgEZulLoA,0","Arial Narrow":"YAGyDvJ_4Ts,0","Arial Rounded MT Bold":"YAFcfoaHu-s,0","Arial":"YAGyDvJ_4Ts,0","Avenir Next":"YAFcfmNq6UY,0","Baloo 2":"YADK30bC6HQ,0","Bebas Neue":"YACgESME5ew,0","Bricolage Grotesque":"YAFyMcdwzpc,0","Broken Glyph":"YADZ-exUkv0,0","Canva Sans":"YAFdJjTk5UU,1","Caveat":"YALBs2ploWQ,0","Comic Sans MS":"YAFcfvtOAUY,1","Cormorant Garamond":"YAFdJhX-538,0","Courier New":"YAGzXiGs0_8,0","Courier Prime":"YAD1aFjegN8,0","DM Sans":"YAD1aU3sLnI,0","DM Serif Display":"YAD1aYG82rc,0","Forum":"YACgEcnnqB4,0","Fraunces":"YAFdJpU7Kkk,0","Georgia":"YAGzXkO0pEM,0","Ghost Mono":"YAHQutsX00Q,0","Hanken Grotesk":"YAFcfhwp99E,0","Helvetica Neue":"YAFcf6CtJfI,0","Helvetica":"YAFcf6CtJfI,0","IBM Plex Mono":"YAFdJkmvhGI,0","Impact":"YAFcfnjI7Vk,0","Instrument Serif":"YAHFeOnZNEk,0","Inter":"YAFdJvSyp_k,3","Iowan Old Style":"YAGNIFa8j9o,0","Jacques Francois":"YADK3zbC6RM,0","JetBrains Mono":"YAFdJksXcAk,0","Josefin Sans":"YAFdJjvw9Ps,0","Lato":"YAFdJuFCnaw,0","Libre Baskerville":"YACgEUFdPdA,0","Lobster":"YAD8SnSjSFI,0","Lora":"YACgEXvxf8Q,0","Merriweather":"YACgEXvHxxs,0","Montserrat":"YAFdtQi73Xs,0","Nunito":"YAFdJoNRMmU,1","Oleo Script":"YACgEQQ14jI,0","Oswald":"YACgEQY10lw,0","Pacifico":"YADLjORQ1u4,0","Phantom Sans":"YAFdJvgJ5TU,0","Playfair Display":"YAFdJhem5V8,1","Plus Jakarta Sans":"YAGvf3_u0_Q,0","Poppins":"YAFdJjbTu24,1","Press Start 2P":"YAFyGr-8pmQ,0","Quicksand":"YAFdJpYtCxE,1","Raleway":"YAFdJhmxbVQ,1","Roboto Slab":"YAFdJswIKAg,0","Rockwell":"YAFcfyVZnN0,0","Rye":"YACgEdQP21k,0","Segoe UI":"YAHNdRD1Klw,0","Source Sans 3":"YAG4lO1Mj10,0","Source Serif 4":"YACgEfdj394,0","Space Grotesk":"YADZ-dYEmhg,0","Space Mono":"YADW1-vpsoc,0","Times New Roman":"YAGzXW3gftg,0","Times":"YAGzXW3gftg,0","Trebuchet MS":"YAFcfrglpVA,0","UV Display":"YAEdVfSSpYo,0","UV Sans":"YAFdJvgJ5TU,0","Ubuntu":"YACgERDU--Q,0","Verdana":"YAGzXTctYtQ,0","Work Sans":"YAGXhLOKv44,0","Yellowtail":"YACgEYG4kG4,0","ui-monospace":"YAD1aFjegN8,0","ui-sans-serif":"YACkoD1yZN0,0"}}');</script><script src="/_sdk/6542d56fbfe7a3eb.telemetry_sdk.js" integrity="sha512-ECdM0nK7EkwDuOqho2qxgyRQXyBHk9hZqRKMBr+Xsu6zjeHlt+qkO2N2YRiHN7Kg4e1fEHDhjIp4bGJYVypv1g=="></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kapia Farm Cafe</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&amp;family=DM+Sans:wght@400;500;600;700&amp;family=Maragsa&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --lime: #ff943e;
+      --lime-hover: #ff6105;
+      --ink: #1A1A2E;
+      --stone: #4A4A5A;
+      --mist: #F7F6F3;
+      --coral: #E8735A;
+      --coral-light: #FFF0ED;
+      --sage: #7BA68A;
+      --sage-light: #EDF5EF;
+      --plum: #9B7EC8;
+      --plum-light: #F3EEFB;
+    }
+    body { font-family: 'DM Sans', sans-serif; }
+    .font-display { font-family: 'Playfair Display', Georgia, serif; }
+
+    #submit-order-btn {
+      background-color: #ff943e !important;
+      color: #000 !important;
+      border: 2px solid #000 !important;
+    }
+
+    .category-tab {
+      transition: all 0.3s ease;
+      border: 2px solid #000;
+      background: transparent;
+      color: #000;
+    }
+    .category-tab.active {
+      background: var(--lime);
+      color: #000;
+      border-color: #000;
+    }
+    .category-tab:not(.active):hover {
+      background: rgba(255,148,62,0.3);
+    }
+
+    .menu-card {
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      border-radius: 0;
+      min-width: 0;
+      width: 100%;
+    }
+    .menu-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 28px -8px rgba(0,0,0,0.12);
+    }
+
+    .modal-overlay {
+      background: rgba(26,26,46,0.5);
+      backdrop-filter: blur(4px);
+      animation: fadeIn 0.2s ease;
+    }
+    .modal-content { animation: slideUp 0.3s cubic-bezier(0.4,0,0.2,1); }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+    @keyframes slideUp { from{opacity:0;transform:translate(-50%,-50%) translateY(20px)} to{opacity:1;transform:translate(-50%,-50%) translateY(0)} }
+    @keyframes cardIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+    .card-animate { animation: cardIn 0.35s ease forwards; }
+    .order-item-enter { animation: cardIn 0.3s ease forwards; }
+
+    .qty-btn {
+      width:28px;height:28px;display:flex;align-items:center;justify-content:center;
+      border-radius:50%;font-weight:700;font-size:14px;transition:all 0.15s ease;
+      cursor:pointer;border:1.5px solid #d1d5db;background:#fff;color:var(--stone);
+    }
+    .qty-btn:hover { background:var(--ink);color:#fff;border-color:var(--ink); }
+
+    .add-to-order-btn { transition: all 0.2s ease; }
+    .add-to-order-btn:hover { background-color: #ff6105 !important; }
+
+    @keyframes btnPop {
+      0% { transform: scale(1); }
+      50% { transform: scale(0.95); }
+      100% { transform: scale(1); }
+    }
+    .btn-click { animation: btnPop 0.3s ease-out; }
+
+    .scrollbar-thin::-webkit-scrollbar { width:5px; }
+    .scrollbar-thin::-webkit-scrollbar-track { background:transparent; }
+    .scrollbar-thin::-webkit-scrollbar-thumb { background:#d1d5db;border-radius:10px; }
+
+    @media (max-width: 1023px) {
+      #order-panel-fixed .canva-panel {
+        height: 100px !important;
+      }
+      #order-panel-fixed {
+        max-height: 100px;
+      }
+    }
+
+    #order-panel-fixed {
+      position:fixed;bottom:0;left:0;right:0;z-index:40;
+      background:#fff;border-top:2px solid #000;color:#000;
+      transition:max-height 0.4s cubic-bezier(0.4,0,0.2,1);
+      max-height:200px;overflow:hidden;
+    }
+    #order-panel-fixed.panel-open { max-height: calc(100 * min(var(--vh, 1vh), 1vh) - 20px) !important; }
+
+    @media (min-width: 1024px) {
+      body {
+        display: grid;
+        grid-template-columns: 1fr 340px;
+        grid-template-rows: auto 1fr;
+        min-height: 100vh;
+      }
+      header[data-template-id="header-section"] {
+        grid-column: 1 / -1;
+      }
+      .main-content-wrapper {
+        grid-column: 1;
+        grid-row: 2;
+        min-width: 0;
+        overflow: hidden;
+        max-width: 100% !important;
+        width: 100%;
+        padding-top: 30px;
+        padding-bottom: 30px;
+      }
+      #order-panel-wrapper {
+        grid-column: 2;
+        grid-row: 2;
+        padding-right: 30px;
+        padding-bottom: 30px;
+        margin-top: 30px;
+      }
+      #order-panel-fixed {
+        position: sticky !important;
+        top: 0;
+        height: 100%;
+        max-height: none !important;
+        border-left: 2px solid #000;
+        border-top: 2px solid #000;
+        border-bottom: 2px solid #000;
+        border-right: 2px solid #000;
+        overflow-y: hidden !important;
+        display: flex;
+        flex-direction: column;
+      }
+      #order-panel-fixed.panel-open {
+        max-height: none !important;
+      }
+      #panel-toggle-btn {
+        display: none !important;
+      }
+      #order-panel-fixed .canva-panel {
+        height: 80px !important;
+      }
+      #order-items-container {
+        flex: 1;
+        overflow-y: auto;
+        min-height: 0;
+      }
+      #menu-grid {
+        grid-template-columns: repeat(3, 1fr);
+        width: 100%;
+        min-width: 0;
+      }
+    }
+  </style>
+  <script src="/_sdk/6c2ecc939521f244.data_sdk.js" integrity="sha512-gRx8s+XsZDN6mSIQu2sivLZysbV0WHhb5kXNUWlgVb5lCMU1foJYukyMEDPv8Tnoocb8iwqB4XdRrWc7oEGzIQ=="></script>
+  <script src="/_sdk/ddcab3e45959c817.resizing_sdk.js" type="text/javascript" integrity="sha512-VAviUKfZVzugWBSeULYjSljTX+nb84wc6Zzbx5GQaQgh6X2ISSjXi8eIiCDGdwDh10esJMY0+QFQgUy9NcrTlQ=="></script>
+ </head>
+ <body data-template-id="__page-root" class="min-h-screen w-full" style="background: rgb(247, 246, 243);">
+  <header data-template-id="header-section" class="canva-header w-full relative overflow-hidden" style="min-height: 75vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, rgb(26, 26, 46), rgb(45, 45, 68));">
+   <img data-template-id="hero-image" loading="lazy" class="canva-image absolute inset-0 w-full h-full object-cover" src="canva://MAFbEa65dRo/1" alt="High-Flash Restaurant Dining Person Having Fish Dish">
+   <div class="absolute inset-0 bg-gradient-to-r from-[rgba(26,26,46,0.14)] to-[rgba(26,26,46,0.14)]"></div>
+   <div class="relative max-w-7xl w-full mx-auto px-4 sm:px-6 flex flex-col items-center text-center">
+    <h1 data-template-id="restaurant-name" class="canva-text font-display" style="color: rgb(255, 255, 255); font-weight: 400; font-style: normal; font-size: 218px;">Kapia Farm Cafe</h1><button data-template-id="order-now-btn" class="canva-button mt-4" style="background: rgb(255, 148, 62); color: rgb(0, 0, 0); border: 2px solid rgb(0, 0, 0); border-radius: 9999px; padding: 0.625rem 1.75rem; font-weight: 700; font-size: 20px; font-style: normal;" onclick="applyBounce(this); scrollToCategories();">Order Now</button>
+   </div>
+   <div id="name-modal" class="hidden" style="position:fixed;inset:0;z-index:200;">
+    <div class="modal-overlay absolute inset-0" style="background:rgba(26,26,46,0.7);backdrop-filter:blur(6px);" onclick="closeNameModal()"></div>
+    <div class="bg-white rounded-2xl shadow-2xl overflow-hidden" style="position:fixed;bottom:210px;left:50%;transform:translateX(-50%);width:min(calc(100vw - 2rem),24rem);z-index:201;">
+     <div class="p-6">
+      <h3 class="text-2xl font-bold mb-2" style="color:var(--ink);">Your Information</h3>
+      <p class="text-sm mb-4" style="color:var(--stone);">Please enter your name and email to complete your order</p><input id="name-input" type="text" placeholder="Enter your name" class="w-full px-4 py-3 rounded-full border-2 border-black font-medium mb-3" style="color:var(--ink);"><input id="email-input" type="email" placeholder="Enter your email" class="w-full px-4 py-3 rounded-full border-2 border-black font-medium mb-4" style="color:var(--ink);">
+      <div id="name-error" class="hidden text-red-600 text-sm mb-3"></div>
+      <div class="flex gap-3">
+       <button id="name-cancel-btn" data-template-id="name-modal-cancel-btn" onclick="closeNameModal()" class="flex-1 py-3 rounded-full font-semibold border-2 border-gray-200 text-sm transition-colors hover:bg-gray-50 canva-button" style="color: rgb(74, 74, 90); background: rgb(229, 231, 235); font-weight: 600; font-style: normal; font-size: 16px;">Cancel</button> <button id="name-submit-btn" onclick="applyBounce(this); confirmNameAndSubmit()" class="flex-1 py-3 rounded-full font-semibold text-sm transition-colors" style="background-color:#ff943e;color:#000;border:2px solid #000;">Submit</button>
+      </div>
+     </div>
+    </div>
+   </div>
+  </header>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 main-content-wrapper" style="padding-bottom: 30px;">
+   <main>
+    <nav data-template-id="category-tabs" class="canva-tabs flex gap-2 sm:gap-3 mb-6" role="tablist" aria-label="Menu categories" style="background: transparent;">
+     <button class="category-tab active flex-1 py-3 px-4 rounded-full font-semibold text-sm sm:text-base" role="tab" aria-selected="true" data-category="fertilizer" onclick="switchCategory('fertilizer')">Fertilizer</button> <button class="category-tab flex-1 py-3 px-4 rounded-full font-semibold text-sm sm:text-base" role="tab" aria-selected="false" data-category="feeds" onclick="switchCategory('feeds')">Feeds</button> <button class="category-tab flex-1 py-3 px-4 rounded-full font-semibold text-sm sm:text-base" role="tab" aria-selected="false" data-category="foods_drinks" onclick="switchCategory('foods_drinks')">Foods &amp; Drinks</button>
+    </nav>
+    <section id="menu-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4" aria-label="Menu items" role="tabpanel"></section>
+   </main>
+  </div>
+  <div id="order-panel-wrapper">
+   <aside id="order-panel-fixed">
+    <div data-template-id="order-summary" class="canva-panel" style="height:200px;background:#ff943e;display:flex;align-items:center;justify-content:space-between;padding:0 1.25rem;flex-shrink:0;">
+     <div style="display:flex;align-items:center;">
+      <h2 data-template-id="order-title" class="canva-text font-display" style="color: rgb(0, 0, 0); font-weight: 700; font-style: normal; font-size: 33px;">Your Order</h2><span id="order-count" class="ml-2 text-xs font-bold px-2.5 py-1 rounded-full" style="background:#000;color:#fff;">0</span>
+     </div><button id="panel-toggle-btn" onclick="toggleOrderPanel()" style="display:flex;align-items:center;justify-content:center;padding:0.5rem 1.25rem;border-radius:9999px;background:#000;border:none;cursor:pointer;transition:all 0.3s ease;flex-shrink:0;font-weight:700;font-size:14px;color:#fff;font-family:'DM Sans',sans-serif;" aria-label="Toggle order panel" aria-expanded="false">View Order</button>
+    </div>
+    <div style="display:flex;flex-direction:column;flex:1;min-height:0;">
+     <div class="flex-1 overflow-y-auto scrollbar-thin px-5 pb-3" id="order-items-container" style="color:#000;min-height:0;">
+      <p id="empty-order" class="text-center py-8 text-gray-400 text-sm italic">Your order is empty</p>
+     </div>
+     <div data-template-id="order-footer" class="canva-section border-t border-gray-200 px-5 py-4 flex-shrink-0" style="background:#fff;color:#000;margin-top:auto;">
+      <div class="flex justify-between items-center mb-4">
+       <span data-template-id="subtotal-label" class="canva-text font-semibold" style="color: rgb(0, 0, 0); font-weight: 400; font-style: normal; font-size: 15px;">Subtotal</span> <span id="order-subtotal" class="font-bold text-xl" style="color:#000;">$0.00</span>
+      </div>
+      <div id="submit-error" class="hidden bg-red-50 border border-red-200 text-red-700 text-sm px-3 py-2 rounded-lg mb-3"></div>
+      <div id="submit-success" class="hidden bg-green-50 border border-green-200 text-green-700 text-sm px-3 py-2 rounded-lg mb-3 flex items-center gap-2">
+       <i data-lucide="check-circle" style="width:16px;height:16px;"></i><span>Order submitted! ✓</span>
+      </div><button id="submit-order-btn" data-template-id="submit-order-btn" onclick="applyBounce(this); submitOrder()" class="canva-button w-full py-3 font-semibold text-sm transition-colors" style="border-radius: 9999px; background: rgb(255, 148, 62); color: rgb(0, 0, 0); font-weight: 600; font-style: normal; font-size: 16px;">Submit Order</button>
+     </div>
+    </div>
+   </aside>
+  </div>
+  <template id="menu-card-template">
+   <article class="menu-card card-animate bg-white overflow-hidden flex flex-col" style="border-radius:0;width:100%;">
+    <img loading="lazy" class="canva-image" style="width:100%;height:256px;object-fit:cover;display:block;">
+    <div class="p-5 flex flex-col flex-1" style="background:#ffffff;">
+     <h3 class="font-bold text-lg mb-1" style="color:var(--ink);"></h3>
+     <p class="text-sm leading-relaxed flex-1 mb-4" style="color:var(--stone);"></p>
+     <div class="flex items-center justify-between mt-auto">
+      <span class="font-bold text-xl" style="color:var(--ink);"></span> <button class="add-to-order-btn font-semibold text-sm px-4 py-2 rounded-xl transition-colors" style="background-color:#ff943e;color:#000;border:2px solid #000;"> <i data-lucide="plus" style="width:16px;height:16px;display:inline-block;vertical-align:-3px;margin-right:4px;"></i>Add </button>
+     </div>
+    </div>
+   </article>
+  </template>
+  <div id="customization-modal" class="hidden" style="position:fixed;inset:0;z-index:100;">
+   <div class="modal-overlay absolute inset-0" onclick="closeModal()"></div>
+   <div class="modal-content bg-white rounded-2xl shadow-2xl overflow-hidden" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:min(calc(100vw - 2rem),28rem);max-height:90vh;overflow-y:auto;z-index:101;">
+    <div class="p-6">
+     <div class="flex justify-between items-start mb-4">
+      <div>
+       <h3 id="modal-item-name" class="text-2xl font-bold" style="color:var(--ink);font-family:'DM Sans',sans-serif;font-weight:700;"></h3>
+       <p id="modal-item-desc" class="text-sm mt-1" style="color:var(--stone);"></p>
+      </div><button onclick="closeModal()" class="p-1 rounded-lg hover:bg-gray-100 transition-colors" aria-label="Close modal"> <i data-lucide="x" style="width:20px;height:20px;color:var(--stone);"></i> </button>
+     </div>
+     <div class="flex items-center mb-5">
+      <span data-template-id="modal-base-price-label" class="canva-text text-sm font-medium" style="color: rgb(74, 74, 90); font-weight: 400; font-style: normal; font-size: 14px;">Base price:</span> <span id="modal-base-price" class="ml-2 font-bold text-lg" style="color:var(--ink);"></span>
+     </div>
+     <div id="addons-section" class="hidden mb-5">
+      <h4 class="font-semibold text-sm uppercase tracking-wider mb-3" style="color:var(--stone);">Add-Ons</h4>
+      <div id="addons-list" class="space-y-2"></div>
+     </div>
+     <div class="flex items-center justify-between mb-6 bg-gray-50 rounded-xl p-4">
+      <span data-template-id="modal-qty-label" class="canva-text font-semibold text-sm" style="color: rgb(74, 74, 90); font-weight: 400; font-style: normal; font-size: 14px;">Quantity</span>
+      <div class="flex items-center gap-3">
+       <button class="qty-btn" onclick="changeModalQty(-1)" aria-label="Decrease quantity">−</button> <span id="modal-qty" class="font-bold text-lg w-8 text-center" style="color:var(--ink);">1</span> <button class="qty-btn" onclick="changeModalQty(1)" aria-label="Increase quantity">+</button>
+      </div>
+     </div>
+     <div class="flex items-center justify-between mb-4">
+      <span data-template-id="modal-total-label" class="canva-text font-semibold" style="color: rgb(74, 74, 90); font-weight: 400; font-style: normal; font-size: 14px;">Item Total:</span> <span id="modal-total" class="font-bold text-2xl" style="color:var(--ink);"></span>
+     </div>
+     <div class="flex gap-3">
+      <button data-template-id="modal-cancel-btn" onclick="closeModal()" class="canva-button flex-1 py-3 rounded-xl font-semibold border-2 border-gray-200 text-sm transition-colors hover:bg-gray-50" style="color: rgb(74, 74, 90); background: rgb(243, 244, 246); font-weight: 600; font-style: normal; font-size: 16px;">Cancel</button> <button data-template-id="modal-add-btn" id="modal-add-btn" onclick="applyBounce(this); confirmAddToOrder()" class="canva-button flex-1 py-3 rounded-xl font-semibold text-sm transition-colors" style="background: rgb(255, 148, 62); color: rgb(0, 0, 0); border: 2px solid rgb(0, 0, 0); font-weight: 600; font-style: normal; font-size: 16px;">Add to Order</button>
+     </div>
+    </div>
+   </div>
+  </div>
+  <template id="order-item-template">
+   <div class="order-item-enter flex items-start gap-3 py-3 border-b border-gray-100 last:border-0">
+    <div class="flex-1 min-w-0">
+     <p class="font-semibold text-sm truncate" style="color:var(--ink);"></p>
+     <div class="flex items-center gap-2 mt-1">
+      <span class="order-item-category text-xs font-semibold px-2.5 py-1 rounded-full"></span>
+      <p class="order-item-addons text-xs" style="color:var(--stone);"></p>
+     </div>
+    </div>
+    <div class="flex items-center gap-2 shrink-0">
+     <button class="qty-btn qty-minus" aria-label="Decrease quantity">−</button> <span class="order-item-qty font-bold text-sm w-5 text-center" style="color:var(--ink);"></span> <button class="qty-btn qty-plus" aria-label="Increase quantity">+</button>
+    </div><span class="order-item-price font-bold text-sm shrink-0 w-16 text-right" style="color:var(--ink);"></span> <button class="remove-btn p-1 rounded-lg hover:bg-red-50 transition-colors shrink-0" aria-label="Remove item"> <i data-lucide="trash-2" style="width:15px;height:15px;color:#EF4444;"></i> </button>
+   </div>
+  </template>
+
+  <div id="admin-login" style="display:none;position:fixed;inset:0;z-index:120;background:rgba(0,0,0,.72);padding:20px;align-items:center;justify-content:center;">
+    <div style="width:100%;max-width:420px;background:#fff;padding:30px;border-radius:18px;box-shadow:0 20px 70px rgba(0,0,0,.3);">
+      <div style="text-align:center"><div style="font-size:45px">🔐</div><h2 style="font-size:28px;font-weight:700;margin:6px 0">Admin Login</h2><p style="color:#666">Kapia Farm Cafe</p></div>
+      <label style="font-weight:700;display:block;margin:14px 0 6px">Password</label>
+      <input id="admin-password" type="password" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')adminLogin()" style="width:100%;box-sizing:border-box;padding:13px;border:1px solid #ccc;border-radius:10px">
+      <p id="admin-login-error" style="display:none;color:#c62828">Incorrect password.</p>
+      <div style="display:flex;gap:10px;margin-top:18px"><button onclick="closeAdminLogin()" style="flex:1;padding:12px;border:2px solid #111;border-radius:10px;background:#fff;font-weight:700">Cancel</button><button onclick="adminLogin()" style="flex:1;padding:12px;border:2px solid #111;border-radius:10px;background:#ff943e;font-weight:700">Login</button></div>
+      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Demo password: <b>password</b></p>
+    </div>
+  </div>
+
+  <div id="admin-dashboard" style="display:none;position:fixed;inset:0;z-index:115;background:#f7f6f3;overflow:auto">
+    <div style="max-width:1200px;margin:auto;padding:24px">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;border-bottom:2px solid #111;padding-bottom:18px">
+        <div><small style="font-weight:700;color:#777">KAPIA FARM CAFE</small><h2 style="font-size:30px;font-weight:700;margin:3px 0">Admin Dashboard</h2><p style="margin:0;color:#666">Manage products and view orders.</p></div>
+        <div style="display:flex;gap:8px"><button onclick="adminLogout()" style="padding:11px 16px;border:2px solid #111;border-radius:10px;background:#fff;font-weight:700">Logout</button><button onclick="closeAdminDashboard()" style="padding:11px 16px;border:2px solid #111;border-radius:10px;background:#ff943e;font-weight:700">Back to Store</button></div>
+      </div>
+      <div style="display:flex;gap:8px;margin:20px 0"><button id="admin-tab-products" onclick="showAdminTab('products')" style="padding:11px 18px;border:2px solid #111;border-radius:999px;background:#ff943e;font-weight:700">Products</button><button id="admin-tab-orders" onclick="showAdminTab('orders')" style="padding:11px 18px;border:2px solid #111;border-radius:999px;background:#fff;font-weight:700">Orders (<span id="admin-order-count">0</span>)</button></div>
+      <section id="admin-products-panel"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px"><div><h3 style="font-size:22px;font-weight:700;margin:0">Products</h3><p style="color:#666">Edit names, pictures, descriptions, prices and categories.</p></div><button onclick="openProductForm()" style="padding:12px 16px;border:2px solid #111;border-radius:10px;background:#ff943e;font-weight:700">＋ Add Product</button></div><div id="admin-products-list" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px"></div></section>
+      <section id="admin-orders-panel" style="display:none"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px"><div><h3 style="font-size:22px;font-weight:700;margin:0">Customer Orders</h3><p style="color:#666">Orders saved in this browser.</p></div><button onclick="clearAllOrders()" style="padding:11px 14px;border:2px solid #b91c1c;border-radius:10px;background:#fff;color:#b91c1c;font-weight:700">Clear Orders</button></div><div id="admin-orders-list"></div></section>
+    </div>
+  </div>
+
+  <div id="product-form-modal" style="display:none;position:fixed;inset:0;z-index:130;background:rgba(0,0,0,.72);padding:20px;overflow:auto">
+    <div style="max-width:620px;margin:30px auto;background:#fff;padding:26px;border-radius:18px">
+      <h3 id="product-form-title" style="font-size:24px;font-weight:700">Add Product</h3>
+      <input id="product-edit-id" type="hidden">
+      <label style="font-weight:700;display:block;margin:12px 0 6px">Product Name</label><input id="product-name-input" style="width:100%;box-sizing:border-box;padding:12px;border:1px solid #ccc;border-radius:10px">
+      <label style="font-weight:700;display:block;margin:12px 0 6px">Category</label><select id="product-category-input" style="width:100%;padding:12px;border:1px solid #ccc;border-radius:10px"><option value="fertilizer">Fertilizer</option><option value="feeds">Feeds</option><option value="foods_drinks">Foods &amp; Drinks</option></select>
+      <label style="font-weight:700;display:block;margin:12px 0 6px">Price (₱)</label><input id="product-price-input" type="number" min="0" step=".01" style="width:100%;box-sizing:border-box;padding:12px;border:1px solid #ccc;border-radius:10px">
+      <label style="font-weight:700;display:block;margin:12px 0 6px">Description</label><textarea id="product-desc-input" rows="3" style="width:100%;box-sizing:border-box;padding:12px;border:1px solid #ccc;border-radius:10px"></textarea>
+      <label style="font-weight:700;display:block;margin:12px 0 6px">Product Picture</label><input id="product-image-input" type="file" accept="image/*" style="width:100%;padding:8px;border:1px solid #ccc;border-radius:10px"><img id="product-image-preview" style="display:none;width:100%;height:200px;object-fit:cover;border-radius:10px;margin-top:10px">
+      <div style="display:flex;gap:10px;margin-top:18px"><button onclick="closeProductForm()" style="flex:1;padding:13px;border:2px solid #111;border-radius:10px;background:#fff;font-weight:700">Cancel</button><button onclick="saveProductFromForm()" style="flex:1;padding:13px;border:2px solid #111;border-radius:10px;background:#ff943e;font-weight:700">Save Product</button></div>
+    </div>
+  </div>
+  <button onclick="openAdminLogin()" style="position:fixed;right:18px;top:18px;z-index:90;padding:10px 14px;border:2px solid #111;border-radius:999px;background:#ff943e;font-weight:700">🔐 Admin</button>
+  <script src="/_sdk/ef0304cb8c7ed696.editing_sdk.js" integrity="sha512-kmL9L5Yuj57MQaequKbMA3aGpT/5lBUp10iGA3e3qnmMLs2ZZQ0poCcIfdd5rTgrhEvNPe4HK0ohePW7ZpgAFg=="></script>
+  <script>
+    const menuData = {
+  fertilizer:{color:'coral',items:[
+    {id:'f1',name:'Complete Fertilizer 14-14-14',desc:'Balanced fertilizer for healthy crop growth.',price:850,image:''},
+    {id:'f2',name:'Urea 46-0-0',desc:'Nitrogen fertilizer for vigorous plant growth.',price:900,image:''},
+    {id:'f3',name:'Organic Compost',desc:'Organic soil conditioner for garden and farm crops.',price:250,image:''},
+    {id:'f4',name:'Complete Fertilizer 16-16-16',desc:'All-purpose fertilizer for a wide range of crops.',price:880,image:''},
+    {id:'f5',name:'Ammonium Phosphate',desc:'Phosphorus and nitrogen fertilizer.',price:950,image:''},
+    {id:'f6',name:'Vermicast',desc:'Natural organic fertilizer for healthier soil.',price:180,image:''}
+  ],addons:[]},
+  feeds:{color:'sage',items:[
+    {id:'fd1',name:'Hog Starter Feed',desc:'Starter feed for young pigs.',price:1200,image:''},
+    {id:'fd2',name:'Hog Grower Feed',desc:'Feed for growing pigs.',price:1150,image:''},
+    {id:'fd3',name:'Broiler Starter Feed',desc:'Starter feed for young broilers.',price:1100,image:''},
+    {id:'fd4',name:'Broiler Finisher Feed',desc:'Finisher feed for broilers.',price:1050,image:''},
+    {id:'fd5',name:'Layer Feed',desc:'Feed formulated for laying hens.',price:980,image:''},
+    {id:'fd6',name:'Cattle Feed',desc:'Nutritious feed for cattle.',price:1300,image:''}
+  ],addons:[]},
+  foods_drinks:{color:'plum',items:[
+    {id:'fdri1',name:'Kapia Farm Coffee',desc:'Freshly brewed farm cafe coffee.',price:80,image:''},
+    {id:'fdri2',name:'Iced Coffee',desc:'Cold and refreshing coffee.',price:95,image:''},
+    {id:'fdri3',name:'Farm Breakfast',desc:'Hearty breakfast with local ingredients.',price:180,image:''},
+    {id:'fdri4',name:'Chicken Sandwich',desc:'Freshly prepared chicken sandwich.',price:150,image:''},
+    {id:'fdri5',name:'Banana Bread',desc:'Soft homemade banana bread.',price:75,image:''},
+    {id:'fdri6',name:'Fresh Fruit Shake',desc:'Refreshing shake made with fresh fruit.',price:110,image:''}
+  ],addons:[]}
+};
+
+const ADMIN_PASSWORD='password';
+let adminLoggedIn=sessionStorage.getItem('kapia-admin')==='true';
+let editingImageData='';
+function openAdminLogin(){if(adminLoggedIn)return openAdminDashboard();document.getElementById('admin-login').style.display='flex';setTimeout(()=>document.getElementById('admin-password').focus(),50);}
+function closeAdminLogin(){document.getElementById('admin-login').style.display='none';document.getElementById('admin-password').value='';document.getElementById('admin-login-error').style.display='none';}
+function adminLogin(){if(document.getElementById('admin-password').value===ADMIN_PASSWORD){adminLoggedIn=true;sessionStorage.setItem('kapia-admin','true');closeAdminLogin();openAdminDashboard();}else document.getElementById('admin-login-error').style.display='block';}
+function adminLogout(){adminLoggedIn=false;sessionStorage.removeItem('kapia-admin');closeAdminDashboard();}
+function openAdminDashboard(){if(!adminLoggedIn)return openAdminLogin();document.getElementById('admin-dashboard').style.display='block';showAdminTab('products');}
+function closeAdminDashboard(){document.getElementById('admin-dashboard').style.display='none';}
+function showAdminTab(t){document.getElementById('admin-products-panel').style.display=t==='products'?'block':'none';document.getElementById('admin-orders-panel').style.display=t==='orders'?'block':'none';document.getElementById('admin-tab-products').style.background=t==='products'?'#ff943e':'#fff';document.getElementById('admin-tab-orders').style.background=t==='orders'?'#ff943e':'#fff';if(t==='products')renderAdminProducts();else renderAdminOrders();updateOrderCount();}
+function defaultProducts(){let a=[];Object.keys(menuData).forEach(c=>menuData[c].items.forEach(x=>a.push({...x,category:c})));return a;}
+function getProducts(){try{let a=JSON.parse(localStorage.getItem('kapia-products')||'null');return Array.isArray(a)&&a.length?a:defaultProducts();}catch(e){return defaultProducts();}}
+function saveProducts(a){localStorage.setItem('kapia-products',JSON.stringify(a));Object.keys(menuData).forEach(k=>menuData[k].items=[]);a.forEach(x=>{if(menuData[x.category])menuData[x.category].items.push(x)});renderMenuGrid();}
+function renderAdminProducts(){let list=document.getElementById('admin-products-list');list.innerHTML='';getProducts().forEach(p=>{let c=document.createElement('div');c.style.cssText='background:#fff;border:1px solid #ddd;border-radius:14px;overflow:hidden';c.innerHTML=(p.image?`<img src="${p.image}" style="width:100%;height:170px;object-fit:cover">`:`<div style="height:170px;background:#eee;display:flex;align-items:center;justify-content:center;font-size:50px">📷</div>`)+`<div style="padding:15px"><small style="font-weight:700;color:#777">${p.category==='fertilizer'?'Fertilizer':p.category==='feeds'?'Feeds':'Foods & Drinks'}</small><h4 style="font-size:18px;font-weight:700">${esc(p.name)}</h4><b>₱${Number(p.price).toFixed(2)}</b><p style="color:#666">${esc(p.desc||'')}</p><button onclick="openProductForm('${p.id}')" style="padding:9px;border:2px solid #111;border-radius:8px;background:#ff943e;font-weight:700">Edit</button> <button onclick="deleteProduct('${p.id}')" style="padding:9px;border:2px solid #b91c1c;border-radius:8px;background:#fff;color:#b91c1c;font-weight:700">Delete</button></div>`;list.appendChild(c);});}
+function openProductForm(id=''){if(!adminLoggedIn)return openAdminLogin();let p=getProducts().find(x=>x.id===id);document.getElementById('product-form-modal').style.display='block';document.getElementById('product-form-title').textContent=id?'Edit Product':'Add Product';document.getElementById('product-edit-id').value=id;document.getElementById('product-name-input').value=p?p.name:'';document.getElementById('product-category-input').value=p?p.category:'fertilizer';document.getElementById('product-price-input').value=p?p.price:'';document.getElementById('product-desc-input').value=p?p.desc:'';editingImageData=p?p.image||'':'';let im=document.getElementById('product-image-preview');im.src=editingImageData;im.style.display=editingImageData?'block':'none';document.getElementById('product-image-input').value='';document.getElementById('product-image-input').onchange=e=>{let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{editingImageData=r.result;im.src=r.result;im.style.display='block'};r.readAsDataURL(f)};}
+function closeProductForm(){document.getElementById('product-form-modal').style.display='none';}
+function saveProductFromForm(){let name=document.getElementById('product-name-input').value.trim(),cat=document.getElementById('product-category-input').value,price=Number(document.getElementById('product-price-input').value),desc=document.getElementById('product-desc-input').value.trim(),id=document.getElementById('product-edit-id').value;if(!name||!Number.isFinite(price)||price<0)return alert('Enter a valid product name and price.');let a=getProducts(),p=a.find(x=>x.id===id);if(p)Object.assign(p,{name,category:cat,price,desc,image:editingImageData||''});else a.push({id:'custom-'+Date.now(),category:cat,name,price,desc,image:editingImageData||''});saveProducts(a);closeProductForm();renderAdminProducts();}
+function deleteProduct(id){if(!confirm('Delete this product?'))return;saveProducts(getProducts().filter(x=>x.id!==id));renderAdminProducts();}
+function getOrders(){try{return JSON.parse(localStorage.getItem('kapia-orders')||'[]')}catch(e){return[]}}
+function updateOrderCount(){document.getElementById('admin-order-count').textContent=getOrders().length;}
+function renderAdminOrders(){let a=getOrders(),l=document.getElementById('admin-orders-list');if(!a.length){l.innerHTML='<div style="background:#fff;padding:30px;border-radius:14px;text-align:center;color:#777">No orders yet.</div>';return}l.innerHTML=a.map((o,i)=>`<div style="background:#fff;border:1px solid #ddd;border-radius:14px;padding:18px;margin-bottom:12px"><b>Order #${esc(o.id||i+1)}</b><br><small>${esc(o.date||'')}</small><hr><b>Customer:</b> ${esc(o.customerName||'—')}<br><b>Contact:</b> ${esc(o.customerEmail||o.phone||'—')}<br><b>Total:</b> ₱${Number(o.total||0).toFixed(2)}<br><b>Payment:</b> ${esc(o.paymentMethod||'—')}<br><br><b>Items:</b><br>${(o.items||[]).map(x=>esc(x.name)+' × '+(x.qty||1)).join('<br>')}</div>`).join('');}
+function clearAllOrders(){if(confirm('Delete all orders saved in this browser?')){localStorage.removeItem('kapia-orders');renderAdminOrders();updateOrderCount();}}
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));}
+
+let currentCategory = 'fertilizer';
+    let order = [];
+    let orderIdCounter = 0;
+    let modalItem = null, modalCategory = null, modalQty = 1, modalAddons = {};
+    let customerName = '';
+    let customerEmail = '';
+
+    function switchCategory(cat) {
+      currentCategory = cat;
+      document.querySelectorAll('.category-tab').forEach(tab => {
+        const c = tab.dataset.category === cat;
+        tab.classList.toggle('active', c);
+        tab.setAttribute('aria-selected', c);
+      });
+      renderMenuGrid();
+    }
+
+    function getItemNameFromConfig(id) { const e = document.querySelector(`[data-template-id="${id}-name"]`); return e ? e.textContent : ''; }
+    function getItemDescFromConfig(id) { const e = document.querySelector(`[data-template-id="${id}-desc"]`); return e ? e.textContent : ''; }
+    function getItemPriceFromConfig(id) { const e = document.querySelector(`[data-template-id="${id}-price"]`); if(!e) return 0; return parseFloat(e.textContent.replace('$','').trim()) || 0; }
+
+    function renderMenuGrid() {
+      const grid = document.getElementById('menu-grid');
+      grid.innerHTML = '';
+      const catData = menuData[currentCategory];
+      const template = document.getElementById('menu-card-template');
+      catData.items.forEach((item, i) => {
+        const clone = template.content.cloneNode(true);
+        const article = clone.querySelector('article');
+        article.style.animationDelay = `${i * 60}ms`;
+        article.style.opacity = '0';
+        const img = clone.querySelector('img');
+        img.dataset.templateId = `${item.id}-image`;
+        if (item.image) img.src = item.image;
+        const savedImage = localStorage.getItem(`kapia-image-${item.id}`);
+        if (savedImage) img.src = savedImage;
+        img.alt = item.name;
+        const nameEl = clone.querySelector('h3');
+        nameEl.dataset.templateId = `${item.id}-name`;
+        nameEl.textContent = item.name;
+        const descEl = clone.querySelector('p');
+        descEl.dataset.templateId = `${item.id}-desc`;
+        descEl.textContent = item.desc;
+        const priceEl = clone.querySelector('span');
+        priceEl.dataset.templateId = `${item.id}-price`;
+        priceEl.textContent = `$${item.price}`;
+        const btn = clone.querySelector('.add-to-order-btn');
+        btn.setAttribute('onclick', `applyBounce(this); openModal('${currentCategory}','${item.id}')`);
+        grid.appendChild(clone);
+      });
+      lucide.createIcons();
+    }
+
+    function openModal(category, itemId) {
+      const catData = menuData[category];
+      const item = catData.items.find(i => i.id === itemId);
+      if (!item) return;
+      const cp = getItemPriceFromConfig(itemId);
+      const cn = getItemNameFromConfig(itemId);
+      const cd = getItemDescFromConfig(itemId);
+      modalItem = { ...item, price: cp > 0 ? cp : item.price, name: cn || item.name, desc: cd || item.desc };
+      modalCategory = category;
+      modalQty = 1;
+      modalAddons = {};
+      document.getElementById('modal-item-name').textContent = modalItem.name;
+      document.getElementById('modal-item-desc').textContent = modalItem.desc;
+      document.getElementById('modal-base-price').textContent = `$${modalItem.price}`;
+      document.getElementById('modal-qty').textContent = '1';
+      const addonsSection = document.getElementById('addons-section');
+      const addonsList = document.getElementById('addons-list');
+      addonsList.innerHTML = '';
+      if (catData.addons.length > 0) {
+        addonsSection.classList.remove('hidden');
+        catData.addons.forEach(addon => {
+          const label = document.createElement('label');
+          label.className = 'flex items-center gap-3 p-3 rounded-xl bg-gray-50 hover:bg-gray-100 cursor-pointer transition-colors';
+          label.innerHTML = `<input type="checkbox" class="w-4 h-4 rounded" onchange="toggleAddon('${addon.id}','${addon.name}',${addon.price},this.checked)"><span class="flex-1 font-medium text-sm" style="color:var(--ink);">${addon.name}</span><span class="font-semibold text-sm" style="color:var(--stone);">+$${addon.price}</span>`;
+          addonsList.appendChild(label);
+        });
+      } else {
+        addonsSection.classList.add('hidden');
+      }
+      updateModalTotal();
+      document.getElementById('customization-modal').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      document.getElementById('customization-modal').classList.add('hidden');
+      document.body.style.overflow = '';
+      modalItem = null;
+    }
+
+    function toggleAddon(id, name, price, checked) {
+      if (checked) modalAddons[id] = { name, price }; else delete modalAddons[id];
+      updateModalTotal();
+    }
+
+    function changeModalQty(d) {
+      modalQty = Math.max(1, modalQty + d);
+      document.getElementById('modal-qty').textContent = modalQty;
+      updateModalTotal();
+    }
+
+    function updateModalTotal() {
+      if (!modalItem) return;
+      const at = Object.values(modalAddons).reduce((s, a) => s + a.price, 0);
+      document.getElementById('modal-total').textContent = `$${((modalItem.price + at) * modalQty).toFixed(2)}`;
+    }
+
+    function confirmAddToOrder() {
+      if (!modalItem) return;
+      const newAddons = Object.values(modalAddons).map(a => ({ name: a.name, price: a.price }));
+      const addonsKey = JSON.stringify(newAddons.sort((a, b) => a.name.localeCompare(b.name)));
+      const existingItem = order.find(o => o.itemId === modalItem.id && JSON.stringify(o.addons.sort((a, b) => a.name.localeCompare(b.name))) === addonsKey);
+      if (existingItem) {
+        existingItem.qty += modalQty;
+      } else {
+        order.push({
+          orderId: ++orderIdCounter,
+          itemId: modalItem.id,
+          name: modalItem.name,
+          basePrice: modalItem.price,
+          addons: newAddons,
+          qty: modalQty,
+          category: modalCategory
+        });
+      }
+      closeModal();
+      renderOrder();
+      if (window.innerWidth < 1024) {
+        const panel = document.getElementById('order-panel-fixed');
+        const btn = document.getElementById('panel-toggle-btn');
+        panel.classList.add('panel-open');
+        btn.textContent = 'Close';
+        btn.setAttribute('aria-expanded', 'true');
+        panel.style.maxHeight = 'calc(100vh - 20px)';
+      }
+    }
+
+    function renderOrder() {
+      const container = document.getElementById('order-items-container');
+      const emptyMsg = document.getElementById('empty-order');
+      const template = document.getElementById('order-item-template');
+      const existingEls = new Map();
+      container.querySelectorAll('[data-order-id]').forEach(el => existingEls.set(parseInt(el.dataset.orderId), el));
+      const currentIds = new Set(order.map(o => o.orderId));
+      existingEls.forEach((el, id) => { if (!currentIds.has(id)) el.remove(); });
+      order.forEach(item => {
+        const itemTotal = (item.basePrice + item.addons.reduce((s, a) => s + a.price, 0)) * item.qty;
+        const addonsText = item.addons.length ? '+ ' + item.addons.map(a => a.name).join(', ') : '';
+        const catLabel = item.category === 'fertilizer' ? 'Fertilizer' : item.category === 'feeds' ? 'Feeds' : 'Foods & Drinks';
+        const catColor = item.category === 'appetizers' ? 'coral' : item.category === 'pastas' ? 'sage' : 'plum';
+        if (existingEls.has(item.orderId)) {
+          const el = existingEls.get(item.orderId);
+          el.querySelector('.order-item-qty').textContent = item.qty;
+          el.querySelector('.order-item-price').textContent = `$${itemTotal.toFixed(2)}`;
+          el.querySelector('.order-item-addons').textContent = addonsText;
+          el.querySelector('.order-item-category').textContent = catLabel;
+          el.querySelector('.order-item-category').style.backgroundColor = `var(--${catColor}-light)`;
+          el.querySelector('.order-item-category').style.color = `var(--${catColor})`;
+        } else {
+          const clone = template.content.cloneNode(true);
+          const wrapper = clone.querySelector('div');
+          wrapper.dataset.orderId = item.orderId;
+          wrapper.querySelector('p.font-semibold').textContent = item.name;
+          wrapper.querySelector('.order-item-category').textContent = catLabel;
+          wrapper.querySelector('.order-item-category').style.backgroundColor = `var(--${catColor}-light)`;
+          wrapper.querySelector('.order-item-category').style.color = `var(--${catColor})`;
+          wrapper.querySelector('.order-item-addons').textContent = addonsText;
+          wrapper.querySelector('.order-item-qty').textContent = item.qty;
+          wrapper.querySelector('.order-item-price').textContent = `$${itemTotal.toFixed(2)}`;
+          wrapper.querySelector('.qty-minus').setAttribute('onclick', `changeOrderQty(${item.orderId},-1)`);
+          wrapper.querySelector('.qty-plus').setAttribute('onclick', `changeOrderQty(${item.orderId},1)`);
+          wrapper.querySelector('.remove-btn').setAttribute('onclick', `removeOrderItem(${item.orderId})`);
+          container.appendChild(clone);
+          lucide.createIcons();
+        }
+      });
+      emptyMsg.style.display = order.length === 0 ? 'block' : 'none';
+      const subtotal = order.reduce((s, item) => s + (item.basePrice + item.addons.reduce((a, ad) => a + ad.price, 0)) * item.qty, 0);
+      const totalCount = order.reduce((s, item) => s + item.qty, 0);
+      document.getElementById('order-subtotal').textContent = `$${subtotal.toFixed(2)}`;
+      document.getElementById('order-count').textContent = totalCount;
+    }
+
+    function changeOrderQty(orderId, d) {
+      const item = order.find(o => o.orderId === orderId);
+      if (!item) return;
+      item.qty = Math.max(1, item.qty + d);
+      renderOrder();
+    }
+
+    function removeOrderItem(orderId) {
+      order = order.filter(o => o.orderId !== orderId);
+      renderOrder();
+    }
+
+    function toggleOrderPanel() {
+      if (window.innerWidth < 1024) {
+        const panel = document.getElementById('order-panel-fixed');
+        const btn = document.getElementById('panel-toggle-btn');
+        const isOpen = panel.classList.contains('panel-open');
+        panel.classList.toggle('panel-open', !isOpen);
+        btn.setAttribute('aria-expanded', String(!isOpen));
+        btn.textContent = isOpen ? 'View Order' : 'Close';
+        if (!isOpen) {
+          panel.style.maxHeight = 'calc(100vh - 20px)';
+        } else {
+          panel.style.maxHeight = '100px';
+        }
+      }
+    }
+
+    function scrollToCategories() {
+      const nav = document.querySelector('nav[data-template-id="category-tabs"]');
+      if (nav) nav.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function applyBounce(element) {
+      element.classList.remove('btn-click');
+      void element.offsetWidth;
+      element.classList.add('btn-click');
+    }
+
+    function submitOrder() {
+      if (order.length === 0) {
+        document.getElementById('submit-error').textContent = 'Your order is empty. Please add items before submitting.';
+        document.getElementById('submit-error').classList.remove('hidden');
+        return;
+      }
+      document.getElementById('submit-error').classList.add('hidden');
+      document.getElementById('name-input').value = '';
+      document.getElementById('email-input').value = '';
+      document.getElementById('name-error').classList.add('hidden');
+      document.getElementById('name-modal').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeNameModal() {
+      document.getElementById('name-modal').classList.add('hidden');
+      document.body.style.overflow = '';
+      document.getElementById('email-input').value = '';
+    }
+
+    function confirmNameAndSubmit() {
+      const nameInput = document.getElementById('name-input').value.trim();
+      const emailInput = document.getElementById('email-input').value.trim();
+      const nameError = document.getElementById('name-error');
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!nameInput) {
+        nameError.textContent = 'Please enter your name';
+        nameError.classList.remove('hidden');
+        return;
+      }
+      if (!emailInput || !emailRegex.test(emailInput)) {
+        nameError.textContent = 'Please enter a valid email address';
+        nameError.classList.remove('hidden');
+        return;
+      }
+      customerName = nameInput;
+      customerEmail = emailInput;
+      closeNameModal();
+      performOrderSubmit();
+    }
+
+    async 
+function saveOrderSnapshot(){try{if(!order||!order.length)return;let items=order.map(x=>({name:x.name,qty:x.qty||1,price:Number(x.price)||0}));let total=items.reduce((a,x)=>a+x.price*x.qty,0);let a=getOrders();a.unshift({id:'KAP-'+Date.now().toString().slice(-6),date:new Date().toLocaleString(),customerName:typeof customerName!=='undefined'?customerName:'',customerEmail:typeof customerEmail!=='undefined'?customerEmail:'',paymentMethod:'Checkout',total,items});localStorage.setItem('kapia-orders',JSON.stringify(a));updateOrderCount();}catch(e){}}
+
+async function performOrderSubmit() {
+      saveOrderSnapshot();
+      const errorEl = document.getElementById('submit-error');
+      const successEl = document.getElementById('submit-success');
+      const submitBtn = document.getElementById('submit-order-btn');
+      errorEl.classList.add('hidden');
+      successEl.classList.add('hidden');
+      const subtotal = order.reduce((s, item) => s + (item.basePrice + item.addons.reduce((a, ad) => a + ad.price, 0)) * item.qty, 0);
+      const timestamp = new Date().toISOString();
+      submitBtn.disabled = true;
+      submitBtn.style.opacity = '0.6';
+      for (const item of order) {
+        const lineTotal = (item.basePrice + item.addons.reduce((a, ad) => a + ad.price, 0)) * item.qty;
+        const catLabel = item.category === 'fertilizer' ? 'Fertilizer' : item.category === 'feeds' ? 'Feeds' : 'Foods & Drinks';
+        const result = await window.dataSdk.create({
+          customer_name: customerName,
+          item_name: item.name,
+          category: catLabel,
+          addons: item.addons.map(a => a.name).join(', '),
+          quantity: item.qty,
+          line_total: lineTotal,
+          order_subtotal: subtotal,
+          submitted_at: timestamp,
+          customer_email: customerEmail
+        });
+        if (!result.isOk) {
+          errorEl.textContent = 'Error submitting order. Please try again.';
+          errorEl.classList.remove('hidden');
+          submitBtn.disabled = false;
+          submitBtn.style.opacity = '1';
+          return;
+        }
+      }
+      successEl.classList.remove('hidden');
+      order = [];
+      orderIdCounter = 0;
+      customerName = '';
+      customerEmail = '';
+      renderOrder();
+      submitBtn.disabled = false;
+      submitBtn.style.opacity = '1';
+      setTimeout(() => successEl.classList.add('hidden'), 3000);
+    }
+
+    const dataHandler = { onDataChanged(data) {} };
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      const initResult = await window.dataSdk.init(dataHandler);
+      renderMenuGrid();
+      lucide.createIcons();
+    });
+  
+    function openEditor(){
+      const list=document.getElementById('editor-list'); list.innerHTML='';
+      Object.entries(menuData).forEach(([cat,data])=>{
+        const h=document.createElement('h3'); h.textContent=cat==='fertilizer'?'Fertilizer':cat==='feeds'?'Feeds':'Foods & Drinks'; h.style.cssText='font-size:20px;font-weight:700;margin:22px 0 10px;'; list.appendChild(h);
+        data.items.forEach(item=>{
+          const row=document.createElement('div'); row.style.cssText='display:grid;grid-template-columns:110px 1fr;gap:14px;border:1px solid #ddd;padding:14px;border-radius:12px;margin-bottom:10px;';
+          const imageInput=document.createElement('input'); imageInput.type='file'; imageInput.accept='image/*'; imageInput.dataset.id=item.id; imageInput.dataset.kind='image';
+          const saved=localStorage.getItem(`kapia-image-${item.id}`);
+          const preview=document.createElement('img'); preview.style.cssText='width:100px;height:80px;object-fit:cover;border-radius:8px;background:#eee;'; preview.src=saved||'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="100" height="80"><rect width="100%" height="100%" fill="#eee"/><text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" fill="#777">No image</text></svg>');
+          imageInput.onchange=e=>{const f=e.target.files[0]; if(f){const r=new FileReader();r.onload=ev=>{preview.src=ev.target.result;imageInput.dataset.data=ev.target.result};r.readAsDataURL(f)}};
+          const fields=document.createElement('div'); fields.style.cssText='display:grid;gap:7px;';
+          fields.innerHTML=`<input data-id="${item.id}" data-kind="name" value="${item.name.replace(/"/g,'&quot;')}" placeholder="Product name" style="padding:9px;border:1px solid #ccc;border-radius:7px;"><input data-id="${item.id}" data-kind="desc" value="${item.desc.replace(/"/g,'&quot;')}" placeholder="Description" style="padding:9px;border:1px solid #ccc;border-radius:7px;"><input data-id="${item.id}" data-kind="price" type="number" value="${item.price}" placeholder="Price" style="padding:9px;border:1px solid #ccc;border-radius:7px;">`;
+          row.appendChild(preview); const right=document.createElement('div'); right.appendChild(fields); right.appendChild(imageInput); row.replaceChildren(preview,right); list.appendChild(row);
+        });
+      });
+      document.getElementById('admin-editor').style.display='block';
+    }
+    function closeEditor(){document.getElementById('admin-editor').style.display='none';}
+    function saveEditor(){
+      document.querySelectorAll('#editor-list input[data-kind]').forEach(input=>{
+        const item=findItem(input.dataset.id); if(!item)return;
+        if(input.dataset.kind==='name')item.name=input.value;
+        if(input.dataset.kind==='desc')item.desc=input.value;
+        if(input.dataset.kind==='price')item.price=parseFloat(input.value)||0;
+      });
+      document.querySelectorAll('#editor-list input[type=file]').forEach(input=>{if(input.dataset.data)localStorage.setItem(`kapia-image-${input.dataset.id}`,input.dataset.data)});
+      localStorage.setItem('kapia-menu-data',JSON.stringify(menuData));
+      renderMenuGrid(); closeEditor(); alert('Changes saved successfully!');
+    }
+    function findItem(id){for(const c of Object.values(menuData)){const x=c.items.find(i=>i.id===id);if(x)return x;}return null;}
+    (function loadSavedMenu(){try{const saved=JSON.parse(localStorage.getItem('kapia-menu-data'));if(saved)Object.keys(menuData).forEach(k=>{if(saved[k])menuData[k]=saved[k]});}catch(e){}})();
+</script>
+ 
+</body></html>
