@@ -1,5 +1,4 @@
 const CURRENCY = '\u20b1';
-const ADMIN_PASSWORD = 'kapiaadmin';
 const PLACEHOLDER_IMAGE = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="400" height="256" viewBox="0 0 400 256"><rect width="100%" height="100%" fill="#eee"/><text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" fill="#888" font-family="sans-serif" font-size="16">Kapia Farm Cafe</text></svg>');
 const DEFAULT_PRODUCTS = [
   { id: 'f1', category: 'fertilizer', name: 'Complete Fertilizer 14-14-14', desc: 'Balanced fertilizer for healthy crop growth.', price: 850, image: 'https://images.pexels.com/photos/7768447/pexels-photo-7768447.jpeg' },
@@ -29,6 +28,7 @@ const LEGACY_CATEGORY_ADDONS = [
 ];
 
 let editingImage = '';
+let ordersCache = [];
 
 function escapeHTML(value) {
   return String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[char]));
@@ -52,16 +52,6 @@ function saveProducts(products) {
   } catch (error) {
     alert('Could not save products. Try a smaller image or remove unused products.');
     return false;
-  }
-}
-
-function getOrders() {
-  try {
-    const orders = JSON.parse(localStorage.getItem('kapia-orders') || '[]');
-    return Array.isArray(orders) ? orders : [];
-  } catch (error) {
-    console.warn('Could not read saved orders:', error);
-    return [];
   }
 }
 
@@ -105,7 +95,7 @@ function renderProducts() {
 
 function renderOrders() {
   const list = document.getElementById('admin-orders-list');
-  const orders = getOrders();
+  const orders = ordersCache;
   document.getElementById('admin-order-count').textContent = orders.length;
   if (!orders.length) {
     list.innerHTML = '<p class="empty-state">No customer orders yet.</p>';
@@ -135,11 +125,32 @@ function renderOrders() {
         </div>
         <div class="ordered-items"><strong>Ordered items</strong><ul>${items}</ul></div>
         <div class="order-actions">
-          <button type="button" class="button button-primary" data-action="toggle-status">${isCompleted ? 'Mark Pending' : 'Mark Completed'}</button>
+          <button type="button" class="button button-primary" data-action="${isPaid ? 'mark-unpaid' : 'mark-paid'}">${isPaid ? 'Mark unpaid' : 'Confirm payment'}</button>
           <button type="button" class="button button-danger" data-action="delete-order">Delete order</button>
         </div>
       </article>`;
   }).join('');
+}
+
+async function loadOrders() {
+  const list = document.getElementById('admin-orders-list');
+  list.textContent = 'Loading orders...';
+  try {
+    const response = await fetch('/api/orders', {
+      headers: { Authorization: `Bearer ${sessionStorage.getItem('kapia-admin-token') || ''}` }
+    });
+    const result = await response.json().catch(() => ({}));
+    if (response.status === 401) {
+      sessionStorage.removeItem('kapia-admin-token');
+      showLogin();
+      throw new Error('Your admin session expired. Please sign in again.');
+    }
+    if (!response.ok) throw new Error(result.error || 'Could not load customer orders.');
+    ordersCache = Array.isArray(result) ? result : [];
+    renderOrders();
+  } catch (error) {
+    list.textContent = error.message || 'Could not connect to the order service.';
+  }
 }
 
 function showTab(tab) {
@@ -151,14 +162,14 @@ function showTab(tab) {
   document.getElementById('admin-tab-products').setAttribute('aria-pressed', productsSelected);
   document.getElementById('admin-tab-orders').setAttribute('aria-pressed', !productsSelected);
   if (productsSelected) renderProducts();
-  else renderOrders();
+  else loadOrders();
 }
 
 function showDashboard() {
   document.getElementById('admin-login-panel').hidden = true;
   document.getElementById('admin-dashboard').hidden = false;
   document.getElementById('admin-logout').hidden = false;
-  showTab('products');
+  showTab('orders');
 }
 
 function showLogin() {
@@ -247,40 +258,69 @@ function removeProduct(productId) {
   saveProducts(getProducts().filter(product => product.id !== productId));
 }
 
-function updateOrder(orderId, action) {
-  const orders = getOrders();
-  const order = orders.find(entry => entry.id === orderId);
-  if (!order) return;
-  if (action === 'delete') {
-    if (!confirm('Delete this order record?')) return;
-    localStorage.setItem('kapia-orders', JSON.stringify(orders.filter(entry => entry.id !== orderId)));
-  } else {
-    order.status = order.status === 'Completed' ? 'Pending' : 'Completed';
-    localStorage.setItem('kapia-orders', JSON.stringify(orders));
+async function updateOrder(orderId, action) {
+  if (action === 'delete-order' && !confirm('Delete this order record?')) return;
+  const isDelete = action === 'delete-order';
+  try {
+    const response = await fetch('/api/orders', {
+      method: isDelete ? 'DELETE' : 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${sessionStorage.getItem('kapia-admin-token') || ''}`
+      },
+      body: JSON.stringify(isDelete
+        ? { id: orderId }
+        : { id: orderId, status: action === 'mark-paid' ? 'Paid - Verified' : 'Awaiting Payment' })
+    });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(result.error || 'Could not update this order.');
+    await loadOrders();
+  } catch (error) {
+    alert(error.message || 'Could not connect to the order service.');
   }
-  renderOrders();
 }
 
-function clearAllOrders() {
-  if (!confirm('Delete all customer orders saved in this browser?')) return;
-  localStorage.removeItem('kapia-orders');
-  renderOrders();
+async function clearAllOrders() {
+  if (!confirm('Delete all customer orders from the shared dashboard?')) return;
+  try {
+    const response = await fetch('/api/orders', {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${sessionStorage.getItem('kapia-admin-token') || ''}` }
+    });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(result.error || 'Could not clear customer orders.');
+    await loadOrders();
+  } catch (error) {
+    alert(error.message || 'Could not connect to the order service.');
+  }
 }
 
 document.getElementById('admin-login-form').addEventListener('submit', event => {
   event.preventDefault();
-  const password = document.getElementById('admin-password').value;
-  if (password === ADMIN_PASSWORD) {
-    sessionStorage.setItem('kapia-admin', 'true');
-    document.getElementById('admin-login-error').hidden = true;
+  const form = event.currentTarget;
+  const loginButton = form.querySelector('button[type="submit"]');
+  const errorMessage = document.getElementById('admin-login-error');
+  loginButton.disabled = true;
+  errorMessage.hidden = true;
+  fetch('/api/admin-login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ password: document.getElementById('admin-password').value })
+  }).then(async response => {
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(result.error || 'Admin sign-in failed.');
+    sessionStorage.setItem('kapia-admin-token', result.token);
     showDashboard();
-  } else {
-    document.getElementById('admin-login-error').hidden = false;
-  }
+  }).catch(error => {
+    errorMessage.textContent = error.message || 'Could not connect to admin sign-in.';
+    errorMessage.hidden = false;
+  }).finally(() => {
+    loginButton.disabled = false;
+  });
 });
 
 document.getElementById('admin-logout').addEventListener('click', () => {
-  sessionStorage.removeItem('kapia-admin');
+  sessionStorage.removeItem('kapia-admin-token');
   showLogin();
 });
 document.getElementById('admin-tab-products').addEventListener('click', () => showTab('products'));
@@ -304,8 +344,7 @@ document.getElementById('admin-orders-list').addEventListener('click', event => 
   const button = event.target.closest('button[data-action]');
   const card = button?.closest('[data-order-id]');
   if (!button || !card) return;
-  const action = button.dataset.action === 'delete-order' ? 'delete' : 'toggle';
-  updateOrder(card.dataset.orderId, action);
+  updateOrder(card.dataset.orderId, button.dataset.action);
 });
 document.getElementById('product-image-url-input').addEventListener('input', event => {
   editingImage = event.target.value.trim();
@@ -340,8 +379,23 @@ document.getElementById('product-image-clear').addEventListener('click', () => {
 });
 window.addEventListener('storage', event => {
   if (event.key === 'kapia-products') renderProducts();
-  if (event.key === 'kapia-orders' && !document.getElementById('admin-orders-panel').hidden) renderOrders();
 });
 
-if (sessionStorage.getItem('kapia-admin') === 'true') showDashboard();
-else showLogin();
+async function restoreAdminSession() {
+  const token = sessionStorage.getItem('kapia-admin-token');
+  if (!token) {
+    showLogin();
+    return;
+  }
+  const response = await fetch('/api/orders', { headers: { Authorization: `Bearer ${token}` } }).catch(() => null);
+  if (response?.ok) showDashboard();
+  else {
+    sessionStorage.removeItem('kapia-admin-token');
+    showLogin();
+  }
+}
+
+restoreAdminSession();
+window.setInterval(() => {
+  if (!document.getElementById('admin-dashboard').hidden && !document.getElementById('admin-orders-panel').hidden) loadOrders();
+}, 20000);

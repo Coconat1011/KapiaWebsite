@@ -602,7 +602,7 @@
                 <ol style="margin:4px 0 0 16px;padding:0;">
                   <li>Open GCash, Maya, or any QRPH-supported banking app.</li>
                   <li>Scan the QR code and confirm amount: <b id="pay-qr-amount" style="color:#ff6105;">₱0.00</b>.</li>
-                  <li>After paying, enter your reference number below and click "Confirm Payment".</li>
+                  <li>After paying, enter your reference number below and report the payment for cafe verification.</li>
                 </ol>
               </div>
             </div>
@@ -640,8 +640,8 @@
           <!-- Success Confirmation Banner -->
           <div id="payment-success-banner" style="display:none;margin-top:16px;background:#ecfdf5;border:2px solid #059669;border-radius:12px;padding:16px;text-align:center;">
             <div style="font-size:28px;margin-bottom:4px;">🎉</div>
-            <div style="font-weight:700;color:#065f46;font-size:16px;">Payment Confirmed!</div>
-            <p style="color:#047857;font-size:13px;margin:4px 0 10px;">Thank you! Your payment reference has been recorded and verified.</p>
+            <div id="payment-success-title" style="font-weight:700;color:#065f46;font-size:16px;">Payment reported</div>
+            <p id="payment-success-message" style="color:#047857;font-size:13px;margin:4px 0 10px;">Your payment report will be verified by the cafe.</p>
             <button onclick="closePaymentPage()" style="padding:8px 18px;border:2px solid #065f46;border-radius:8px;background:#fff;color:#065f46;font-weight:700;font-size:13px;cursor:pointer;">
               Done &amp; Return to Store
             </button>
@@ -780,15 +780,6 @@
         const savedImg = localStorage.getItem(`kapia-image-${p.id}`);
         menuData[cat].items.push({ ...p, image: p.image || savedImg || '' });
       });
-    }
-
-    // Orders management
-    function getOrders() {
-      try {
-        return JSON.parse(localStorage.getItem('kapia-orders') || '[]');
-      } catch (e) {
-        return [];
-      }
     }
 
     function esc(v) {
@@ -1120,45 +1111,30 @@
       performOrderSubmit();
     }
 
-    function saveOrderSnapshot() {
-      try {
-        if (!order || !order.length) return null;
-        const items = order.map(x => {
-          const addonsPrice = (x.addons || []).reduce((a, ad) => a + (Number(ad.price) || 0), 0);
-          const unitPrice = Number(x.basePrice || 0) + addonsPrice;
-          return {
-            id: x.itemId,
-            name: x.name,
-            qty: x.qty || 1,
-            unitPrice: unitPrice,
-            addons: x.addons || [],
-            category: x.category || '',
-            lineTotal: unitPrice * (x.qty || 1)
-          };
-        });
-        const total = items.reduce((a, x) => a + x.lineTotal, 0);
-        const orderRecord = {
-          id: 'KAP-' + Date.now().toString().slice(-6),
-          date: new Date().toLocaleString(),
-          customerName: customerName || 'Guest Customer',
-          customerEmail: customerEmail || 'N/A',
-          paymentMethod: 'QR PH / GCash (Pending)',
-          status: 'Awaiting Payment',
-          total: total,
-          items: items
-        };
-        const orders = getOrders();
-        orders.unshift(orderRecord);
-        localStorage.setItem('kapia-orders', JSON.stringify(orders));
-        return orderRecord;
-      } catch (e) {
-        console.warn('Error saving order snapshot:', e);
-        return null;
-      }
+    async function createOrderRecord() {
+      const response = await fetch('/api/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          customerName,
+          customerEmail,
+          items: order.map(item => ({
+            id: item.itemId,
+            name: item.name,
+            basePrice: Number(item.basePrice),
+            addons: item.addons || [],
+            qty: item.qty || 1,
+            category: item.category || ''
+          }))
+        })
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(result.error || 'Could not submit your order. Please try again.');
+      if (!result.order) throw new Error('The order service returned an invalid response.');
+      return result.order;
     }
 
     async function performOrderSubmit() {
-      const savedOrder = saveOrderSnapshot();
       const errorEl = document.getElementById('submit-error');
       const successEl = document.getElementById('submit-success');
       const submitBtn = document.getElementById('submit-order-btn');
@@ -1166,46 +1142,23 @@
       errorEl.classList.add('hidden');
       successEl.classList.add('hidden');
       
-      const subtotal = order.reduce((s, item) => {
-        const addonsPrice = item.addons.reduce((a, ad) => a + (Number(ad.price) || 0), 0);
-        return s + (Number(item.basePrice) + addonsPrice) * item.qty;
-      }, 0);
-      const timestamp = new Date().toISOString();
-      
       submitBtn.disabled = true;
       submitBtn.style.opacity = '0.6';
 
-      // Safely support Canva dataSdk if present
-      if (window.dataSdk && typeof window.dataSdk.create === 'function') {
-        for (const item of order) {
-          const lineTotal = (Number(item.basePrice) + item.addons.reduce((a, ad) => a + (Number(ad.price) || 0), 0)) * item.qty;
-          const catLabel = item.category === 'fertilizer' ? 'Fertilizer' : item.category === 'feeds' ? 'Feeds' : 'Foods & Drinks';
-          try {
-            await window.dataSdk.create({
-              customer_name: customerName,
-              item_name: item.name,
-              category: catLabel,
-              addons: item.addons.map(a => a.name).join(', '),
-              quantity: item.qty,
-              line_total: lineTotal,
-              order_subtotal: subtotal,
-              submitted_at: timestamp,
-              customer_email: customerEmail
-            });
-          } catch (err) {
-            console.warn('dataSdk.create warning:', err);
-          }
-        }
+      let savedOrder;
+      try {
+        savedOrder = await createOrderRecord();
+      } catch (error) {
+        errorEl.textContent = error.message || 'Could not submit your order. Please try again.';
+        errorEl.classList.remove('hidden');
+        submitBtn.disabled = false;
+        submitBtn.style.opacity = '1';
+        return;
       }
 
       successEl.classList.remove('hidden');
 
-      // Navigate to Payment Page immediately
-      if (savedOrder) {
-        setTimeout(() => {
-          openPaymentPage(savedOrder);
-        }, 300);
-      }
+      setTimeout(() => openPaymentPage(savedOrder), 300);
 
       order = [];
       orderIdCounter = 0;
@@ -1296,6 +1249,9 @@
         qrSection.style.display = 'none';
         codSection.style.display = 'block';
       }
+      document.getElementById('pay-confirm-btn').textContent = method === 'cod'
+        ? 'Request cash on delivery / pickup'
+        : '✓ I Have Completed Payment';
     }
 
     function randomizeCurrentQR() {
@@ -1352,38 +1308,42 @@
       drawFinder(0, gridCount - 7);
     }
 
-    function confirmPaymentComplete() {
+    async function confirmPaymentComplete() {
       if (!currentPaymentOrder) return;
       const refInput = document.getElementById('pay-ref-input').value.trim();
-      const orders = getOrders();
-      const idx = orders.findIndex(o => o.id === currentPaymentOrder.id);
-
-      let updatedStatus = 'Paid - Verified';
-      let methodText = 'QR PH / GCash';
-
-      if (currentPaymentMethod === 'cod') {
-        updatedStatus = 'Awaiting COD / Pickup';
-        methodText = 'Cash on Delivery';
-      } else if (refInput) {
-        methodText = 'QR PH (Ref: ' + refInput + ')';
-      }
-
-      if (idx !== -1) {
-        orders[idx].status = updatedStatus;
-        orders[idx].paymentMethod = methodText;
-        localStorage.setItem('kapia-orders', JSON.stringify(orders));
-      }
-
-      const badge = document.getElementById('payment-status-badge');
-      badge.textContent = updatedStatus;
-      badge.style.background = '#dcfce7';
-      badge.style.color = '#15803d';
-
-      document.getElementById('payment-success-banner').style.display = 'block';
       const btn = document.getElementById('pay-confirm-btn');
       btn.disabled = true;
-      btn.style.opacity = '0.5';
-      btn.textContent = '✓ Payment Recorded';
+      const updatedStatus = currentPaymentMethod === 'cod' ? 'Awaiting COD / Pickup' : 'Payment Reported';
+      const methodText = currentPaymentMethod === 'cod'
+        ? 'Cash on Delivery'
+        : refInput ? `QR PH (Ref: ${refInput})` : 'QR PH / GCash (Payment reported)';
+
+      try {
+        const response = await fetch('/api/orders', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: currentPaymentOrder.id, status: updatedStatus, paymentMethod: methodText })
+        });
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(result.error || 'Could not update your order.');
+
+        currentPaymentOrder = result.order;
+        const badge = document.getElementById('payment-status-badge');
+        badge.textContent = updatedStatus;
+        badge.style.background = currentPaymentMethod === 'cod' ? '#eff6ff' : '#fffbeb';
+        badge.style.color = currentPaymentMethod === 'cod' ? '#1d4ed8' : '#92400e';
+
+        document.getElementById('payment-success-title').textContent = currentPaymentMethod === 'cod' ? 'Pickup request received' : 'Payment reported';
+        document.getElementById('payment-success-message').textContent = currentPaymentMethod === 'cod'
+          ? 'Your order is awaiting cash payment at delivery or pickup.'
+          : 'Your payment report was sent to the cafe. The admin will verify it and update your order.';
+        document.getElementById('payment-success-banner').style.display = 'block';
+        btn.style.opacity = '0.5';
+        btn.textContent = '✓ Order updated';
+      } catch (error) {
+        alert(error.message || 'Could not update your order. Please try again.');
+        btn.disabled = false;
+      }
     }
 
     window.addEventListener('storage', event => {

@@ -1,0 +1,21 @@
+const { constantTimeEqual, createAdminToken } = require('../lib/admin-auth');
+
+module.exports = async function adminLogin(request, response) {
+  response.setHeader('Cache-Control', 'no-store');
+  if (request.method !== 'POST') {
+    response.setHeader('Allow', 'POST');
+    return response.status(405).json({ error: 'Method not allowed.' });
+  }
+
+  const adminPassword = process.env.ADMIN_PASSWORD;
+  if (!adminPassword) {
+    return response.status(503).json({ error: 'Admin authentication is not configured on the server.' });
+  }
+
+  const password = typeof request.body?.password === 'string' ? request.body.password : '';
+  if (!constantTimeEqual(password, adminPassword)) {
+    return response.status(401).json({ error: 'Incorrect password.' });
+  }
+
+  return response.status(200).json({ token: createAdminToken(adminPassword) });
+};
