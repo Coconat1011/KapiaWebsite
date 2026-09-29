@@ -1,5 +1,5 @@
 const crypto = require('node:crypto');
-const { neon } = require('@neondatabase/serverless');
+const { getOrdersCollection } = require('../lib/mongodb');
 const { isAdminRequest } = require('../lib/admin-auth');
 
 const ALLOWED_STATUSES = new Set([
@@ -17,10 +17,10 @@ function sendError(response, status, message) {
 function toOrder(row) {
   return {
     id: row.id,
-    date: row.created_at instanceof Date ? row.created_at.toISOString() : row.created_at,
-    customerName: row.customer_name,
-    customerEmail: row.customer_email,
-    paymentMethod: row.payment_method,
+    date: row.createdAt instanceof Date ? row.createdAt.toISOString() : row.createdAt,
+    customerName: row.customerName,
+    customerEmail: row.customerEmail,
+    paymentMethod: row.paymentMethod,
     status: row.status,
     total: Number(row.total),
     items: row.items
@@ -64,19 +64,6 @@ function buildItems(input) {
   });
 }
 
-async function ensureSchema(sql) {
-  await sql`CREATE TABLE IF NOT EXISTS kapia_orders (
-    id TEXT PRIMARY KEY,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    customer_name TEXT NOT NULL,
-    customer_email TEXT NOT NULL,
-    payment_method TEXT NOT NULL,
-    status TEXT NOT NULL,
-    total NUMERIC(12, 2) NOT NULL,
-    items JSONB NOT NULL
-  )`;
-}
-
 module.exports = async function orders(request, response) {
   response.setHeader('Cache-Control', 'no-store');
   if (!['GET', 'POST', 'PATCH', 'DELETE'].includes(request.method)) {
@@ -85,7 +72,7 @@ module.exports = async function orders(request, response) {
   }
 
   const adminPassword = process.env.ADMIN_PASSWORD || 'kapiaadmin';
-  const databaseUrl = process.env.DATABASE_URL;
+  const mongoUri = process.env.MONGODB_URI;
 
   if ((request.method === 'GET' || request.method === 'DELETE') && !isAdminRequest(request, adminPassword)) {
     return sendError(response, 401, 'Admin login is required.');
@@ -97,19 +84,19 @@ module.exports = async function orders(request, response) {
       return sendError(response, 401, 'Admin login is required.');
     }
   }
-  if (!databaseUrl) {
-    return sendError(response, 503, 'Order storage is not configured. Set DATABASE_URL in Vercel.');
+  if (!mongoUri) {
+    return sendError(response, 503, 'Order storage is not configured. Set MONGODB_URI in Vercel.');
   }
 
   try {
-    const sql = neon(databaseUrl);
-    await ensureSchema(sql);
+    const ordersCollection = await getOrdersCollection();
 
     if (request.method === 'POST') {
       const customerName = String(request.body?.customerName || '').trim();
       const customerEmail = String(request.body?.customerEmail || '').trim();
-      if (!customerName || customerName.length > 200 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customerEmail) || customerEmail.length > 320) {
-        return sendError(response, 400, 'Enter a valid customer name and email.');
+      const hasValidEmail = !customerEmail || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customerEmail);
+      if (!customerName || customerName.length > 200 || !hasValidEmail || customerEmail.length > 320) {
+        return sendError(response, 400, 'Enter a customer name and a valid email if you provide one.');
       }
 
       let items;
@@ -121,6 +108,7 @@ module.exports = async function orders(request, response) {
       const total = items.reduce((sum, item) => sum + item.lineTotal, 0);
       const order = {
         id: `KAP-${Date.now()}-${crypto.randomBytes(3).toString('hex').toUpperCase()}`,
+        createdAt: new Date(),
         customerName,
         customerEmail,
         paymentMethod: 'QR PH / GCash (Pending)',
@@ -128,17 +116,13 @@ module.exports = async function orders(request, response) {
         total,
         items
       };
-      const rows = await sql`
-        INSERT INTO kapia_orders (id, customer_name, customer_email, payment_method, status, total, items)
-        VALUES (${order.id}, ${customerName}, ${customerEmail}, ${order.paymentMethod}, ${order.status}, ${total}, ${JSON.stringify(items)}::jsonb)
-        RETURNING id, created_at, customer_name, customer_email, payment_method, status, total, items
-      `;
-      return response.status(201).json({ order: toOrder(rows[0]) });
+      await ordersCollection.insertOne(order);
+      return response.status(201).json({ order: toOrder(order) });
     }
 
     if (request.method === 'GET') {
-      const rows = await sql`SELECT id, created_at, customer_name, customer_email, payment_method, status, total, items FROM kapia_orders ORDER BY created_at DESC LIMIT 500`;
-      return response.status(200).json(rows.map(toOrder));
+      const orders = await ordersCollection.find({}).sort({ createdAt: -1 }).limit(500).toArray();
+      return response.status(200).json(orders.map(toOrder));
     }
 
     if (request.method === 'PATCH') {
@@ -147,26 +131,24 @@ module.exports = async function orders(request, response) {
       const paymentMethod = typeof request.body?.paymentMethod === 'string' ? request.body.paymentMethod.slice(0, 160) : null;
       if (!orderId || !ALLOWED_STATUSES.has(status)) return sendError(response, 400, 'Invalid order update.');
 
-      const rows = await sql`
-        UPDATE kapia_orders
-        SET status = ${status}, payment_method = COALESCE(${paymentMethod}, payment_method)
-        WHERE id = ${orderId}
-        RETURNING id, created_at, customer_name, customer_email, payment_method, status, total, items
-      `;
-      if (!rows.length) return sendError(response, 404, 'Order not found.');
-      return response.status(200).json({ order: toOrder(rows[0]) });
+      const update = { status };
+      if (paymentMethod !== null) update.paymentMethod = paymentMethod;
+      const result = await ordersCollection.updateOne({ id: orderId }, { $set: update });
+      if (!result.matchedCount) return sendError(response, 404, 'Order not found.');
+      const updatedOrder = await ordersCollection.findOne({ id: orderId });
+      return response.status(200).json({ order: toOrder(updatedOrder) });
     }
 
     if (request.method === 'DELETE') {
       const orderId = String(request.body?.id || '').trim();
-      if (orderId) await sql`DELETE FROM kapia_orders WHERE id = ${orderId}`;
-      else await sql`DELETE FROM kapia_orders`;
+      if (orderId) await ordersCollection.deleteOne({ id: orderId });
+      else await ordersCollection.deleteMany({});
       return response.status(200).json({ success: true });
     }
 
     return sendError(response, 405, 'Method not allowed.');
   } catch (error) {
     console.error('Order API error:', error);
-    return sendError(response, 500, 'Could not access the order database. Check the Vercel database configuration.');
+    return sendError(response, 500, 'Could not access MongoDB. Check MONGODB_URI and the Atlas network access settings.');
   }
 };
