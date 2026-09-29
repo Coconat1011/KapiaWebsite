@@ -1112,24 +1112,36 @@
     }
 
     async function createOrderRecord() {
-      const response = await fetch('/api/orders', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          customerName,
-          customerEmail,
-          items: order.map(item => ({
-            id: item.itemId,
-            name: item.name,
-            basePrice: Number(item.basePrice),
-            addons: item.addons || [],
-            qty: item.qty || 1,
-            category: item.category || ''
-          }))
-        })
-      });
-      const result = await response.json().catch(() => ({}));
-      if (!response.ok) throw new Error(result.error || 'Could not submit your order. Please try again.');
+      let response;
+      try {
+        response = await fetch('/api/orders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            customerName,
+            customerEmail,
+            items: order.map(item => ({
+              id: item.itemId,
+              name: item.name,
+              basePrice: Number(item.basePrice),
+              addons: item.addons || [],
+              qty: item.qty || 1,
+              category: item.category || ''
+            }))
+          })
+        });
+      } catch (error) {
+        throw new Error('Cannot reach /api/orders. Confirm the Vercel API is deployed with this website.');
+      }
+
+      const responseText = await response.text();
+      let result;
+      try {
+        result = JSON.parse(responseText);
+      } catch (error) {
+        throw new Error(`Order API returned HTTP ${response.status} without JSON. Confirm /api/orders is deployed on Vercel.`);
+      }
+      if (!response.ok) throw new Error(result.error || `Order API returned HTTP ${response.status}.`);
       if (!result.order) throw new Error('The order service returned an invalid response.');
       return result.order;
     }
