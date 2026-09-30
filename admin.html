@@ -76,6 +76,8 @@
     .addon-row .button { min-height: 44px; }
     .addon-add { margin-top: 10px; }
     .preview { display: block; width: 100%; height: 180px; margin-top: 10px; border: 1px solid var(--line); border-radius: 7px; object-fit: cover; }
+    .upload-status { min-height: 18px; margin: 8px 0 0; font-size: 13px; }
+    .upload-status[data-state="error"] { color: var(--red); }
     .error { margin: 12px 0 0; color: var(--red); font-size: 13px; font-weight: 700; }
     @media (max-width: 560px) {
       .topbar { align-items: flex-start; padding: 13px 16px; }
@@ -156,8 +158,9 @@
         </fieldset>
         <label for="product-image-url-input">Image URL</label>
         <input id="product-image-url-input" type="url" placeholder="https://...">
-        <label for="product-image-input">Or upload an image (max 2 MB)</label>
-        <input id="product-image-input" type="file" accept="image/*">
+        <label for="product-image-input">Upload a product photo (max 2 MB)</label>
+        <input id="product-image-input" type="file" accept="image/jpeg,image/png,image/webp,image/gif">
+        <p id="product-image-upload-status" class="upload-status" role="status" aria-live="polite" hidden></p>
         <div id="product-image-container" hidden><img id="product-image-preview" class="preview" alt="Product preview"><button id="product-image-clear" class="button button-danger" type="button" style="margin-top:8px;">Remove image</button></div>
         <div class="form-actions"><button class="button" type="button" data-close-product-form>Cancel</button><button class="button button-primary" type="submit">Save product</button></div>
       </form>

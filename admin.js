@@ -8,6 +8,7 @@ const LEGACY_CATEGORY_ADDONS = [
 ];
 
 let editingImage = '';
+let imageUploadPromise = null;
 let ordersCache = [];
 let productsCache = [];
 
@@ -190,6 +191,11 @@ function openProductForm(productId = '') {
   productAddons.forEach(addon => addAddonRow(addon));
   editingImage = product?.image || '';
   document.getElementById('product-image-url-input').value = editingImage.startsWith('data:') ? '' : editingImage;
+  imageUploadPromise = null;
+  const uploadStatus = document.getElementById('product-image-upload-status');
+  uploadStatus.textContent = '';
+  uploadStatus.hidden = true;
+  delete uploadStatus.dataset.state;
   updateImagePreview();
   document.getElementById('product-form-modal').hidden = false;
   document.getElementById('product-name-input').focus();
@@ -208,6 +214,7 @@ function closeProductForm() {
 
 async function saveProduct(event) {
   event.preventDefault();
+  if (imageUploadPromise) return;
   const name = document.getElementById('product-name-input').value.trim();
   const price = Number(document.getElementById('product-price-input').value);
   if (!name || !Number.isFinite(price) || price < 0) return;
@@ -234,6 +241,7 @@ async function saveProduct(event) {
     const result = await response.json().catch(() => ({}));
     if (response.status === 401) {
       sessionStorage.removeItem('kapia-admin-token');
+      closeProductForm();
       showLogin();
       throw new Error('Your admin session expired. Please sign in again.');
     }
@@ -366,8 +374,8 @@ document.getElementById('product-image-url-input').addEventListener('input', eve
 document.getElementById('product-image-input').addEventListener('change', event => {
   const file = event.target.files?.[0];
   if (!file) return;
-  if (!file.type.startsWith('image/')) {
-    alert('Choose an image file.');
+  if (!['image/jpeg', 'image/png', 'image/webp', 'image/gif'].includes(file.type)) {
+    alert('Choose a JPEG, PNG, WebP, or GIF image.');
     event.target.value = '';
     return;
   }
@@ -376,18 +384,79 @@ document.getElementById('product-image-input').addEventListener('change', event 
     event.target.value = '';
     return;
   }
-  const reader = new FileReader();
-  reader.addEventListener('load', () => {
-    editingImage = String(reader.result || '');
-    document.getElementById('product-image-url-input').value = '';
-    updateImagePreview();
-  });
-  reader.readAsDataURL(file);
+  imageUploadPromise = uploadProductImage(file);
 });
+
+async function uploadProductImage(file) {
+  const status = document.getElementById('product-image-upload-status');
+  const fileInput = document.getElementById('product-image-input');
+  const urlInput = document.getElementById('product-image-url-input');
+  const saveButton = document.querySelector('#product-form button[type="submit"]');
+  const closeButtons = document.querySelectorAll('[data-close-product-form]');
+  const clearButton = document.getElementById('product-image-clear');
+  status.textContent = 'Uploading photo...';
+  status.hidden = false;
+  status.dataset.state = 'uploading';
+  fileInput.disabled = true;
+  urlInput.disabled = true;
+  clearButton.disabled = true;
+  saveButton.disabled = true;
+  closeButtons.forEach(button => { button.disabled = true; });
+
+  try {
+    const image = await new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.addEventListener('load', () => resolve(String(reader.result || '')));
+      reader.addEventListener('error', () => reject(new Error('Could not read the selected photo.')));
+      reader.readAsDataURL(file);
+    });
+    const response = await fetch('/api/upload-image', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${sessionStorage.getItem('kapia-admin-token') || ''}`
+      },
+      body: JSON.stringify({ image })
+    });
+    const result = await response.json().catch(() => ({}));
+    if (response.status === 401) {
+      sessionStorage.removeItem('kapia-admin-token');
+      closeProductForm();
+      showLogin();
+      throw new Error('Your admin session expired. Please sign in again.');
+    }
+    if (!response.ok || typeof result.url !== 'string') {
+      throw new Error(result.error || 'Could not upload this photo.');
+    }
+
+    editingImage = result.url;
+    urlInput.value = result.url;
+    updateImagePreview();
+    status.textContent = 'Photo uploaded to EdgeStore.';
+    status.dataset.state = 'success';
+  } catch (error) {
+    status.textContent = error.message || 'Could not upload this photo.';
+    status.dataset.state = 'error';
+    fileInput.value = '';
+  } finally {
+    fileInput.disabled = false;
+    urlInput.disabled = false;
+    clearButton.disabled = false;
+    saveButton.disabled = false;
+    closeButtons.forEach(button => { button.disabled = false; });
+    imageUploadPromise = null;
+  }
+}
+
 document.getElementById('product-image-clear').addEventListener('click', () => {
   editingImage = '';
+  imageUploadPromise = null;
   document.getElementById('product-image-input').value = '';
   document.getElementById('product-image-url-input').value = '';
+  const uploadStatus = document.getElementById('product-image-upload-status');
+  uploadStatus.textContent = '';
+  uploadStatus.hidden = true;
+  delete uploadStatus.dataset.state;
   updateImagePreview();
 });
 async function restoreAdminSession() {
