@@ -63,11 +63,19 @@ test('product API reads defaults and protects persistent catalog changes', async
   let response = await request('GET');
   assert.equal(response.statusCode, 200);
   assert.equal(response.body.length, 18);
+  assert.equal(response.body[0].inStock, true);
 
   response = await request('POST', {
     product: { name: 'New feed', category: 'feeds', price: 12, desc: '', image: '', addons: [] }
   });
   assert.equal(response.statusCode, 401);
+
+  response = await request('PATCH', {
+    id: 'f1',
+    product: { name: 'Unavailable fertilizer', category: 'fertilizer', price: 850, desc: '', image: '', inStock: false, addons: [] }
+  });
+  assert.equal(response.statusCode, 401);
+  assert.equal((await request('GET')).body[0].inStock, true);
 
   response = await request('POST', {
     product: { name: 'New feed', category: 'feeds', price: 12, desc: '', image: '', addons: [] }
@@ -78,10 +86,11 @@ test('product API reads defaults and protects persistent catalog changes', async
 
   response = await request('PATCH', {
     id: 'f1',
-    product: { name: 'Updated fertilizer', category: 'fertilizer', price: 15, desc: '', image: '', addons: [] }
+    product: { name: 'Updated fertilizer', category: 'fertilizer', price: 15, desc: '', image: '', inStock: false, addons: [] }
   }, true);
   assert.equal(response.statusCode, 200);
   assert.equal((await request('GET')).body[0].name, 'Updated fertilizer');
+  assert.equal((await request('GET')).body[0].inStock, false);
 
   response = await request('DELETE', { id: 'f1' }, true);
   assert.equal(response.statusCode, 200);

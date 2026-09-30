@@ -115,7 +115,10 @@
     .qty-btn:hover, .qty-btn:active { background:var(--ink); color:#fff; border-color:var(--ink); }
 
     .add-to-order-btn { transition: all 0.2s ease; cursor: pointer; }
+    .add-to-order-btn:disabled { cursor: not-allowed; opacity: 0.65; }
     .add-to-order-btn:active { transform: scale(0.96); }
+    .stock-label { display: inline-flex; padding: 4px 9px; border-radius: 999px; font-size: 12px; font-weight: 700; background: #dcfce7; color: #15803d; }
+    .stock-label.out-of-stock { background: #fee2e2; color: #b91c1c; }
     @media (hover: hover) {
       .add-to-order-btn:hover { background-color: #ff6105 !important; }
     }
@@ -421,12 +424,13 @@
     <article class="menu-card card-animate bg-white overflow-hidden flex flex-col shadow-sm border border-gray-200" style="border-radius:14px;width:100%;">
       <div class="card-image-wrap" style="width:100%;height:200px;overflow:hidden;background:#f3f4f6;position:relative;">
         <img loading="lazy" decoding="async" fetchpriority="low" class="canva-image" style="width:100%;height:100%;object-fit:cover;display:block;">
+        <span class="stock-label" style="position:absolute;top:10px;left:10px;"></span>
       </div>
       <div class="p-4 flex flex-col flex-1" style="background:#ffffff;">
         <h3 class="font-bold text-base mb-1" style="color:var(--ink);"></h3>
         <p class="text-xs leading-relaxed flex-1 mb-3" style="color:var(--stone);"></p>
         <div class="flex items-center justify-between mt-auto">
-          <span class="font-bold text-lg" style="color:var(--ink);"></span>
+          <span class="product-price font-bold text-lg" style="color:var(--ink);"></span>
           <button class="add-to-order-btn font-semibold text-sm px-4 py-2 rounded-xl transition-colors cursor-pointer" style="background-color:#ff943e;color:#000;border:2px solid #000;">
             <i data-lucide="plus" style="width:16px;height:16px;display:inline-block;vertical-align:-3px;margin-right:4px;"></i>Add
           </button>
@@ -743,7 +747,7 @@
 
       order = order.filter(item => {
         const product = currentProducts.get(item.itemId);
-        if (!product) return false;
+        if (!product || product.inStock === false) return false;
         item.name = product.name;
         item.basePrice = Number(product.price);
         item.category = product.category || 'fertilizer';
@@ -752,7 +756,7 @@
 
       if (modalItem) {
         const product = currentProducts.get(modalItem.id);
-        if (!product) {
+        if (!product || product.inStock === false) {
           closeModal();
         } else {
           modalItem = { ...product };
@@ -821,12 +825,25 @@
         descEl.dataset.templateId = `${item.id}-desc`;
         descEl.textContent = item.desc;
 
-        const priceEl = clone.querySelector('span');
+        const priceEl = clone.querySelector('.product-price');
         priceEl.dataset.templateId = `${item.id}-price`;
         priceEl.textContent = `${CURRENCY}${Number(item.price).toFixed(2)}`;
 
+        const inStock = item.inStock !== false;
+        const stockLabel = clone.querySelector('.stock-label');
+        stockLabel.textContent = inStock ? 'In stock' : 'Out of stock';
+        stockLabel.classList.toggle('out-of-stock', !inStock);
+
         const btn = clone.querySelector('.add-to-order-btn');
-        btn.setAttribute('onclick', `applyBounce(this); openModal('${currentCategory}','${item.id}')`);
+        btn.disabled = !inStock;
+        if (inStock) {
+          btn.setAttribute('onclick', `applyBounce(this); openModal('${currentCategory}','${item.id}')`);
+        } else {
+          btn.textContent = 'Out of stock';
+          btn.style.backgroundColor = '#e5e7eb';
+          btn.style.color = '#6b7280';
+          btn.style.borderColor = '#9ca3af';
+        }
 
         grid.appendChild(clone);
       });
@@ -852,7 +869,7 @@
       const catData = menuData[category];
       if (!catData) return;
       const item = catData.items.find(i => i.id === itemId);
-      if (!item) return;
+      if (!item || item.inStock === false) return;
 
       modalItem = { ...item };
       modalCategory = category;
@@ -925,7 +942,7 @@
     }
 
     function confirmAddToOrder() {
-      if (!modalItem) return;
+      if (!modalItem || modalItem.inStock === false) return;
       const newAddons = Object.values(modalAddons).map(a => ({ name: a.name, price: a.price }));
       const addonsKey = JSON.stringify([...newAddons].sort((a, b) => a.name.localeCompare(b.name)));
       const existingItem = order.find(o => o.itemId === modalItem.id && JSON.stringify([...o.addons].sort((a, b) => a.name.localeCompare(b.name))) === addonsKey);

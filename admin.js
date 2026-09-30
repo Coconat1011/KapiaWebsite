@@ -42,6 +42,7 @@ function renderProducts() {
         <p class="eyebrow">${escapeHTML(categoryName(product.category))}</p>
         <h3>${escapeHTML(product.name)}</h3>
         <p class="product-price">${formatPrice(product.price)}</p>
+        <p><span class="stock-label ${product.inStock === false ? 'stock-out' : 'stock-in'}">${product.inStock === false ? 'Out of stock' : 'In stock'}</span></p>
         <p class="product-description">${escapeHTML(product.desc || '')}</p>
         <div class="product-actions">
           <button type="button" class="button button-primary" data-action="edit-product">Edit</button>
@@ -183,6 +184,7 @@ function openProductForm(productId = '') {
   document.getElementById('product-category-input').value = product?.category || 'fertilizer';
   document.getElementById('product-price-input').value = product?.price ?? '';
   document.getElementById('product-desc-input').value = product?.desc || '';
+  document.getElementById('product-stock-input').value = product?.inStock === false ? 'out' : 'in';
   const productAddons = Array.isArray(product?.addons)
     ? product.addons
     : product?.category === 'foods_drinks' ? LEGACY_CATEGORY_ADDONS : [];
@@ -225,6 +227,7 @@ async function saveProduct(event) {
     price,
     desc: document.getElementById('product-desc-input').value.trim(),
     image: editingImage,
+    inStock: document.getElementById('product-stock-input').value === 'in',
     addons: getFormAddons()
   };
   const submitButton = document.querySelector('#product-form button[type="submit"]');

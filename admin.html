@@ -42,6 +42,9 @@
     .eyebrow { margin: 0 0 5px; color: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
     .product-copy h3 { margin: 0 0 6px; font-size: 17px; }
     .product-price { margin: 0 0 7px; color: #c45108; font-size: 17px; font-weight: 700; }
+    .stock-label { display: inline-flex; width: fit-content; margin: 0 0 10px; padding: 4px 9px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+    .stock-in { background: #dcfce7; color: #15803d; }
+    .stock-out { background: #fee2e2; color: #b91c1c; }
     .product-description { flex: 1; margin: 0 0 14px; color: var(--muted); font-size: 13px; line-height: 1.45; }
     .product-actions, .order-actions { display: flex; gap: 8px; }
     .product-actions .button { flex: 1; }
@@ -151,6 +154,8 @@
         <input id="product-price-input" type="number" min="0" step="any" required>
         <label for="product-desc-input">Description</label>
         <textarea id="product-desc-input" rows="3"></textarea>
+        <label for="product-stock-input">Stock status</label>
+        <select id="product-stock-input"><option value="in">In stock</option><option value="out">Out of stock</option></select>
         <fieldset class="addon-editor">
           <legend>Product add-ons</legend>
           <div id="product-addons-list" class="addon-list"></div>

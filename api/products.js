@@ -20,10 +20,14 @@ function normalizeProduct(input) {
   const desc = String(input.desc || '').trim();
   const price = Number(input.price);
   const image = typeof input.image === 'string' ? input.image.trim() : '';
+  const inStock = input.inStock !== false;
   const inputAddons = Array.isArray(input.addons) ? input.addons : [];
 
   if (!ALLOWED_CATEGORIES.has(category) || !name || name.length > 200 || desc.length > 2000 || !Number.isFinite(price) || price < 0 || price > 1000000000) {
     throw new Error('Enter a valid name, category, description, and price.');
+  }
+  if (input.inStock !== undefined && typeof input.inStock !== 'boolean') {
+    throw new Error('Choose a valid stock status.');
   }
   if (image.length > MAX_IMAGE_LENGTH || (image && !/^(https?:\/\/|data:image\/)/i.test(image))) {
     throw new Error('Use an HTTP(S) image URL or an image smaller than 2 MB.');
@@ -43,7 +47,7 @@ function normalizeProduct(input) {
     };
   });
 
-  return { category, name, desc, price, image, addons };
+  return { category, name, desc, price, image, inStock, addons };
 }
 
 function withoutStorageFields(product) {
@@ -60,14 +64,16 @@ async function listProducts(collection) {
   for (const defaultProduct of DEFAULT_PRODUCTS) {
     const storedProduct = storedById.get(defaultProduct.id);
     if (storedProduct?.deleted) continue;
-    products.push(storedProduct
+    const product = storedProduct
       ? { ...defaultProduct, ...withoutStorageFields(storedProduct) }
-      : { ...defaultProduct });
+      : { ...defaultProduct };
+    products.push({ ...product, inStock: product.inStock !== false });
   }
 
   for (const storedProduct of storedProducts) {
     if (!defaultIds.has(storedProduct.id) && !storedProduct.deleted) {
-      products.push(withoutStorageFields(storedProduct));
+      const product = withoutStorageFields(storedProduct);
+      products.push({ ...product, inStock: product.inStock !== false });
     }
   }
 
