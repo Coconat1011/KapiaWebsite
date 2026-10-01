@@ -10,19 +10,24 @@
   <script defer src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&amp;family=DM+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./assets/fonts.css">
   <style>
     :root {
-      --lime: #ff943e;
-      --lime-hover: #ff6105;
-      --ink: #1A1A2E;
-      --stone: #4A4A5A;
-      --mist: #F7F6F3;
-      --coral: #E8735A;
-      --coral-light: #FFF0ED;
+      --latte-foam: #F4ECE6;
+      --latte-crema: #DFBB96;
+      --latte-body: #BF8969;
+      --latte-espresso: #3D281C;
+      --lime: var(--latte-crema);
+      --lime-hover: var(--latte-body);
+      --ink: var(--latte-espresso);
+      --stone: #765B4D;
+      --mist: var(--latte-foam);
+      --coral: var(--latte-body);
+      --coral-light: #F4ECE6;
       --sage: #2e7d32;
       --sage-light: #EDF5EF;
-      --plum: #7e57c2;
-      --plum-light: #F3EEFB;
+      --plum: var(--latte-espresso);
+      --plum-light: #EFE2D7;
       /* Mobile safe areas */
       --safe-bottom: env(safe-area-inset-bottom, 0px);
       --safe-top: env(safe-area-inset-top, 0px);
@@ -30,8 +35,10 @@
 
     *, *::before, *::after { box-sizing: border-box; }
 
-    body { font-family: 'DM Sans', sans-serif; -webkit-font-smoothing: antialiased; }
-    .font-display { font-family: 'Playfair Display', Georgia, serif; }
+    body { font-family: var(--font-primary); -webkit-font-smoothing: antialiased; }
+    body[data-template-id="__page-root"] *:not(svg):not(path) { font-family: var(--font-primary) !important; }
+    #pay-ref-input { font-family: monospace !important; }
+    .font-display { font-family: var(--font-primary); }
 
     /* ─── Tap highlight removal for interactive elements ─── */
     button, a, [onclick] {
@@ -334,6 +341,47 @@
         display: none !important;
       }
     }
+
+    body[data-template-id="__page-root"] {
+      background: linear-gradient(155deg, #FFFAF6 0%, var(--latte-foam) 64%, #EBDCCD 100%) !important;
+      color: var(--latte-espresso);
+    }
+    header[data-template-id="header-section"] {
+      background: linear-gradient(125deg, var(--latte-espresso), #76513D 58%, var(--latte-body)) !important;
+    }
+    header[data-template-id="header-section"] > div.absolute.inset-0.bg-gradient-to-b {
+      background: linear-gradient(100deg, rgba(61, 40, 28, .78), rgba(61, 40, 28, .38) 70%, rgba(61, 40, 28, .2)) !important;
+    }
+    header[data-template-id="header-section"] > img { z-index: 0; }
+    header[data-template-id="header-section"] > :not(img) { z-index: 2; }
+    #submit-order-btn, .category-tab.active, .add-to-order-btn, #name-submit-btn,
+    #pay-opt-qr, #pay-opt-cod, #pay-confirm-btn, #contact-footer a,
+    [data-template-id="order-now-btn"] {
+      border-color: var(--latte-espresso) !important;
+      background: linear-gradient(120deg, var(--latte-crema), var(--latte-body)) !important;
+      color: var(--latte-espresso) !important;
+    }
+    .category-tab { border-color: #CBB39D !important; color: var(--latte-espresso) !important; }
+    .category-tab:not(.active):hover { background: #EFE2D7 !important; }
+    .text-orange-400 { color: var(--latte-body) !important; }
+    #order-panel-fixed {
+      border-color: var(--latte-crema) !important;
+      background: linear-gradient(160deg, #FFFAF6, var(--latte-foam)) !important;
+      color: var(--latte-espresso) !important;
+    }
+    #order-panel-fixed .canva-panel {
+      background: linear-gradient(120deg, var(--latte-crema), var(--latte-body)) !important;
+      color: var(--latte-espresso) !important;
+    }
+    #panel-toggle-btn { background: var(--latte-espresso) !important; color: var(--latte-foam) !important; }
+    #order-count { background: var(--latte-espresso) !important; color: var(--latte-foam) !important; }
+    .menu-card { border: 1px solid #E2D0BE !important; background: linear-gradient(145deg, #FFFAF6, var(--latte-foam)) !important; }
+    .modal-overlay { background: rgba(61, 40, 28, .62) !important; }
+    #payment-page { background: linear-gradient(155deg, #FFFAF6, var(--latte-foam) 64%, #EBDCCD) !important; color: var(--latte-espresso) !important; }
+    #payment-page [style*="background:#fff7ed"] { border-color: var(--latte-body) !important; background: linear-gradient(120deg, #F8EFE8, #EFE2D7) !important; }
+    #pay-total-amount, #pay-qr-amount, #pay-cod-amount { color: var(--latte-espresso) !important; }
+    #contact-footer { border-color: #E2D0BE !important; background: linear-gradient(100deg, #FFFAF6, var(--latte-foam)) !important; }
+    #contact-footer a:hover, .add-to-order-btn:hover { background: linear-gradient(120deg, #E8C9A9, var(--latte-crema)) !important; }
   </style>
   <script src="/_sdk/6c2ecc939521f244.data_sdk.js" integrity="sha512-gRx8s+XsZDN6mSIQu2sivLZysbV0WHhb5kXNUWlgVb5lCMU1foJYukyMEDPv8Tnoocb8iwqB4XdRrWc7oEGzIQ=="></script>
   <script src="/_sdk/ddcab3e45959c817.resizing_sdk.js" type="text/javascript" integrity="sha512-VAviUKfZVzugWBSeULYjSljTX+nb84wc6Zzbx5GQaQgh6X2ISSjXi8eIiCDGdwDh10esJMY0+QFQgUy9NcrTlQ=="></script>
@@ -1314,7 +1362,7 @@
         ctx.fillRect(x * cellSize, y * cellSize, 7 * cellSize, 7 * cellSize);
         ctx.fillStyle = '#ffffff';
         ctx.fillRect((x + 1) * cellSize, (y + 1) * cellSize, 5 * cellSize, 5 * cellSize);
-        ctx.fillStyle = '#ff943e';
+        ctx.fillStyle = '#3D281C';
         ctx.fillRect((x + 2) * cellSize, (y + 2) * cellSize, 3 * cellSize, 3 * cellSize);
       }
 
