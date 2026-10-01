@@ -33,3 +33,82 @@
 :root {
   --font-primary: 'Sunny Brunch', 'DM Sans', sans-serif;
 }
+
+body[data-template-id="__page-root"] nav[data-template-id="category-tabs"] button.category-tab {
+  transition-property: background-color, border-color, color !important;
+}
+
+@media (min-width: 1024px) {
+  .welcome-brand { font-size: 23px !important; }
+  .welcome-admin { font-size: 17px !important; }
+  .welcome-eyebrow { font-size: 16px !important; }
+  .welcome-copy h1 { font-size: clamp(51px, calc(7vw + 3px), 91px) !important; }
+  .welcome-copy p { font-size: 21px !important; }
+  .welcome-cta { font-size: 19px !important; }
+  .welcome-category span { font-size: 15px !important; }
+  .welcome-category strong { font-size: 22px !important; }
+
+  body { font-size: 19px; }
+  .brand { font-size: 24px !important; }
+  .section-heading h1 { font-size: 24px !important; }
+  .section-heading p, label, .addon-editor legend { font-size: 17px !important; }
+  .eyebrow { font-size: 14px !important; }
+  .product-copy h3, .product-price, .order-heading h3 { font-size: 20px !important; }
+  .stock-label, .order-heading p, .status { font-size: 15px !important; }
+  .product-description, .order-details, .ordered-items { font-size: 16px !important; }
+  .modal-heading h2 { font-size: 23px !important; }
+  .upload-status, .error { font-size: 16px !important; }
+  .button { font-size: 19px; }
+
+  body[data-template-id="__page-root"] { font-size: 19px !important; }
+  body[data-template-id="__page-root"] .text-xs { font-size: 15px !important; }
+  body[data-template-id="__page-root"] .text-sm { font-size: 17px !important; }
+  body[data-template-id="__page-root"] .text-base { font-size: 19px !important; }
+  body[data-template-id="__page-root"] .text-lg { font-size: 21px !important; }
+  body[data-template-id="__page-root"] .text-xl { font-size: 23px !important; }
+  body[data-template-id="__page-root"] .text-2xl { font-size: 27px !important; }
+  body[data-template-id="__page-root"] .text-3xl { font-size: 33px !important; }
+  body[data-template-id="__page-root"] .text-4xl { font-size: 39px !important; }
+  body[data-template-id="__page-root"] .text-5xl { font-size: 51px !important; }
+  body[data-template-id="__page-root"] .text-6xl { font-size: 63px !important; }
+  body[data-template-id="__page-root"] [data-template-id="restaurant-name"] {
+    font-size: clamp(calc(2.5rem + 3px), calc(7vw + 3px), calc(5.5rem + 3px)) !important;
+  }
+  body[data-template-id="__page-root"] nav[data-template-id="category-tabs"] button.category-tab { font-size: 19px !important; }
+  body[data-template-id="__page-root"] .menu-card h3 { font-size: 19px !important; }
+  body[data-template-id="__page-root"] .menu-card p { font-size: 15px !important; }
+  body[data-template-id="__page-root"] .menu-card .product-price { font-size: 21px !important; }
+  body[data-template-id="__page-root"] .stock-label { font-size: 15px !important; }
+  body[data-template-id="__page-root"] .add-to-order-btn { font-size: 17px !important; }
+  body[data-template-id="__page-root"] .qty-btn { font-size: 21px !important; }
+  body[data-template-id="__page-root"] #order-panel-fixed h2 { font-size: 29px !important; }
+  body[data-template-id="__page-root"] #panel-toggle-btn { font-size: 16px !important; }
+  body[data-template-id="__page-root"] #submit-order-btn { font-size: 19px !important; }
+  body[data-template-id="__page-root"] #contact-footer a { font-size: 19px !important; }
+  body[data-template-id="__page-root"] [style*="font-size: 11px"],
+  body[data-template-id="__page-root"] [style*="font-size:11px"] { font-size: 14px !important; }
+  body[data-template-id="__page-root"] [style*="font-size: 12px"],
+  body[data-template-id="__page-root"] [style*="font-size:12px"] { font-size: 15px !important; }
+  body[data-template-id="__page-root"] [style*="font-size: 13px"],
+  body[data-template-id="__page-root"] [style*="font-size:13px"] { font-size: 16px !important; }
+  body[data-template-id="__page-root"] [style*="font-size: 14px"],
+  body[data-template-id="__page-root"] [style*="font-size:14px"] { font-size: 17px !important; }
+  body[data-template-id="__page-root"] [style*="font-size: 15px"],
+  body[data-template-id="__page-root"] [style*="font-size:15px"] { font-size: 18px !important; }
+  body[data-template-id="__page-root"] [style*="font-size: 16px"],
+  body[data-template-id="__page-root"] [style*="font-size:16px"] { font-size: 19px !important; }
+  body[data-template-id="__page-root"] [style*="font-size: 18px"],
+  body[data-template-id="__page-root"] [style*="font-size:18px"] { font-size: 21px !important; }
+  body[data-template-id="__page-root"] [style*="font-size: 20px"],
+  body[data-template-id="__page-root"] [style*="font-size:20px"] { font-size: 23px !important; }
+  body[data-template-id="__page-root"] [style*="font-size: 22px"],
+  body[data-template-id="__page-root"] [style*="font-size:22px"] { font-size: 25px !important; }
+  body[data-template-id="__page-root"] [style*="font-size: 26px"],
+  body[data-template-id="__page-root"] [style*="font-size:26px"] { font-size: 29px !important; }
+  body[data-template-id="__page-root"] [style*="font-size: 28px"],
+  body[data-template-id="__page-root"] [style*="font-size:28px"] { font-size: 31px !important; }
+}
+
+@media (max-width: 1023px) {
+  body[data-template-id="__page-root"] nav[data-template-id="category-tabs"] button.category-tab { font-size: 16px !important; }
+}
