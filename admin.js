@@ -9,6 +9,7 @@ const LEGACY_CATEGORY_ADDONS = [
 
 let editingImage = '';
 let imageUploadPromise = null;
+let cropSession = null;
 let ordersCache = [];
 let productsCache = [];
 
@@ -387,8 +388,153 @@ document.getElementById('product-image-input').addEventListener('change', event 
     event.target.value = '';
     return;
   }
-  imageUploadPromise = uploadProductImage(file);
+  imageUploadPromise = prepareAndUploadProductImage(file);
 });
+
+function renderCropImage(session, preserveCenter = false) {
+  const viewport = session.viewport.getBoundingClientRect();
+  const centerX = preserveCenter ? session.x + session.width / 2 : viewport.width / 2;
+  const centerY = preserveCenter ? session.y + session.height / 2 : viewport.height / 2;
+  session.viewportWidth = viewport.width;
+  session.viewportHeight = viewport.height;
+  session.baseScale = Math.max(viewport.width / session.image.naturalWidth, viewport.height / session.image.naturalHeight);
+  session.scale = session.baseScale * Number(document.getElementById('image-crop-zoom').value);
+  session.width = session.image.naturalWidth * session.scale;
+  session.height = session.image.naturalHeight * session.scale;
+  session.x = Math.min(0, Math.max(viewport.width - session.width, centerX - session.width / 2));
+  session.y = Math.min(0, Math.max(viewport.height - session.height, centerY - session.height / 2));
+  session.image.style.width = `${session.width}px`;
+  session.image.style.height = `${session.height}px`;
+  session.image.style.left = `${session.x}px`;
+  session.image.style.top = `${session.y}px`;
+}
+
+function finishProductImageCrop(file, error) {
+  if (!cropSession) return;
+  const session = cropSession;
+  cropSession = null;
+  URL.revokeObjectURL(session.objectUrl);
+  document.getElementById('image-crop-modal').hidden = true;
+  document.getElementById('image-crop-status').hidden = true;
+  if (error) session.reject(error);
+  else session.resolve(file);
+}
+
+function openProductImageCrop(file) {
+  return new Promise((resolve, reject) => {
+    const image = document.getElementById('image-crop-preview');
+    const viewport = document.getElementById('image-crop-viewport');
+    const objectUrl = URL.createObjectURL(file);
+    cropSession = { file, image, viewport, objectUrl, resolve, reject, x: 0, y: 0, width: 0, height: 0 };
+    document.getElementById('image-crop-zoom').value = '1';
+    document.getElementById('image-crop-status').hidden = true;
+    document.getElementById('image-crop-modal').hidden = false;
+    image.onload = () => {
+      if (!cropSession) return;
+      renderCropImage(cropSession);
+      document.getElementById('image-crop-zoom').focus();
+    };
+    image.onerror = () => finishProductImageCrop(null, new Error('Could not open this photo.'));
+    image.src = objectUrl;
+  });
+}
+
+function canvasToBlob(canvas) {
+  return new Promise(resolve => canvas.toBlob(resolve, 'image/webp', 0.84));
+}
+
+async function createCroppedProductImage(session) {
+  const sourceX = -session.x / session.scale;
+  const sourceY = -session.y / session.scale;
+  const sourceWidth = session.viewportWidth / session.scale;
+  const sourceHeight = session.viewportHeight / session.scale;
+  let canvas = document.createElement('canvas');
+  canvas.width = 900;
+  canvas.height = 600;
+  let context = canvas.getContext('2d');
+  context.drawImage(session.image, sourceX, sourceY, sourceWidth, sourceHeight, 0, 0, canvas.width, canvas.height);
+  let blob = await canvasToBlob(canvas);
+
+  if (!blob) throw new Error('Could not crop this photo.');
+  if (blob.size > 2 * 1024 * 1024) {
+    canvas = document.createElement('canvas');
+    canvas.width = 720;
+    canvas.height = 480;
+    context = canvas.getContext('2d');
+    context.drawImage(session.image, sourceX, sourceY, sourceWidth, sourceHeight, 0, 0, canvas.width, canvas.height);
+    blob = await canvasToBlob(canvas);
+  }
+  if (!blob || blob.size > 2 * 1024 * 1024) throw new Error('The cropped photo is still larger than 2 MB. Zoom in and try again.');
+
+  const extension = blob.type === 'image/webp' ? 'webp' : blob.type === 'image/jpeg' ? 'jpg' : 'png';
+  const name = session.file.name.replace(/\.[^.]+$/, '') || 'product-photo';
+  return new File([blob], `${name}-cropped.${extension}`, { type: blob.type || 'image/png' });
+}
+
+async function applyProductImageCrop() {
+  if (!cropSession) return;
+  const applyButton = document.getElementById('image-crop-apply');
+  const status = document.getElementById('image-crop-status');
+  applyButton.disabled = true;
+  status.hidden = true;
+  try {
+    const croppedFile = await createCroppedProductImage(cropSession);
+    finishProductImageCrop(croppedFile);
+  } catch (error) {
+    status.textContent = error.message || 'Could not crop this photo.';
+    status.dataset.state = 'error';
+    status.hidden = false;
+  } finally {
+    applyButton.disabled = false;
+  }
+}
+
+async function prepareAndUploadProductImage(file) {
+  const fileInput = document.getElementById('product-image-input');
+  try {
+    const croppedFile = await openProductImageCrop(file);
+    if (croppedFile) await uploadProductImage(croppedFile);
+    else fileInput.value = '';
+  } catch (error) {
+    const status = document.getElementById('product-image-upload-status');
+    status.textContent = error.message || 'Could not prepare this photo.';
+    status.dataset.state = 'error';
+    status.hidden = false;
+    fileInput.value = '';
+  } finally {
+    imageUploadPromise = null;
+  }
+}
+
+const cropViewport = document.getElementById('image-crop-viewport');
+cropViewport.addEventListener('pointerdown', event => {
+  if (!cropSession) return;
+  event.preventDefault();
+  cropViewport.setPointerCapture(event.pointerId);
+  cropViewport.classList.add('is-dragging');
+  cropSession.drag = { pointerId: event.pointerId, clientX: event.clientX, clientY: event.clientY, x: cropSession.x, y: cropSession.y };
+});
+cropViewport.addEventListener('pointermove', event => {
+  if (!cropSession?.drag || cropSession.drag.pointerId !== event.pointerId) return;
+  cropSession.x = cropSession.drag.x + event.clientX - cropSession.drag.clientX;
+  cropSession.y = cropSession.drag.y + event.clientY - cropSession.drag.clientY;
+  renderCropImage(cropSession, true);
+});
+function endCropDrag() {
+  cropViewport.classList.remove('is-dragging');
+  if (cropSession) cropSession.drag = null;
+}
+cropViewport.addEventListener('pointerup', endCropDrag);
+cropViewport.addEventListener('pointercancel', endCropDrag);
+document.getElementById('image-crop-zoom').addEventListener('input', () => {
+  if (cropSession) renderCropImage(cropSession, true);
+});
+window.addEventListener('resize', () => {
+  if (cropSession?.image.naturalWidth) renderCropImage(cropSession, true);
+});
+document.getElementById('image-crop-apply').addEventListener('click', applyProductImageCrop);
+document.getElementById('image-crop-cancel').addEventListener('click', () => finishProductImageCrop(null));
+document.getElementById('image-crop-close').addEventListener('click', () => finishProductImageCrop(null));
 
 async function uploadProductImage(file) {
   const status = document.getElementById('product-image-upload-status');
@@ -447,7 +593,6 @@ async function uploadProductImage(file) {
     clearButton.disabled = false;
     saveButton.disabled = false;
     closeButtons.forEach(button => { button.disabled = false; });
-    imageUploadPromise = null;
   }
 }
 
