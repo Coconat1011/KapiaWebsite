@@ -85,6 +85,7 @@
       min-width: 0;
       width: 100%;
     }
+    .catalog-message { grid-column: 1 / -1; padding: 36px 16px; color: var(--stone); text-align: center; }
     .menu-card:active { transform: scale(0.98); }
     @media (hover: hover) {
       .menu-card:hover {
@@ -100,6 +101,27 @@
       animation: fadeIn 0.2s ease;
     }
     .modal-content { animation: slideUp 0.3s cubic-bezier(0.4,0,0.2,1); }
+    .social-media-dialog {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      z-index: 301;
+      width: min(calc(100vw - 2rem), 28rem);
+      padding: 24px;
+      transform: translate(-50%, -50%);
+      border: 1px solid #E2D0BE;
+      border-radius: 8px;
+      background: linear-gradient(145deg, #FFFAF6, var(--latte-foam));
+      box-shadow: 0 24px 70px rgba(61, 40, 28, .24);
+      animation: slideUp 0.25s ease-out;
+    }
+    .social-media-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
+    .social-media-heading h2 { margin: 0; color: var(--latte-espresso); font-size: 28px; }
+    .social-media-close { display: grid; width: 44px; height: 44px; place-items: center; border: 1px solid #E2D0BE; border-radius: 6px; background: #FFFAF6; color: var(--latte-espresso); cursor: pointer; }
+    .social-media-links { display: grid; gap: 10px; }
+    .social-media-link { display: flex; min-height: 52px; align-items: center; justify-content: center; border: 1px solid var(--latte-espresso); border-radius: 6px; background: linear-gradient(120deg, var(--latte-crema), var(--latte-body)); color: var(--latte-espresso); font-size: 18px; font-weight: 700; text-decoration: none; }
+    .social-media-link:hover { background: linear-gradient(120deg, #E8C9A9, var(--latte-crema)); }
+    .social-media-close:focus-visible, .social-media-link:focus-visible { outline: 3px solid var(--latte-espresso); outline-offset: 3px; }
 
     @keyframes fadeIn  { from{opacity:0}                                             to{opacity:1} }
     @keyframes slideUp { from{opacity:0;transform:translate(-50%,-50%) translateY(20px)} to{opacity:1;transform:translate(-50%,-50%) translateY(0)} }
@@ -300,7 +322,7 @@
       color: var(--ink);
     }
 
-    #contact-footer a {
+    #contact-footer button {
       display: inline-flex;
       min-height: 44px;
       align-items: center;
@@ -311,14 +333,15 @@
       background: #ff943e;
       color: #111;
       font-weight: 700;
-      text-decoration: none;
+      font-family: inherit;
+      cursor: pointer;
     }
 
-    #contact-footer a:hover { background: #ffad69; }
+    #contact-footer button:hover { background: #ffad69; }
 
     @media (max-width: 1023px) {
       body { display: flex; flex-direction: column; }
-      #contact-footer { margin-top: auto; }
+      #contact-footer { margin-top: auto; padding-bottom: calc(90px + var(--safe-bottom)); }
     }
 
     /* ─── Mobile-specific utility improvements ─── */
@@ -355,7 +378,7 @@
     header[data-template-id="header-section"] > img { z-index: 0; }
     header[data-template-id="header-section"] > :not(img) { z-index: 2; }
     #submit-order-btn, .category-tab.active, .add-to-order-btn, #name-submit-btn,
-    #pay-opt-qr, #pay-opt-cod, #pay-confirm-btn, #contact-footer a,
+    #pay-opt-qr, #pay-opt-cod, #pay-confirm-btn, #contact-footer button,
     [data-template-id="order-now-btn"] {
       border-color: var(--latte-espresso) !important;
       background: linear-gradient(120deg, var(--latte-crema), var(--latte-body)) !important;
@@ -381,7 +404,7 @@
     #payment-page [style*="background:#fff7ed"] { border-color: var(--latte-body) !important; background: linear-gradient(120deg, #F8EFE8, #EFE2D7) !important; }
     #pay-total-amount, #pay-qr-amount, #pay-cod-amount { color: var(--latte-espresso) !important; }
     #contact-footer { border-color: #E2D0BE !important; background: linear-gradient(100deg, #FFFAF6, var(--latte-foam)) !important; }
-    #contact-footer a:hover, .add-to-order-btn:hover { background: linear-gradient(120deg, #E8C9A9, var(--latte-crema)) !important; }
+    #contact-footer button:hover, .add-to-order-btn:hover, .social-media-link:hover { background: linear-gradient(120deg, #E8C9A9, var(--latte-crema)) !important; }
   </style>
   <script src="/_sdk/6c2ecc939521f244.data_sdk.js" integrity="sha512-gRx8s+XsZDN6mSIQu2sivLZysbV0WHhb5kXNUWlgVb5lCMU1foJYukyMEDPv8Tnoocb8iwqB4XdRrWc7oEGzIQ=="></script>
   <script src="/_sdk/ddcab3e45959c817.resizing_sdk.js" type="text/javascript" integrity="sha512-VAviUKfZVzugWBSeULYjSljTX+nb84wc6Zzbx5GQaQgh6X2ISSjXi8eIiCDGdwDh10esJMY0+QFQgUy9NcrTlQ=="></script>
@@ -464,8 +487,24 @@
 
   <footer id="contact-footer">
     <span>Need help with your order?</span>
-    <a href="https://www.facebook.com/profile.php?id=61594672631776" target="_blank" rel="noopener noreferrer">Contact us</a>
+    <button id="social-media-button" type="button" onclick="openSocialMediaModal()">Social Media</button>
   </footer>
+
+  <div id="social-media-modal" class="hidden" style="position:fixed;inset:0;z-index:300;">
+    <div class="modal-overlay absolute inset-0" onclick="closeSocialMediaModal()"></div>
+    <section class="social-media-dialog" role="dialog" aria-modal="true" aria-labelledby="social-media-title">
+      <div class="social-media-heading">
+        <h2 id="social-media-title">Social Media</h2>
+        <button id="social-media-close" class="social-media-close" type="button" aria-label="Close social media dialog" onclick="closeSocialMediaModal()">
+          <i data-lucide="x" style="width:20px;height:20px;"></i>
+        </button>
+      </div>
+      <nav class="social-media-links" aria-label="Kapia Farm Cafe social media">
+        <a class="social-media-link" href="https://www.facebook.com/profile.php?id=61571503785901" target="_blank" rel="noopener noreferrer">Facebook</a>
+        <a class="social-media-link" href="https://www.instagram.com/kapia.cafe/" target="_blank" rel="noopener noreferrer">Instagram</a>
+      </nav>
+    </section>
+  </div>
 
   <!-- Menu Item Card Template -->
   <template id="menu-card-template">
@@ -711,62 +750,13 @@
     const CURRENCY = '₱';
     const DEFAULT_PLACEHOLDER_IMAGE = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="400" height="256" viewBox="0 0 400 256"><rect width="100%" height="100%" fill="#eee"/><text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" fill="#888" font-family="sans-serif" font-size="16">Kapia Farm Cafe</text></svg>');
 
-    // Initial default catalog with Pexels stock images
     const menuData = {
-      fertilizer: {
-        color: 'coral',
-        items: [
-          { id: 'f1', name: 'Complete Fertilizer 14-14-14', desc: 'Balanced fertilizer for healthy crop growth.', price: 850, image: 'https://images.pexels.com/photos/7768447/pexels-photo-7768447.jpeg?cs=srgb&dl=pexels-freestockpro-7768447.jpg&fm=jpg' },
-          { id: 'f2', name: 'Urea 46-0-0', desc: 'Nitrogen fertilizer for vigorous plant growth.', price: 900, image: 'https://images.pexels.com/photos/31673795/pexels-photo-31673795.jpeg?cs=srgb&dl=pexels-kkwritesofficial-31673795.jpg&fm=jpg' },
-          { id: 'f3', name: 'Organic Compost', desc: 'Organic soil conditioner for garden and farm crops.', price: 250, image: 'https://images.pexels.com/photos/32938346/pexels-photo-32938346.jpeg?cs=srgb&dl=pexels-drphotographer152-32938346.jpg&fm=jpg' },
-          { id: 'f4', name: 'Complete Fertilizer 16-16-16', desc: 'All-purpose fertilizer for a wide range of crops.', price: 880, image: 'https://images.pexels.com/photos/11996941/pexels-photo-11996941.jpeg?cs=srgb&dl=pexels-mirkofabian-11996941.jpg&fm=jpg' },
-          { id: 'f5', name: 'Ammonium Phosphate', desc: 'Phosphorus and nitrogen fertilizer.', price: 950, image: 'https://images.pexels.com/photos/15388810/pexels-photo-15388810.jpeg?cs=srgb&dl=pexels-amresh444-15388810.jpg&fm=jpg' },
-          { id: 'f6', name: 'Vermicast', desc: 'Natural organic fertilizer for healthier soil.', price: 180, image: 'https://images.pexels.com/photos/25974981/pexels-photo-25974981.jpeg?cs=srgb&dl=pexels-leiliane-dutra-1841922-25974981.jpg&fm=jpg' }
-        ],
-        addons: []
-      },
-      feeds: {
-        color: 'sage',
-        items: [
-          { id: 'fd1', name: 'Hog Starter Feed', desc: 'Starter feed for young pigs.', price: 1200, image: 'https://images.pexels.com/photos/6192537/pexels-photo-6192537.jpeg?cs=srgb&dl=pexels-topeasokere-6192537.jpg&fm=jpg' },
-          { id: 'fd2', name: 'Hog Grower Feed', desc: 'Feed for growing pigs.', price: 1150, image: 'https://images.pexels.com/photos/5216150/pexels-photo-5216150.jpeg?cs=srgb&dl=pexels-yankrukov-5216150.jpg&fm=jpg' },
-          { id: 'fd3', name: 'Broiler Starter Feed', desc: 'Starter feed for young broilers.', price: 1100, image: 'https://images.pexels.com/photos/32653692/pexels-photo-32653692.jpeg?cs=srgb&dl=pexels-wanas-rosa-1295016-32653692.jpg&fm=jpg' },
-          { id: 'fd4', name: 'Broiler Finisher Feed', desc: 'Finisher feed for broilers.', price: 1050, image: 'https://images.pexels.com/photos/11350102/pexels-photo-11350102.jpeg?cs=srgb&dl=pexels-towfiqu-barbhuiya-3440682-11350102.jpg&fm=jpg' },
-          { id: 'fd5', name: 'Layer Feed', desc: 'Feed formulated for laying hens.', price: 980, image: 'https://images.pexels.com/photos/6724094/pexels-photo-6724094.jpeg?cs=srgb&dl=pexels-andrianyn-6724094.jpg&fm=jpg' },
-          { id: 'fd6', name: 'Cattle Feed', desc: 'Nutritious feed for cattle.', price: 1300, image: 'https://images.pexels.com/photos/4840958/pexels-photo-4840958.jpeg?cs=srgb&dl=pexels-alwi-hafizh-al-mumtaz-3211525-4840958.jpg&fm=jpg' }
-        ],
-        addons: []
-      },
-      foods_drinks: {
-        color: 'plum',
-        items: [
-          { id: 'fdri1', name: 'Kapia Farm Coffee', desc: 'Freshly brewed farm cafe coffee.', price: 80, image: 'https://images.pexels.com/photos/459489/pexels-photo-459489.jpeg?cs=srgb&dl=pexels-pixabay-459489.jpg&fm=jpg' },
-          { id: 'fdri2', name: 'Iced Coffee', desc: 'Cold and refreshing coffee.', price: 95, image: 'https://images.pexels.com/photos/9715331/pexels-photo-9715331.jpeg?cs=srgb&dl=pexels-thegr8ossab-9715331.jpg&fm=jpg' },
-          { id: 'fdri3', name: 'Farm Breakfast', desc: 'Hearty breakfast with local ingredients.', price: 180, image: 'https://images.pexels.com/photos/18972781/pexels-photo-18972781.jpeg?cs=srgb&dl=pexels-the-design-lady-746806315-18972781.jpg&fm=jpg' },
-          { id: 'fdri4', name: 'Chicken Sandwich', desc: 'Freshly prepared chicken sandwich.', price: 150, image: 'https://images.pexels.com/photos/9240536/pexels-photo-9240536.jpeg?cs=srgb&dl=pexels-akilvigneshjr-9240536.jpg&fm=jpg' },
-          { id: 'fdri5', name: 'Banana Bread', desc: 'Soft homemade banana bread.', price: 75, image: 'https://images.pexels.com/photos/5441033/pexels-photo-5441033.jpeg?cs=srgb&dl=pexels-rachel-loughman-3513722-5441033.jpg&fm=jpg' },
-          { id: 'fdri6', name: 'Fresh Fruit Shake', desc: 'Refreshing shake made with fresh fruit.', price: 110, image: 'https://images.pexels.com/photos/8743884/pexels-photo-8743884.jpeg?cs=srgb&dl=pexels-farhad-8743884.jpg&fm=jpg' }
-        ],
-        addons: [
-          { id: 'ad1', name: 'Extra Shot', price: 25 },
-          { id: 'ad2', name: 'Oat Milk', price: 30 },
-          { id: 'ad3', name: 'Extra Syrup', price: 15 },
-          { id: 'ad4', name: 'Extra Cheese', price: 20 }
-        ]
-      }
+      fertilizer: { color: 'coral', items: [], addons: [] },
+      feeds: { color: 'sage', items: [], addons: [] },
+      foods_drinks: { color: 'plum', items: [], addons: [] }
     };
 
     // Product synchronization helpers
-    function defaultProducts() {
-      const list = [];
-      Object.keys(menuData).forEach(cat => {
-        menuData[cat].items.forEach(item => {
-          list.push({ ...item, category: cat });
-        });
-      });
-      return list;
-    }
-
     function syncMenuFromProducts(productsList) {
       Object.keys(menuData).forEach(k => {
         menuData[k].items = [];
@@ -786,7 +776,7 @@
       if (!response.ok || !Array.isArray(products)) {
         throw new Error(products?.error || 'Could not load the product catalog.');
       }
-      return products;
+      return products.filter(product => typeof product.id === 'string' && product.id.startsWith('custom-'));
     }
 
     function applyProductCatalog(products) {
@@ -847,7 +837,13 @@
       if (!grid) return;
       grid.innerHTML = '';
       const catData = menuData[currentCategory];
-      if (!catData || !catData.items) return;
+      if (!catData || !catData.items.length) {
+        const message = document.createElement('p');
+        message.className = 'catalog-message';
+        message.textContent = 'No products available in this category yet.';
+        grid.appendChild(message);
+        return;
+      }
       const template = document.getElementById('menu-card-template');
 
       catData.items.forEach((item, i) => {
@@ -1409,12 +1405,33 @@
       }
     }
 
+    function openSocialMediaModal() {
+      const modal = document.getElementById('social-media-modal');
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+      if (window.lucide && typeof lucide.createIcons === 'function') lucide.createIcons({ root: modal });
+      document.getElementById('social-media-close').focus();
+    }
+
+    function closeSocialMediaModal() {
+      document.getElementById('social-media-modal').classList.add('hidden');
+      document.body.style.overflow = '';
+      document.getElementById('social-media-button').focus();
+    }
+
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && !document.getElementById('social-media-modal').classList.contains('hidden')) {
+        closeSocialMediaModal();
+      }
+    });
+
     // App Initialization
     window.addEventListener('DOMContentLoaded', () => {
-      syncMenuFromProducts(defaultProducts());
-      renderMenuGrid();
+      syncMenuFromProducts([]);
+      document.getElementById('menu-grid').innerHTML = '<p class="catalog-message">Loading products...</p>';
       renderOrder();
       loadProductCatalog().then(applyProductCatalog).catch(error => {
+        document.getElementById('menu-grid').innerHTML = '<p class="catalog-message">Products could not be loaded. Please try again later.</p>';
         console.warn('Could not refresh product catalog:', error);
       });
     });

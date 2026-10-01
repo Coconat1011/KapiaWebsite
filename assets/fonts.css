@@ -84,7 +84,7 @@ body[data-template-id="__page-root"] nav[data-template-id="category-tabs"] butto
   body[data-template-id="__page-root"] #order-panel-fixed h2 { font-size: 29px !important; }
   body[data-template-id="__page-root"] #panel-toggle-btn { font-size: 16px !important; }
   body[data-template-id="__page-root"] #submit-order-btn { font-size: 19px !important; }
-  body[data-template-id="__page-root"] #contact-footer a { font-size: 19px !important; }
+  body[data-template-id="__page-root"] #contact-footer button { font-size: 19px !important; }
   body[data-template-id="__page-root"] [style*="font-size: 11px"],
   body[data-template-id="__page-root"] [style*="font-size:11px"] { font-size: 14px !important; }
   body[data-template-id="__page-root"] [style*="font-size: 12px"],
