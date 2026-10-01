@@ -28,9 +28,12 @@ globalThis.__kapiaMongoClientPromise = Promise.resolve({
 });
 process.env.MONGODB_URI = 'mongodb://test';
 process.env.ADMIN_PASSWORD = 'test-password';
+process.env.EDGE_STORE_ACCESS_KEY = 'test-access-key';
+process.env.EDGE_STORE_SECRET_KEY = 'test-secret-key';
 
 const handler = require('../api/products');
 const { createAdminToken } = require('../lib/admin-auth');
+const edgeStore = require('../lib/edgestore');
 const adminToken = createAdminToken(process.env.ADMIN_PASSWORD);
 
 async function request(method, body, authorized = false) {
@@ -100,4 +103,58 @@ test('product API reads defaults and protects persistent catalog changes', async
   response = await request('DELETE', { id: customId }, true);
   assert.equal(response.statusCode, 200);
   assert.equal((await request('GET')).body.length, 17);
+});
+
+test('product API deletes replaced and removed EdgeStore images only when unused', async () => {
+  storedProducts.length = 0;
+  const oldImage = 'https://files.edgestore.dev/project/_public/product.jpg';
+  const deletedImages = [];
+  const originalDeleteProductImage = edgeStore.deleteProductImage;
+  edgeStore.deleteProductImage = async url => {
+    deletedImages.push(url);
+    return true;
+  };
+
+  try {
+    storedProducts.push({
+      id: 'custom-photo',
+      name: 'Photo product',
+      category: 'feeds',
+      desc: '',
+      price: 10,
+      image: oldImage,
+      addons: []
+    });
+    storedProducts.push({
+      id: 'custom-shared',
+      name: 'Shared photo product',
+      category: 'feeds',
+      desc: '',
+      price: 10,
+      image: oldImage,
+      addons: []
+    });
+
+    let response = await request('PATCH', {
+      id: 'custom-photo',
+      product: { name: 'Photo product', category: 'feeds', price: 10, desc: '', image: '', addons: [] }
+    }, true);
+    assert.equal(response.statusCode, 200);
+    assert.deepEqual(deletedImages, []);
+
+    response = await request('PATCH', {
+      id: 'custom-shared',
+      product: { name: 'Shared photo product', category: 'feeds', price: 10, desc: '', image: 'https://example.com/new.jpg', addons: [] }
+    }, true);
+    assert.equal(response.statusCode, 200);
+    assert.deepEqual(deletedImages, [oldImage]);
+
+    const nextImage = 'https://files.edgestore.dev/project/_public/next.jpg';
+    storedProducts.find(product => product.id === 'custom-shared').image = nextImage;
+    response = await request('DELETE', { id: 'custom-shared' }, true);
+    assert.equal(response.statusCode, 200);
+    assert.deepEqual(deletedImages, [oldImage, nextImage]);
+  } finally {
+    edgeStore.deleteProductImage = originalDeleteProductImage;
+  }
 });

@@ -55,6 +55,17 @@ function withoutStorageFields(product) {
   return publicProduct;
 }
 
+async function cleanupUnusedProductImage(collection, imageUrl) {
+  if (!imageUrl) return;
+  try {
+    const products = await listProducts(collection);
+    if (products.some(product => product.image === imageUrl)) return;
+    await require('../lib/edgestore').deleteProductImage(imageUrl);
+  } catch (error) {
+    console.error('EdgeStore image cleanup failed:', error);
+  }
+}
+
 async function listProducts(collection) {
   const storedProducts = await collection.find({}).toArray();
   const storedById = new Map(storedProducts.map(product => [product.id, product]));
@@ -122,18 +133,23 @@ module.exports = async function products(request, response) {
       } catch (error) {
         return sendError(response, 400, error.message);
       }
-      const exists = (await listProducts(collection)).some(product => product.id === productId);
-      if (!exists) return sendError(response, 404, 'Product not found.');
+      const previousProduct = (await listProducts(collection)).find(product => product.id === productId);
+      if (!previousProduct) return sendError(response, 404, 'Product not found.');
       const product = { id: productId, ...values };
       await collection.updateOne({ id: productId }, { $set: product, $unset: { deleted: '' } }, { upsert: true });
+      if (previousProduct.image !== product.image) {
+        await cleanupUnusedProductImage(collection, previousProduct.image);
+      }
       return response.status(200).json({ product });
     }
 
+    const previousProduct = (await listProducts(collection)).find(product => product.id === productId);
     if (DEFAULT_PRODUCTS.some(product => product.id === productId)) {
       await collection.updateOne({ id: productId }, { $set: { id: productId, deleted: true } }, { upsert: true });
     } else {
       await collection.deleteOne({ id: productId });
     }
+    if (previousProduct) await cleanupUnusedProductImage(collection, previousProduct.image);
     return response.status(200).json({ success: true });
   } catch (error) {
     console.error('Product API error:', error);
