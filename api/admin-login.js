@@ -1,4 +1,4 @@
-const { constantTimeEqual, createAdminToken } = require('../lib/admin-auth');
+const { constantTimeEqual, createAdminToken, getAdminPassword } = require('../lib/admin-auth');
 
 module.exports = async function adminLogin(request, response) {
   response.setHeader('Cache-Control', 'no-store');
@@ -8,7 +8,7 @@ module.exports = async function adminLogin(request, response) {
   }
 
   const adminUsername = process.env.ADMIN_USERNAME || 'kapiaadmin';
-  const adminPassword = process.env.ADMIN_PASSWORD || 'h1zqp7ld269o';
+  const adminPassword = getAdminPassword();
 
   const username = typeof request.body?.username === 'string' ? request.body.username : '';
   const password = typeof request.body?.password === 'string' ? request.body.password : '';

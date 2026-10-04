@@ -1,6 +1,6 @@
 const crypto = require('node:crypto');
 const { getOrdersCollection } = require('../lib/mongodb');
-const { isAdminRequest } = require('../lib/admin-auth');
+const { getAdminPassword, isAdminRequest } = require('../lib/admin-auth');
 
 const ALLOWED_STATUSES = new Set([
   'Awaiting Payment',
@@ -71,7 +71,7 @@ module.exports = async function orders(request, response) {
     return sendError(response, 405, 'Method not allowed.');
   }
 
-  const adminPassword = process.env.ADMIN_PASSWORD || 'kapiaadmin';
+  const adminPassword = getAdminPassword();
   const mongoUri = process.env.MONGODB_URI;
 
   if ((request.method === 'GET' || request.method === 'DELETE') && !isAdminRequest(request, adminPassword)) {

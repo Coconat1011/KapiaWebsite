@@ -1,6 +1,6 @@
 const crypto = require('node:crypto');
 const { getProductsCollection } = require('../lib/mongodb');
-const { isAdminRequest } = require('../lib/admin-auth');
+const { getAdminPassword, isAdminRequest } = require('../lib/admin-auth');
 const DEFAULT_PRODUCTS = require('../lib/default-products');
 
 const ALLOWED_CATEGORIES = new Set(['fertilizer', 'feeds', 'foods_drinks']);
@@ -98,7 +98,7 @@ module.exports = async function products(request, response) {
     return sendError(response, 405, 'Method not allowed.');
   }
 
-  if (request.method !== 'GET' && !isAdminRequest(request, process.env.ADMIN_PASSWORD || 'kapiaadmin')) {
+  if (request.method !== 'GET' && !isAdminRequest(request, getAdminPassword())) {
     return sendError(response, 401, 'Admin login is required.');
   }
   if (!process.env.MONGODB_URI) {

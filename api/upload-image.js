@@ -1,4 +1,4 @@
-const { isAdminRequest } = require('../lib/admin-auth');
+const { getAdminPassword, isAdminRequest } = require('../lib/admin-auth');
 
 const MAX_IMAGE_SIZE = 2 * 1024 * 1024;
 const SUPPORTED_IMAGE_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp', 'image/gif']);
@@ -13,7 +13,7 @@ module.exports = async function uploadImage(request, response) {
     response.setHeader('Allow', 'POST');
     return sendError(response, 405, 'Method not allowed.');
   }
-  if (!isAdminRequest(request, process.env.ADMIN_PASSWORD || 'kapiaadmin')) {
+  if (!isAdminRequest(request, getAdminPassword())) {
     return sendError(response, 401, 'Admin login is required.');
   }
   if (!process.env.EDGE_STORE_ACCESS_KEY || !process.env.EDGE_STORE_SECRET_KEY) {
