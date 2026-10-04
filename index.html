@@ -326,8 +326,28 @@
       box-shadow: 0 14px 26px rgba(122, 88, 61, 0.22);
     }
 
-    .welcome-categories {
-      display: none;
+    .welcome-contact-bar {
+      width: min(100% - 48px, 1180px);
+      margin: 0 auto;
+      padding: 28px 0 32px;
+      background: #fff;
+    }
+
+    .welcome-contact {
+      display: inline-flex;
+      min-height: 52px;
+      align-items: center;
+      justify-content: center;
+      padding: 0 28px;
+      border: none;
+      border-radius: 999px;
+      background: #c88d62;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      box-shadow: 0 12px 22px rgba(122, 88, 61, 0.18);
     }
 
     @keyframes welcome-image-in {
@@ -342,17 +362,14 @@
 
     @media (max-width: 640px) {
       .welcome-hero { min-height: 74svh; }
-      .welcome-nav, .welcome-copy, .welcome-categories { width: calc(100% - 36px); }
+      .welcome-nav, .welcome-copy, .welcome-contact-bar { width: calc(100% - 36px); }
       .welcome-nav { padding-top: 18px; }
       .welcome-brand { font-size: 17px; }
       .welcome-admin { padding-inline: 12px; font-size: 13px; }
       .welcome-copy { padding-top: 50px; }
       .welcome-copy h1 { font-size: clamp(46px, 13vw, 68px); }
       .welcome-copy p { font-size: 16px; }
-      .welcome-categories { grid-template-columns: 1fr; padding: 14px 0; }
-      .welcome-category, .welcome-category:first-child { padding: 13px 0; border: 0; border-top: 1px solid #DCC8B6; }
-      .welcome-category:first-child { border-top: 0; }
-      .welcome-category strong { font-size: 17px; }
+      .welcome-contact-bar { padding: 18px 0 24px; }
     }
   </style>
 </head>
@@ -369,6 +386,9 @@
         <p>Shop quality farm supplies, feeds, and freshly prepared food and drinks, all in one place.</p>
         <a class="welcome-cta" href="./Kapia_Farm_Cafe_w%20admin.html">Explore the store</a>
       </div>
+    </section>
+    <section class="welcome-contact-bar" aria-label="Contact us">
+      <button type="button" class="welcome-contact">Contact Us</button>
     </section>
   </main>
 </body>
