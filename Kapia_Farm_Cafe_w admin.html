@@ -121,7 +121,7 @@
     .social-media-heading h2 { margin: 0; color: var(--latte-espresso); font-size: 28px; }
     .social-media-close { display: grid; width: 44px; height: 44px; place-items: center; border: 1px solid #E2D0BE; border-radius: 6px; background: #FFFAF6; color: var(--latte-espresso); cursor: pointer; }
     .social-media-links { display: grid; gap: 10px; }
-    .social-media-link { display: flex; min-height: 52px; align-items: center; justify-content: center; border: none; border-radius: 8px; background: #c98c63; color: #fff; font-size: 18px; font-weight: 700; text-decoration: none; box-shadow: 0 12px 24px rgba(122, 87, 61, 0.18); }
+    .social-media-link { display: flex; min-height: 52px; align-items: center; justify-content: center; border: none; border-radius: 8px; background: #c98c63; color: #fff; font-size: 18px; font-weight: 700; text-decoration: none; box-shadow: 0 12px 24px rgba(122, 87, 61, 0.18); text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25); }
     .social-media-link:hover { background: #b77d54; }
     .social-media-close:focus-visible, .social-media-link:focus-visible { outline: none; box-shadow: 0 0 0 4px rgba(122, 87, 61, 0.18); }
 
@@ -384,11 +384,12 @@
     header[data-template-id="header-section"] > :not(img) { z-index: 2; }
     #submit-order-btn, .category-tab.active, .add-to-order-btn, #name-submit-btn,
     #pay-opt-qr, #pay-opt-cod, #pay-confirm-btn, #contact-footer button,
-    [data-template-id="order-now-btn"] {
+    [data-template-id="order-now-btn"], .social-media-link, #modal-add-btn {
       border: none !important;
       box-shadow: 0 12px 24px rgba(122, 87, 61, 0.18) !important;
       background: #c98c63 !important;
       color: #fff !important;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.22) !important;
     }
     .category-tab { border: none !important; color: var(--latte-espresso) !important; box-shadow: 0 8px 18px rgba(122, 87, 61, 0.08); }
     .category-tab:not(.active):hover { background: #efe0d3 !important; }
@@ -425,9 +426,9 @@
     <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/75"></div>
     <div class="relative max-w-7xl w-full mx-auto px-4 sm:px-6 flex flex-col items-center text-center py-16">
       <span class="text-orange-400 font-semibold tracking-widest text-sm uppercase mb-2">Welcome to</span>
-      <h1 data-template-id="restaurant-name" class="canva-text font-display" style="color: rgb(255, 255, 255); font-weight: 700; font-style: normal; font-size: clamp(2.5rem, 7vw, 5.5rem); line-height: 1.15; margin-bottom: 0.5rem;">Kapia Farm Cafe</h1>
-      <p class="text-gray-200 max-w-xl text-base sm:text-lg mb-6">Premium agricultural fertilizers, high-performance feeds, and delicious farm-to-table food and beverages.</p>
-      <button data-template-id="order-now-btn" class="canva-button" style="background: #c98c63; color: #fff; border: none; border-radius: 9999px; padding: 0.75rem 2.25rem; font-weight: 700; font-size: 18px; font-style: normal; cursor: pointer; box-shadow: 0 12px 24px rgba(122, 87, 61, 0.18);" onclick="applyBounce(this); scrollToCategories();">Order Now</button>
+      <h1 data-template-id="restaurant-name" class="canva-text font-display" style="color: rgb(255, 255, 255); font-weight: 700; font-style: normal; font-size: clamp(2.5rem, 7vw, 5.5rem); line-height: 1.15; margin-bottom: 0.5rem; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.24);">Kapia Farm Cafe</h1>
+      <p class="text-gray-200 max-w-xl text-base sm:text-lg mb-6" style="text-shadow: 0 1px 2px rgba(0, 0, 0, 0.22);">Premium agricultural fertilizers, high-performance feeds, and delicious farm-to-table food and beverages.</p>
+      <button data-template-id="order-now-btn" class="canva-button" style="background: #c98c63; color: #fff; border: none; border-radius: 9999px; padding: 0.75rem 2.25rem; font-weight: 700; font-size: 18px; font-style: normal; cursor: pointer; box-shadow: 0 12px 24px rgba(122, 87, 61, 0.18); text-shadow: 0 1px 2px rgba(0, 0, 0, 0.22);" onclick="applyBounce(this); scrollToCategories();">Order Now</button>
     </div>
 
     <!-- Customer Details Modal -->
@@ -443,7 +444,7 @@
           <div id="name-error" class="hidden text-red-600 text-sm mb-3 font-semibold"></div>
           <div class="flex gap-3">
             <button id="name-cancel-btn" data-template-id="name-modal-cancel-btn" onclick="closeNameModal()" class="flex-1 py-3 rounded-xl font-semibold border-2 border-gray-300 text-sm transition-colors hover:bg-gray-100 canva-button" style="color: rgb(74, 74, 90); background: rgb(243, 244, 246); font-weight: 600; font-style: normal; font-size: 15px; cursor: pointer;">Cancel</button>
-            <button id="name-submit-btn" onclick="applyBounce(this); confirmNameAndSubmit()" class="flex-1 py-3 rounded-xl font-semibold text-sm transition-colors cursor-pointer" style="background-color:#c98c63;color:#fff;border:none;box-shadow:0 12px 24px rgba(122, 87, 61, 0.18);">Confirm Order</button>
+            <button id="name-submit-btn" onclick="applyBounce(this); confirmNameAndSubmit()" class="flex-1 py-3 rounded-xl font-semibold text-sm transition-colors cursor-pointer" style="background-color:#c98c63;color:#fff;border:none;box-shadow:0 12px 24px rgba(122, 87, 61, 0.18);text-shadow:0 1px 2px rgba(0, 0, 0, 0.22);">Confirm Order</button>
           </div>
         </div>
       </div>
@@ -487,7 +488,7 @@
           <div id="submit-success" class="hidden bg-green-50 border border-green-200 text-green-700 text-sm px-3 py-2 rounded-lg mb-3 flex items-center gap-2">
             <i data-lucide="check-circle" style="width:16px;height:16px;"></i><span>Order submitted successfully! ✓</span>
           </div>
-          <button id="submit-order-btn" data-template-id="submit-order-btn" onclick="applyBounce(this); submitOrder()" class="canva-button w-full py-3 font-semibold text-sm transition-colors cursor-pointer" style="border-radius: 9999px; background: #c98c63; color: #fff; font-weight: 700; font-size: 16px; border: none; box-shadow: 0 12px 24px rgba(122, 87, 61, 0.18);">Submit Order</button>
+          <button id="submit-order-btn" data-template-id="submit-order-btn" onclick="applyBounce(this); submitOrder()" class="canva-button w-full py-3 font-semibold text-sm transition-colors cursor-pointer" style="border-radius: 9999px; background: #c98c63; color: #fff; font-weight: 700; font-size: 16px; border: none; box-shadow: 0 12px 24px rgba(122, 87, 61, 0.18); text-shadow: 0 1px 2px rgba(0, 0, 0, 0.22);">Submit Order</button>
         </div>
       </div>
     </aside>
@@ -526,7 +527,7 @@
         <p class="text-xs leading-relaxed flex-1 mb-3" style="color:var(--stone);"></p>
         <div class="flex items-center justify-between mt-auto">
           <span class="product-price font-bold text-lg" style="color:var(--ink);"></span>
-          <button class="add-to-order-btn font-semibold text-sm px-4 py-2 rounded-xl transition-colors cursor-pointer" style="background-color:#c98c63;color:#fff;border:none;box-shadow:0 12px 24px rgba(122, 87, 61, 0.18);">
+          <button class="add-to-order-btn font-semibold text-sm px-4 py-2 rounded-xl transition-colors cursor-pointer" style="background-color:#c98c63;color:#fff;border:none;box-shadow:0 12px 24px rgba(122, 87, 61, 0.18);text-shadow:0 1px 2px rgba(0, 0, 0, 0.22);">
             <i data-lucide="plus" style="width:16px;height:16px;display:inline-block;vertical-align:-3px;margin-right:4px;"></i>Add
           </button>
         </div>
@@ -570,7 +571,7 @@
         </div>
         <div class="flex gap-3">
           <button data-template-id="modal-cancel-btn" onclick="closeModal()" class="canva-button flex-1 py-3 rounded-xl font-semibold border-2 border-gray-200 text-sm transition-colors hover:bg-gray-100 cursor-pointer" style="color: rgb(74, 74, 90); background: rgb(243, 244, 246); font-weight: 600; font-style: normal; font-size: 16px;">Cancel</button>
-          <button data-template-id="modal-add-btn" id="modal-add-btn" onclick="applyBounce(this); confirmAddToOrder()" class="canva-button flex-1 py-3 rounded-xl font-semibold text-sm transition-colors cursor-pointer" style="background: #c98c63; color: #fff; border: none; font-weight: 600; font-style: normal; font-size: 16px; box-shadow: 0 12px 24px rgba(122, 87, 61, 0.18);">Add to Order</button>
+          <button data-template-id="modal-add-btn" id="modal-add-btn" onclick="applyBounce(this); confirmAddToOrder()" class="canva-button flex-1 py-3 rounded-xl font-semibold text-sm transition-colors cursor-pointer" style="background: #c98c63; color: #fff; border: none; font-weight: 600; font-style: normal; font-size: 16px; box-shadow: 0 12px 24px rgba(122, 87, 61, 0.18); text-shadow: 0 1px 2px rgba(0, 0, 0, 0.22);">Add to Order</button>
         </div>
       </div>
     </div>
@@ -667,7 +668,7 @@
 
           <!-- Payment Options Tabs -->
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;">
-            <button id="pay-opt-qr" onclick="selectPaymentMethod('qr')" style="padding:10px;border:none;border-radius:10px;background:#c98c63;color:#fff;font-weight:700;font-size:13px;cursor:pointer;text-align:center;box-shadow:0 12px 24px rgba(122, 87, 61, 0.18);">
+            <button id="pay-opt-qr" onclick="selectPaymentMethod('qr')" style="padding:10px;border:none;border-radius:10px;background:#c98c63;color:#fff;font-weight:700;font-size:13px;cursor:pointer;text-align:center;box-shadow:0 12px 24px rgba(122, 87, 61, 0.18);text-shadow:0 1px 2px rgba(0, 0, 0, 0.22);">
               📱 QR PH / GCash / Maya
             </button>
             <button id="pay-opt-cod" onclick="selectPaymentMethod('cod')" style="padding:10px;border:none;border-radius:10px;background:#fff;font-weight:700;font-size:13px;cursor:pointer;text-align:center;box-shadow:0 8px 18px rgba(122, 87, 61, 0.08);">
@@ -731,7 +732,7 @@
 
           <!-- Action Buttons -->
           <div style="margin-top:20px;display:flex;flex-direction:column;gap:10px;">
-            <button id="pay-confirm-btn" onclick="confirmPaymentComplete()" style="width:100%;padding:14px;border:none;border-radius:999px;background:#c98c63;color:#fff;font-weight:700;font-size:16px;cursor:pointer;transition:all 0.2s ease;box-shadow:0 12px 24px rgba(122, 87, 61, 0.18);">
+            <button id="pay-confirm-btn" onclick="confirmPaymentComplete()" style="width:100%;padding:14px;border:none;border-radius:999px;background:#c98c63;color:#fff;font-weight:700;font-size:16px;cursor:pointer;transition:all 0.2s ease;box-shadow:0 12px 24px rgba(122, 87, 61, 0.18);text-shadow:0 1px 2px rgba(0, 0, 0, 0.22);">
               ✓ I Have Completed Payment
             </button>
             <button onclick="closePaymentPage()" style="width:100%;padding:12px;border:2px solid #ccc;border-radius:999px;background:#fff;color:#555;font-weight:700;font-size:14px;cursor:pointer;">
