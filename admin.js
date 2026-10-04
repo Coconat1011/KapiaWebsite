@@ -153,8 +153,9 @@ function showLogin() {
   document.getElementById('admin-dashboard').hidden = true;
   document.getElementById('admin-login-panel').hidden = false;
   document.getElementById('admin-logout').hidden = true;
+  document.getElementById('admin-username').value = '';
   document.getElementById('admin-password').value = '';
-  document.getElementById('admin-password').focus();
+  document.getElementById('admin-username').focus();
 }
 
 function addAddonRow(addon = {}) {
@@ -330,7 +331,10 @@ document.getElementById('admin-login-form').addEventListener('submit', event => 
   fetch('/api/admin-login', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ password: document.getElementById('admin-password').value })
+    body: JSON.stringify({
+      username: document.getElementById('admin-username').value,
+      password: document.getElementById('admin-password').value
+    })
   }).then(async response => {
     const result = await response.json().catch(() => ({}));
     if (!response.ok) throw new Error(result.error || 'Admin sign-in failed.');
