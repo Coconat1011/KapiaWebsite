@@ -1,36 +1,4 @@
 @font-face {
-  font-family: 'Sunny Brunch';
-  src: url('./fonts/SunnyBrunch-Regular.ttf') format('truetype');
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Sunny Brunch';
-  src: url('./fonts/SunnyBrunch-Medium.ttf') format('truetype');
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Sunny Brunch';
-  src: url('./fonts/SunnyBrunch-SemiBold.ttf') format('truetype');
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Sunny Brunch';
-  src: url('./fonts/SunnyBrunch-Bold.ttf') format('truetype');
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-}
-
-@font-face {
   font-family: 'Anak Orang';
   src: url('./fonts/AnakOrang-Regular.ttf') format('truetype');
   font-style: normal;
@@ -39,8 +7,8 @@
 }
 
 :root {
-  --font-primary: 'Sunny Brunch', 'DM Sans', sans-serif;
-  --font-secondary: 'Anak Orang', 'Sunny Brunch', cursive;
+  --font-primary: 'Anak Orang', cursive;
+  --font-secondary: var(--font-primary);
 }
 
 h1, h2, h3, h4, h5, h6 {
