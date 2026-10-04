@@ -613,7 +613,7 @@
           <div style="width:40px;height:40px;border-radius:50%;background:#ff943e;color:var(--ink);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:bold;">✓</div>
           <div>
             <div style="font-weight:700;font-size:16px;color:#9a3412;">Order Submitted Successfully!</div>
-            <div style="font-size:13px;color:#7c2d12;">Please scan the randomized QR code below to complete your payment.</div>
+            <div style="font-size:13px;color:#7c2d12;">Please scan the QR code below to complete your payment.</div>
           </div>
         </div>
         <div id="payment-status-badge" style="background:#fef3c7;color:#92400e;padding:6px 16px;border-radius:999px;font-size:13px;font-weight:700;">
@@ -650,7 +650,7 @@
           </div>
         </div>
 
-        <!-- Right Column: Payment & Randomized QR -->
+        <!-- Right Column: Payment & QR code -->
         <div style="background:#fff;border:2px solid #111;border-radius:16px;padding:24px;box-shadow:0 6px 20px rgba(0,0,0,0.04);">
           
           <h3 style="font-size:20px;font-weight:700;margin:0 0 6px;">Select Payment Method</h3>
@@ -676,13 +676,14 @@
               <!-- QR Display Area -->
               <div style="width:230px;height:230px;margin:0 auto 12px;background:#fff;border:2px solid #ddd;border-radius:12px;display:flex;align-items:center;justify-content:center;padding:10px;box-shadow:0 4px 12px rgba(0,0,0,0.06);position:relative;">
                 <canvas id="qr-canvas" width="210" height="210" style="display:block;width:210px;height:210px;border-radius:6px;"></canvas>
-                <img id="qr-img" style="display:none;width:210px;height:210px;object-fit:contain;border-radius:6px;" alt="Randomized QR Code">
+                <img id="qr-img" style="display:none;width:210px;height:210px;object-fit:contain;border-radius:6px;" alt="Payment QR code">
               </div>
 
-              <!-- Randomize QR Button -->
+              <!-- Download QR image -->
               <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:12px;">
-                <button type="button" onclick="randomizeCurrentQR()" style="padding:6px 14px;border:1.5px solid #111;border-radius:8px;background:#fff;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:5px;box-shadow:0 2px 4px rgba(0,0,0,0.05);">
-                  🔀 Randomize QR Code
+                <button id="download-qr-btn" type="button" onclick="downloadPaymentQR()" style="padding:8px 14px;border:1.5px solid var(--latte-body);border-radius:8px;background:#fff;color:var(--ink);font:700 14px var(--font-primary);cursor:pointer;display:flex;align-items:center;gap:8px;box-shadow:0 2px 4px rgba(0,0,0,0.05);">
+                  <i data-lucide="download" aria-hidden="true" style="width:16px;height:16px;"></i>
+                  Download QR image
                 </button>
               </div>
 
@@ -1228,7 +1229,7 @@
       setTimeout(() => successEl.classList.add('hidden'), 4000);
     }
 
-    // Payment Page & Randomized QR Code Logic
+    // Payment page QR image logic
     let currentPaymentOrder = null;
     let currentPaymentMethod = 'qr';
     let currentQRSeed = Date.now();
@@ -1312,11 +1313,22 @@
         : '✓ I Have Completed Payment';
     }
 
-    function randomizeCurrentQR() {
-      currentQRSeed = Math.floor(Math.random() * 899999) + 100000;
-      if (currentPaymentOrder) {
-        generateRandomQR(currentPaymentOrder.id, currentPaymentOrder.total);
-      }
+    function downloadPaymentQR() {
+      const qrImage = document.getElementById('qr-img');
+      const canvas = document.getElementById('qr-canvas');
+      const imageUrl = qrImage && getComputedStyle(qrImage).display !== 'none' && qrImage.complete && qrImage.naturalWidth
+        ? qrImage.src
+        : canvas?.toDataURL('image/png');
+      if (!imageUrl) return;
+
+      const referenceCode = document.getElementById('pay-qr-ref').textContent.trim() || 'qr-code';
+      const filename = `kapia-payment-${referenceCode.toLowerCase().replace(/[^a-z0-9-]/g, '')}.png`;
+      const downloadLink = document.createElement('a');
+      downloadLink.href = imageUrl;
+      downloadLink.download = filename;
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      downloadLink.remove();
     }
 
     function generateRandomQR(orderId, amount) {
