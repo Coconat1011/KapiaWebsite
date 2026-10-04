@@ -455,9 +455,9 @@
   <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 main-content-wrapper" style="padding-bottom: 30px;">
     <main>
       <nav data-template-id="category-tabs" class="canva-tabs flex gap-2 sm:gap-3 mb-6" role="tablist" aria-label="Menu categories" style="background: transparent;">
-        <button class="category-tab active flex-1 py-3 px-4 rounded-full font-semibold text-sm sm:text-base" role="tab" aria-selected="true" data-category="fertilizer" onclick="switchCategory('fertilizer')">Fertilizer</button>
+        <button class="category-tab active flex-1 py-3 px-4 rounded-full font-semibold text-sm sm:text-base" role="tab" aria-selected="true" data-category="foods_drinks" onclick="switchCategory('foods_drinks')">Foods &amp; Drinks</button>
+        <button class="category-tab flex-1 py-3 px-4 rounded-full font-semibold text-sm sm:text-base" role="tab" aria-selected="false" data-category="fertilizer" onclick="switchCategory('fertilizer')">Fertilizers</button>
         <button class="category-tab flex-1 py-3 px-4 rounded-full font-semibold text-sm sm:text-base" role="tab" aria-selected="false" data-category="feeds" onclick="switchCategory('feeds')">Feeds</button>
-        <button class="category-tab flex-1 py-3 px-4 rounded-full font-semibold text-sm sm:text-base" role="tab" aria-selected="false" data-category="foods_drinks" onclick="switchCategory('foods_drinks')">Foods &amp; Drinks</button>
       </nav>
       <section id="menu-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-5" aria-label="Menu items" role="tabpanel"></section>
     </main>
@@ -825,7 +825,7 @@
     }
 
     // Customer store variables
-    let currentCategory = 'fertilizer';
+    let currentCategory = 'foods_drinks';
     let order = [];
     let orderIdCounter = 0;
     let modalItem = null, modalCategory = null, modalQty = 1, modalAddons = {};
