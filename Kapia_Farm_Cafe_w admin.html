@@ -46,9 +46,10 @@
     }
 
     #submit-order-btn {
-      background-color: #ff943e !important;
-      color: var(--ink) !important;
-      border: 2px solid #000 !important;
+      background-color: #c98c63 !important;
+      color: #fff !important;
+      border: none !important;
+      box-shadow: 0 12px 24px rgba(122, 87, 61, 0.18) !important;
     }
 
     /* ─── Category tabs — horizontal scroll on mobile ─── */
@@ -63,19 +64,21 @@
 
     .category-tab {
       transition: all 0.25s ease;
-      border: 2px solid #000;
-      background: transparent;
+      border: none;
+      background: #f5eee8;
       color: var(--ink);
       cursor: pointer;
       white-space: nowrap;
       flex-shrink: 0;
+      box-shadow: 0 8px 18px rgba(122, 87, 61, 0.08);
     }
     .category-tab.active {
-      background: var(--lime);
-      color: var(--ink);
-      border-color: #000;
+      background: #c98c63;
+      color: #fff;
+      border: none;
+      box-shadow: 0 12px 24px rgba(122, 87, 61, 0.18);
     }
-    .category-tab:not(.active):hover { background: rgba(255,148,62,0.3); }
+    .category-tab:not(.active):hover { background: #efe0d3; }
 
     /* ─── Menu cards ─── */
     .menu-card {
@@ -110,7 +113,7 @@
       transform: translate(-50%, -50%);
       border: 1px solid #E2D0BE;
       border-radius: 8px;
-      background: linear-gradient(145deg, #FFFAF6, var(--latte-foam));
+      background: #fffaf5;
       box-shadow: 0 24px 70px rgba(61, 40, 28, .24);
       animation: slideUp 0.25s ease-out;
     }
@@ -118,9 +121,9 @@
     .social-media-heading h2 { margin: 0; color: var(--latte-espresso); font-size: 28px; }
     .social-media-close { display: grid; width: 44px; height: 44px; place-items: center; border: 1px solid #E2D0BE; border-radius: 6px; background: #FFFAF6; color: var(--latte-espresso); cursor: pointer; }
     .social-media-links { display: grid; gap: 10px; }
-    .social-media-link { display: flex; min-height: 52px; align-items: center; justify-content: center; border: 1px solid var(--latte-espresso); border-radius: 6px; background: linear-gradient(120deg, var(--latte-crema), var(--latte-body)); color: var(--latte-espresso); font-size: 18px; font-weight: 700; text-decoration: none; }
-    .social-media-link:hover { background: linear-gradient(120deg, #E8C9A9, var(--latte-crema)); }
-    .social-media-close:focus-visible, .social-media-link:focus-visible { outline: 3px solid var(--latte-espresso); outline-offset: 3px; }
+    .social-media-link { display: flex; min-height: 52px; align-items: center; justify-content: center; border: none; border-radius: 8px; background: #c98c63; color: #fff; font-size: 18px; font-weight: 700; text-decoration: none; box-shadow: 0 12px 24px rgba(122, 87, 61, 0.18); }
+    .social-media-link:hover { background: #b77d54; }
+    .social-media-close:focus-visible, .social-media-link:focus-visible { outline: none; box-shadow: 0 0 0 4px rgba(122, 87, 61, 0.18); }
 
     @keyframes fadeIn  { from{opacity:0}                                             to{opacity:1} }
     @keyframes slideUp { from{opacity:0;transform:translate(-50%,-50%) translateY(20px)} to{opacity:1;transform:translate(-50%,-50%) translateY(0)} }
@@ -296,10 +299,11 @@
         top: 20px;
         height: calc(100vh - 50px);
         max-height: none !important;
-        border: 2px solid #000;
+        border: none;
         border-radius: 16px;
         overflow-y: hidden !important;
         display: flex; flex-direction: column;
+        box-shadow: 0 15px 35px rgba(122, 87, 61, 0.12);
       }
       #order-panel-fixed.panel-open { max-height: none !important; }
       #panel-toggle-btn { display: none !important; }
@@ -327,16 +331,17 @@
       align-items: center;
       justify-content: center;
       padding: 0 20px;
-      border: 2px solid #111;
+      border: none;
       border-radius: 999px;
-      background: #ff943e;
-      color: var(--ink);
+      background: #c98c63;
+      color: #fff;
       font-weight: 700;
       font-family: inherit;
       cursor: pointer;
+      box-shadow: 0 12px 24px rgba(122, 87, 61, 0.18);
     }
 
-    #contact-footer button:hover { background: #ffad69; }
+    #contact-footer button:hover { background: #b77d54; }
 
     @media (max-width: 1023px) {
       body { display: flex; flex-direction: column; }
@@ -365,60 +370,64 @@
     }
 
     body[data-template-id="__page-root"] {
-      background: linear-gradient(155deg, #FFFAF6 0%, var(--latte-foam) 64%, #EBDCCD 100%) !important;
+      background: #f5efe9 !important;
       color: var(--latte-espresso);
     }
     header[data-template-id="header-section"] {
-      background: linear-gradient(125deg, var(--latte-espresso), #76513D 58%, var(--latte-body)) !important;
+      background: #c79b73 !important;
+      box-shadow: 0 18px 34px rgba(123, 86, 60, 0.16);
     }
     header[data-template-id="header-section"] > div.absolute.inset-0.bg-gradient-to-b {
-      background: linear-gradient(100deg, rgba(61, 40, 28, .78), rgba(61, 40, 28, .38) 70%, rgba(61, 40, 28, .2)) !important;
+      background: linear-gradient(90deg, rgba(93, 63, 41, 0.62), rgba(93, 63, 41, 0.2) 70%, rgba(93, 63, 41, 0.08)) !important;
     }
     header[data-template-id="header-section"] > img { z-index: 0; }
     header[data-template-id="header-section"] > :not(img) { z-index: 2; }
     #submit-order-btn, .category-tab.active, .add-to-order-btn, #name-submit-btn,
     #pay-opt-qr, #pay-opt-cod, #pay-confirm-btn, #contact-footer button,
     [data-template-id="order-now-btn"] {
-      border-color: var(--latte-espresso) !important;
-      background: linear-gradient(120deg, var(--latte-crema), var(--latte-body)) !important;
-      color: var(--latte-espresso) !important;
+      border: none !important;
+      box-shadow: 0 12px 24px rgba(122, 87, 61, 0.18) !important;
+      background: #c98c63 !important;
+      color: #fff !important;
     }
-    .category-tab { border-color: #CBB39D !important; color: var(--latte-espresso) !important; }
-    .category-tab:not(.active):hover { background: #EFE2D7 !important; }
+    .category-tab { border: none !important; color: var(--latte-espresso) !important; box-shadow: 0 8px 18px rgba(122, 87, 61, 0.08); }
+    .category-tab:not(.active):hover { background: #efe0d3 !important; }
     .text-orange-400 { color: var(--latte-body) !important; }
     #order-panel-fixed {
-      border-color: var(--latte-crema) !important;
-      background: linear-gradient(160deg, #FFFAF6, var(--latte-foam)) !important;
+      border-color: #e7d5c1 !important;
+      background: #f8f1ea !important;
       color: var(--latte-espresso) !important;
+      box-shadow: 0 -12px 32px rgba(122, 87, 61, 0.08);
     }
     #order-panel-fixed .canva-panel {
-      background: linear-gradient(120deg, var(--latte-crema), var(--latte-body)) !important;
-      color: var(--latte-espresso) !important;
+      background: #c98c63 !important;
+      color: #fff !important;
+      box-shadow: 0 12px 24px rgba(122, 87, 61, 0.12);
     }
-    #panel-toggle-btn { background: var(--latte-espresso) !important; color: var(--latte-foam) !important; }
-    #order-count { background: var(--latte-espresso) !important; color: var(--latte-foam) !important; }
-    .menu-card { border: 1px solid #E2D0BE !important; background: linear-gradient(145deg, #FFFAF6, var(--latte-foam)) !important; }
-    .modal-overlay { background: rgba(61, 40, 28, .62) !important; }
-    #payment-page { background: linear-gradient(155deg, #FFFAF6, var(--latte-foam) 64%, #EBDCCD) !important; color: var(--latte-espresso) !important; }
-    #payment-page [style*="background:#fff7ed"] { border-color: var(--latte-body) !important; background: linear-gradient(120deg, #F8EFE8, #EFE2D7) !important; }
+    #panel-toggle-btn { background: #8d5f3f !important; color: #fff !important; border: none !important; box-shadow: 0 8px 18px rgba(122, 87, 61, 0.14) !important; }
+    #order-count { background: #8d5f3f !important; color: #fff !important; }
+    .menu-card { border: 1px solid #e5d2c3 !important; background: #fffaf5 !important; }
+    .modal-overlay { background: rgba(61, 40, 28, .58) !important; }
+    #payment-page { background: #f5efe9 !important; color: var(--latte-espresso) !important; }
+    #payment-page [style*="background:#fff7ed"] { border-color: #d8bda5 !important; background: #f7efe8 !important; }
     #pay-total-amount, #pay-qr-amount, #pay-cod-amount { color: var(--latte-espresso) !important; }
-    #contact-footer { border-color: #E2D0BE !important; background: linear-gradient(100deg, #FFFAF6, var(--latte-foam)) !important; }
-    #contact-footer button:hover, .add-to-order-btn:hover, .social-media-link:hover { background: linear-gradient(120deg, #E8C9A9, var(--latte-crema)) !important; }
+    #contact-footer { border-color: #e7d5c1 !important; background: #f8f2ec !important; }
+    #contact-footer button:hover, .add-to-order-btn:hover, .social-media-link:hover { background: #b77d54 !important; box-shadow: 0 12px 20px rgba(122, 87, 61, 0.2) !important; }
   </style>
   <script src="/_sdk/6c2ecc939521f244.data_sdk.js" integrity="sha512-gRx8s+XsZDN6mSIQu2sivLZysbV0WHhb5kXNUWlgVb5lCMU1foJYukyMEDPv8Tnoocb8iwqB4XdRrWc7oEGzIQ=="></script>
   <script src="/_sdk/ddcab3e45959c817.resizing_sdk.js" type="text/javascript" integrity="sha512-VAviUKfZVzugWBSeULYjSljTX+nb84wc6Zzbx5GQaQgh6X2ISSjXi8eIiCDGdwDh10esJMY0+QFQgUy9NcrTlQ=="></script>
 </head>
-<body data-template-id="__page-root" class="min-h-screen w-full" style="background: rgb(247, 246, 243);">
+<body data-template-id="__page-root" class="min-h-screen w-full" style="background: #f5efe9;">
 
   <!-- Hero Header Section -->
-  <header data-template-id="header-section" class="canva-header w-full relative overflow-hidden" style="min-height: 65vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, rgb(26, 26, 46), rgb(45, 45, 68));">
+  <header data-template-id="header-section" class="canva-header w-full relative overflow-hidden" style="min-height: 65vh; display: flex; align-items: center; justify-content: center; background: #c79b73; box-shadow: 0 18px 34px rgba(123, 86, 60, 0.16);">
     <img data-template-id="hero-image" loading="eager" fetchpriority="high" decoding="async" class="canva-image absolute inset-0 w-full h-full object-cover" src="./assets/kapiacafe.webp" alt="Kapia Farm Cafe beside the pond" onerror="this.style.display='none'">
     <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/75"></div>
     <div class="relative max-w-7xl w-full mx-auto px-4 sm:px-6 flex flex-col items-center text-center py-16">
       <span class="text-orange-400 font-semibold tracking-widest text-sm uppercase mb-2">Welcome to</span>
       <h1 data-template-id="restaurant-name" class="canva-text font-display" style="color: rgb(255, 255, 255); font-weight: 700; font-style: normal; font-size: clamp(2.5rem, 7vw, 5.5rem); line-height: 1.15; margin-bottom: 0.5rem;">Kapia Farm Cafe</h1>
       <p class="text-gray-200 max-w-xl text-base sm:text-lg mb-6">Premium agricultural fertilizers, high-performance feeds, and delicious farm-to-table food and beverages.</p>
-      <button data-template-id="order-now-btn" class="canva-button" style="background: rgb(255, 148, 62); color: var(--ink); border: 2px solid rgb(0, 0, 0); border-radius: 9999px; padding: 0.75rem 2.25rem; font-weight: 700; font-size: 18px; font-style: normal; cursor: pointer;" onclick="applyBounce(this); scrollToCategories();">Order Now</button>
+      <button data-template-id="order-now-btn" class="canva-button" style="background: #c98c63; color: #fff; border: none; border-radius: 9999px; padding: 0.75rem 2.25rem; font-weight: 700; font-size: 18px; font-style: normal; cursor: pointer; box-shadow: 0 12px 24px rgba(122, 87, 61, 0.18);" onclick="applyBounce(this); scrollToCategories();">Order Now</button>
     </div>
 
     <!-- Customer Details Modal -->
@@ -434,7 +443,7 @@
           <div id="name-error" class="hidden text-red-600 text-sm mb-3 font-semibold"></div>
           <div class="flex gap-3">
             <button id="name-cancel-btn" data-template-id="name-modal-cancel-btn" onclick="closeNameModal()" class="flex-1 py-3 rounded-xl font-semibold border-2 border-gray-300 text-sm transition-colors hover:bg-gray-100 canva-button" style="color: rgb(74, 74, 90); background: rgb(243, 244, 246); font-weight: 600; font-style: normal; font-size: 15px; cursor: pointer;">Cancel</button>
-            <button id="name-submit-btn" onclick="applyBounce(this); confirmNameAndSubmit()" class="flex-1 py-3 rounded-xl font-semibold text-sm transition-colors cursor-pointer" style="background-color:#ff943e;color:var(--ink);border:2px solid #000;">Confirm Order</button>
+            <button id="name-submit-btn" onclick="applyBounce(this); confirmNameAndSubmit()" class="flex-1 py-3 rounded-xl font-semibold text-sm transition-colors cursor-pointer" style="background-color:#c98c63;color:#fff;border:none;box-shadow:0 12px 24px rgba(122, 87, 61, 0.18);">Confirm Order</button>
           </div>
         </div>
       </div>
@@ -458,7 +467,7 @@
     <aside id="order-panel-fixed">
       <!-- Drag handle (visible on mobile only) -->
       <div id="panel-drag-handle" onclick="toggleOrderPanel()" aria-label="Toggle order panel"></div>
-      <div data-template-id="order-summary" class="canva-panel" style="background:#ff943e;display:flex;align-items:center;justify-content:space-between;padding:0 1.25rem;flex-shrink:0;">
+      <div data-template-id="order-summary" class="canva-panel" style="background:#c98c63;display:flex;align-items:center;justify-content:space-between;padding:0 1.25rem;flex-shrink:0;box-shadow:0 12px 24px rgba(122, 87, 61, 0.12);">
         <div style="display:flex;align-items:center;">
           <h2 data-template-id="order-title" class="canva-text font-display" style="color: var(--ink); font-weight: 700; font-style: normal; font-size: 26px;">Your Order</h2>
           <span id="order-count" class="ml-2 text-xs font-bold px-2.5 py-1 rounded-full" style="background:#000;color:#fff;">0</span>
@@ -478,7 +487,7 @@
           <div id="submit-success" class="hidden bg-green-50 border border-green-200 text-green-700 text-sm px-3 py-2 rounded-lg mb-3 flex items-center gap-2">
             <i data-lucide="check-circle" style="width:16px;height:16px;"></i><span>Order submitted successfully! ✓</span>
           </div>
-          <button id="submit-order-btn" data-template-id="submit-order-btn" onclick="applyBounce(this); submitOrder()" class="canva-button w-full py-3 font-semibold text-sm transition-colors cursor-pointer" style="border-radius: 9999px; background: rgb(255, 148, 62); color: var(--ink); font-weight: 700; font-size: 16px;">Submit Order</button>
+          <button id="submit-order-btn" data-template-id="submit-order-btn" onclick="applyBounce(this); submitOrder()" class="canva-button w-full py-3 font-semibold text-sm transition-colors cursor-pointer" style="border-radius: 9999px; background: #c98c63; color: #fff; font-weight: 700; font-size: 16px; border: none; box-shadow: 0 12px 24px rgba(122, 87, 61, 0.18);">Submit Order</button>
         </div>
       </div>
     </aside>
@@ -517,7 +526,7 @@
         <p class="text-xs leading-relaxed flex-1 mb-3" style="color:var(--stone);"></p>
         <div class="flex items-center justify-between mt-auto">
           <span class="product-price font-bold text-lg" style="color:var(--ink);"></span>
-          <button class="add-to-order-btn font-semibold text-sm px-4 py-2 rounded-xl transition-colors cursor-pointer" style="background-color:#ff943e;color:var(--ink);border:2px solid #000;">
+          <button class="add-to-order-btn font-semibold text-sm px-4 py-2 rounded-xl transition-colors cursor-pointer" style="background-color:#c98c63;color:#fff;border:none;box-shadow:0 12px 24px rgba(122, 87, 61, 0.18);">
             <i data-lucide="plus" style="width:16px;height:16px;display:inline-block;vertical-align:-3px;margin-right:4px;"></i>Add
           </button>
         </div>
@@ -561,7 +570,7 @@
         </div>
         <div class="flex gap-3">
           <button data-template-id="modal-cancel-btn" onclick="closeModal()" class="canva-button flex-1 py-3 rounded-xl font-semibold border-2 border-gray-200 text-sm transition-colors hover:bg-gray-100 cursor-pointer" style="color: rgb(74, 74, 90); background: rgb(243, 244, 246); font-weight: 600; font-style: normal; font-size: 16px;">Cancel</button>
-          <button data-template-id="modal-add-btn" id="modal-add-btn" onclick="applyBounce(this); confirmAddToOrder()" class="canva-button flex-1 py-3 rounded-xl font-semibold text-sm transition-colors cursor-pointer" style="background: rgb(255, 148, 62); color: var(--ink); border: 2px solid rgb(0, 0, 0); font-weight: 600; font-style: normal; font-size: 16px;">Add to Order</button>
+          <button data-template-id="modal-add-btn" id="modal-add-btn" onclick="applyBounce(this); confirmAddToOrder()" class="canva-button flex-1 py-3 rounded-xl font-semibold text-sm transition-colors cursor-pointer" style="background: #c98c63; color: #fff; border: none; font-weight: 600; font-style: normal; font-size: 16px; box-shadow: 0 12px 24px rgba(122, 87, 61, 0.18);">Add to Order</button>
         </div>
       </div>
     </div>
@@ -608,9 +617,9 @@
       </div>
 
       <!-- Payment Alert / Progress Banner -->
-      <div style="background:#fff7ed;border:2px solid #ff943e;border-radius:14px;padding:16px 20px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+      <div style="background:#fff7ed;border:2px solid #c98c63;border-radius:14px;padding:16px 20px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
         <div style="display:flex;align-items:center;gap:12px;">
-          <div style="width:40px;height:40px;border-radius:50%;background:#ff943e;color:var(--ink);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:bold;">✓</div>
+          <div style="width:40px;height:40px;border-radius:50%;background:#c98c63;color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:bold;">✓</div>
           <div>
             <div style="font-weight:700;font-size:16px;color:#9a3412;">Order Submitted Successfully!</div>
             <div style="font-size:13px;color:#7c2d12;">Please scan the QR code below to complete your payment.</div>
@@ -658,10 +667,10 @@
 
           <!-- Payment Options Tabs -->
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;">
-            <button id="pay-opt-qr" onclick="selectPaymentMethod('qr')" style="padding:10px;border:2px solid #111;border-radius:10px;background:#ff943e;font-weight:700;font-size:13px;cursor:pointer;text-align:center;">
+            <button id="pay-opt-qr" onclick="selectPaymentMethod('qr')" style="padding:10px;border:none;border-radius:10px;background:#c98c63;color:#fff;font-weight:700;font-size:13px;cursor:pointer;text-align:center;box-shadow:0 12px 24px rgba(122, 87, 61, 0.18);">
               📱 QR PH / GCash / Maya
             </button>
-            <button id="pay-opt-cod" onclick="selectPaymentMethod('cod')" style="padding:10px;border:2px solid #111;border-radius:10px;background:#fff;font-weight:700;font-size:13px;cursor:pointer;text-align:center;">
+            <button id="pay-opt-cod" onclick="selectPaymentMethod('cod')" style="padding:10px;border:none;border-radius:10px;background:#fff;font-weight:700;font-size:13px;cursor:pointer;text-align:center;box-shadow:0 8px 18px rgba(122, 87, 61, 0.08);">
               💵 Cash on Delivery / Pickup
             </button>
           </div>
@@ -722,7 +731,7 @@
 
           <!-- Action Buttons -->
           <div style="margin-top:20px;display:flex;flex-direction:column;gap:10px;">
-            <button id="pay-confirm-btn" onclick="confirmPaymentComplete()" style="width:100%;padding:14px;border:2px solid #111;border-radius:999px;background:#ff943e;color:var(--ink);font-weight:700;font-size:16px;cursor:pointer;transition:all 0.2s ease;">
+            <button id="pay-confirm-btn" onclick="confirmPaymentComplete()" style="width:100%;padding:14px;border:none;border-radius:999px;background:#c98c63;color:#fff;font-weight:700;font-size:16px;cursor:pointer;transition:all 0.2s ease;box-shadow:0 12px 24px rgba(122, 87, 61, 0.18);">
               ✓ I Have Completed Payment
             </button>
             <button onclick="closePaymentPage()" style="width:100%;padding:12px;border:2px solid #ccc;border-radius:999px;background:#fff;color:#555;font-weight:700;font-size:14px;cursor:pointer;">
@@ -1298,13 +1307,21 @@
       const codSection = document.getElementById('payment-cod-section');
 
       if (method === 'qr') {
-        qrBtn.style.background = '#ff943e';
+        qrBtn.style.background = '#c98c63';
+        qrBtn.style.color = '#fff';
+        qrBtn.style.boxShadow = '0 12px 24px rgba(122, 87, 61, 0.18)';
         codBtn.style.background = '#fff';
+        codBtn.style.color = '#4b2e1f';
+        codBtn.style.boxShadow = '0 8px 18px rgba(122, 87, 61, 0.08)';
         qrSection.style.display = 'block';
         codSection.style.display = 'none';
       } else {
         qrBtn.style.background = '#fff';
-        codBtn.style.background = '#ff943e';
+        qrBtn.style.color = '#4b2e1f';
+        qrBtn.style.boxShadow = '0 8px 18px rgba(122, 87, 61, 0.08)';
+        codBtn.style.background = '#c98c63';
+        codBtn.style.color = '#fff';
+        codBtn.style.boxShadow = '0 12px 24px rgba(122, 87, 61, 0.18)';
         qrSection.style.display = 'none';
         codSection.style.display = 'block';
       }
