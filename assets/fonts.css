@@ -30,8 +30,30 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'Anak Orang';
+  src: url('./fonts/AnakOrang-Regular.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
 :root {
   --font-primary: 'Sunny Brunch', 'DM Sans', sans-serif;
+  --font-secondary: 'Anak Orang', 'Sunny Brunch', cursive;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-secondary) !important;
+}
+
+body[data-template-id="__page-root"] h1,
+body[data-template-id="__page-root"] h2,
+body[data-template-id="__page-root"] h3,
+body[data-template-id="__page-root"] h4,
+body[data-template-id="__page-root"] h5,
+body[data-template-id="__page-root"] h6 {
+  font-family: var(--font-secondary) !important;
 }
 
 body[data-template-id="__page-root"] nav[data-template-id="category-tabs"] button.category-tab {
