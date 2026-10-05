@@ -1,5 +1,5 @@
 const crypto = require('node:crypto');
-const { getOrdersCollection } = require('../lib/mongodb');
+const { getOrdersCollection, getTransactionsCollection } = require('../lib/mongodb');
 const { getAdminPassword, isAdminRequest } = require('../lib/admin-auth');
 
 const ALLOWED_STATUSES = new Set([
@@ -24,6 +24,13 @@ function toOrder(row) {
     status: row.status,
     total: Number(row.total),
     items: row.items
+  };
+}
+
+function toTransaction(row) {
+  return {
+    ...toOrder(row),
+    confirmedAt: row.confirmedAt instanceof Date ? row.confirmedAt.toISOString() : row.confirmedAt
   };
 }
 
@@ -90,6 +97,7 @@ module.exports = async function orders(request, response) {
 
   try {
     const ordersCollection = await getOrdersCollection();
+    const isHistoryRequest = request.query?.history === '1';
 
     if (request.method === 'POST') {
       const customerName = String(request.body?.customerName || '').trim();
@@ -121,6 +129,11 @@ module.exports = async function orders(request, response) {
     }
 
     if (request.method === 'GET') {
+      if (isHistoryRequest) {
+        const transactionsCollection = await getTransactionsCollection();
+        const transactions = await transactionsCollection.find({}).sort({ confirmedAt: -1 }).limit(500).toArray();
+        return response.status(200).json(transactions.map(toTransaction));
+      }
       const orders = await ordersCollection.find({}).sort({ createdAt: -1 }).limit(500).toArray();
       return response.status(200).json(orders.map(toOrder));
     }
@@ -136,10 +149,43 @@ module.exports = async function orders(request, response) {
       const result = await ordersCollection.updateOne({ id: orderId }, { $set: update });
       if (!result.matchedCount) return sendError(response, 404, 'Order not found.');
       const updatedOrder = await ordersCollection.findOne({ id: orderId });
+      if (status === 'Paid - Verified') {
+        const transactionsCollection = await getTransactionsCollection();
+        try {
+          await transactionsCollection.updateOne(
+            { _id: updatedOrder.id },
+            {
+              $setOnInsert: {
+                _id: updatedOrder.id,
+                orderId: updatedOrder.id,
+                id: updatedOrder.id,
+                createdAt: updatedOrder.createdAt,
+                confirmedAt: new Date(),
+                customerName: updatedOrder.customerName,
+                customerEmail: updatedOrder.customerEmail,
+                paymentMethod: updatedOrder.paymentMethod,
+                status: updatedOrder.status,
+                total: updatedOrder.total,
+                items: updatedOrder.items
+              }
+            },
+            { upsert: true }
+          );
+        } catch (error) {
+          if (error.code !== 11000 || !await transactionsCollection.findOne({ _id: updatedOrder.id })) throw error;
+        }
+      }
       return response.status(200).json({ order: toOrder(updatedOrder) });
     }
 
     if (request.method === 'DELETE') {
+      if (request.body?.history === true) {
+        const transactionsCollection = await getTransactionsCollection();
+        const orderId = String(request.body?.id || '').trim();
+        if (orderId) await transactionsCollection.deleteOne({ orderId });
+        else await transactionsCollection.deleteMany({});
+        return response.status(200).json({ success: true });
+      }
       const orderId = String(request.body?.id || '').trim();
       if (orderId) await ordersCollection.deleteOne({ id: orderId });
       else await ordersCollection.deleteMany({});

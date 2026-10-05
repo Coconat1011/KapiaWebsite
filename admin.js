@@ -11,6 +11,7 @@ let editingImage = '';
 let imageUploadPromise = null;
 let cropSession = null;
 let ordersCache = [];
+let historyCache = [];
 let productsCache = [];
 
 function escapeHTML(value) {
@@ -70,43 +71,51 @@ async function loadProducts() {
   }
 }
 
+function renderOrderCard(order, index, isHistory = false) {
+  const isCompleted = order.status === 'Completed';
+  const isPaid = order.status === 'Paid - Verified';
+  const isCod = order.status === 'Awaiting COD / Pickup';
+  const statusClass = isPaid || isCompleted ? 'status-good' : isCod ? 'status-info' : 'status-pending';
+  const items = (order.items || []).map(item => {
+    const addons = item.addons?.length ? ` <span class="muted">(+ ${item.addons.map(addon => escapeHTML(addon.name)).join(', ')})</span>` : '';
+    const total = item.lineTotal || (Number(item.unitPrice) || 0) * (Number(item.qty) || 1);
+    return `<li><strong>${escapeHTML(item.name)}</strong>${addons} × ${Number(item.qty) || 1} <span class="line-total">${formatPrice(total)}</span></li>`;
+  }).join('');
+  const actions = isHistory
+    ? '<button type="button" class="button button-danger" data-action="delete-history">Delete history</button>'
+    : `<button type="button" class="button button-primary" data-action="${isPaid ? 'mark-unpaid' : 'mark-paid'}">${isPaid ? 'Mark unpaid' : 'Confirm payment'}</button>
+          <button type="button" class="button button-danger" data-action="delete-order">Delete order</button>`;
+  return `
+    <article class="order-card" data-order-id="${escapeHTML(order.id || index)}">
+      <header class="order-heading">
+        <div><h3>Order #${escapeHTML(order.id || index + 1)}</h3><p class="muted">Placed: ${escapeHTML(order.date || '')}${isHistory && order.confirmedAt ? ` · Confirmed: ${escapeHTML(order.confirmedAt)}` : ''}</p></div>
+        <span class="status ${statusClass}">${escapeHTML(order.status || 'Awaiting Payment')}</span>
+      </header>
+      <div class="order-details">
+        <p><strong>Customer</strong>${escapeHTML(order.customerName || 'Guest')}</p>
+        <p><strong>Email</strong>${escapeHTML(order.customerEmail || '—')}</p>
+        <p><strong>Payment</strong>${escapeHTML(order.paymentMethod || 'Checkout')}</p>
+        <p><strong>Total</strong><span class="product-price">${formatPrice(order.total)}</span></p>
+      </div>
+      <div class="ordered-items"><strong>Ordered items</strong><ul>${items}</ul></div>
+      <div class="order-actions">${actions}</div>
+    </article>`;
+}
+
 function renderOrders() {
   const list = document.getElementById('admin-orders-list');
-  const orders = ordersCache;
-  document.getElementById('admin-order-count').textContent = orders.length;
-  if (!orders.length) {
-    list.innerHTML = '<p class="empty-state">No customer orders yet.</p>';
-    return;
-  }
-  list.innerHTML = orders.map((order, index) => {
-    const isCompleted = order.status === 'Completed';
-    const isPaid = order.status === 'Paid - Verified';
-    const isCod = order.status === 'Awaiting COD / Pickup';
-    const statusClass = isPaid || isCompleted ? 'status-good' : isCod ? 'status-info' : 'status-pending';
-    const items = (order.items || []).map(item => {
-      const addons = item.addons?.length ? ` <span class="muted">(+ ${item.addons.map(addon => escapeHTML(addon.name)).join(', ')})</span>` : '';
-      const total = item.lineTotal || (Number(item.unitPrice) || 0) * (Number(item.qty) || 1);
-      return `<li><strong>${escapeHTML(item.name)}</strong>${addons} × ${Number(item.qty) || 1} <span class="line-total">${formatPrice(total)}</span></li>`;
-    }).join('');
-    return `
-      <article class="order-card" data-order-id="${escapeHTML(order.id || index)}">
-        <header class="order-heading">
-          <div><h3>Order #${escapeHTML(order.id || index + 1)}</h3><p class="muted">${escapeHTML(order.date || '')}</p></div>
-          <span class="status ${statusClass}">${escapeHTML(order.status || 'Awaiting Payment')}</span>
-        </header>
-        <div class="order-details">
-          <p><strong>Customer</strong>${escapeHTML(order.customerName || 'Guest')}</p>
-          <p><strong>Email</strong>${escapeHTML(order.customerEmail || '—')}</p>
-          <p><strong>Payment</strong>${escapeHTML(order.paymentMethod || 'Checkout')}</p>
-          <p><strong>Total</strong><span class="product-price">${formatPrice(order.total)}</span></p>
-        </div>
-        <div class="ordered-items"><strong>Ordered items</strong><ul>${items}</ul></div>
-        <div class="order-actions">
-          <button type="button" class="button button-primary" data-action="${isPaid ? 'mark-unpaid' : 'mark-paid'}">${isPaid ? 'Mark unpaid' : 'Confirm payment'}</button>
-          <button type="button" class="button button-danger" data-action="delete-order">Delete order</button>
-        </div>
-      </article>`;
-  }).join('');
+  document.getElementById('admin-order-count').textContent = ordersCache.length;
+  list.innerHTML = ordersCache.length
+    ? ordersCache.map((order, index) => renderOrderCard(order, index)).join('')
+    : '<p class="empty-state">No customer orders yet.</p>';
+}
+
+function renderHistory() {
+  const list = document.getElementById('admin-history-list');
+  document.getElementById('admin-history-count').textContent = historyCache.length;
+  list.innerHTML = historyCache.length
+    ? historyCache.map((transaction, index) => renderOrderCard(transaction, index, true)).join('')
+    : '<p class="empty-state">No confirmed transactions yet.</p>';
 }
 
 async function loadOrders() {
@@ -130,16 +139,42 @@ async function loadOrders() {
   }
 }
 
+async function loadHistory() {
+  const list = document.getElementById('admin-history-list');
+  list.textContent = 'Loading transaction history...';
+  try {
+    const response = await fetch('/api/orders?history=1', {
+      headers: { Authorization: `Bearer ${sessionStorage.getItem('kapia-admin-token') || ''}` }
+    });
+    const result = await response.json().catch(() => ({}));
+    if (response.status === 401) {
+      sessionStorage.removeItem('kapia-admin-token');
+      showLogin();
+      throw new Error('Your admin session expired. Please sign in again.');
+    }
+    if (!response.ok) throw new Error(result.error || 'Could not load transaction history.');
+    historyCache = Array.isArray(result) ? result : [];
+    renderHistory();
+  } catch (error) {
+    list.textContent = error.message || 'Could not connect to the order service.';
+  }
+}
+
 function showTab(tab) {
   const productsSelected = tab === 'products';
+  const ordersSelected = tab === 'orders';
   document.getElementById('admin-products-panel').hidden = !productsSelected;
-  document.getElementById('admin-orders-panel').hidden = productsSelected;
+  document.getElementById('admin-orders-panel').hidden = !ordersSelected;
+  document.getElementById('admin-history-panel').hidden = tab !== 'history';
   document.getElementById('admin-tab-products').classList.toggle('active', productsSelected);
-  document.getElementById('admin-tab-orders').classList.toggle('active', !productsSelected);
+  document.getElementById('admin-tab-orders').classList.toggle('active', ordersSelected);
+  document.getElementById('admin-tab-history').classList.toggle('active', tab === 'history');
   document.getElementById('admin-tab-products').setAttribute('aria-pressed', productsSelected);
-  document.getElementById('admin-tab-orders').setAttribute('aria-pressed', !productsSelected);
+  document.getElementById('admin-tab-orders').setAttribute('aria-pressed', ordersSelected);
+  document.getElementById('admin-tab-history').setAttribute('aria-pressed', tab === 'history');
   if (productsSelected) loadProducts();
-  else loadOrders();
+  else if (ordersSelected) loadOrders();
+  else loadHistory();
 }
 
 function showDashboard() {
@@ -301,9 +336,33 @@ async function updateOrder(orderId, action) {
     const result = await response.json().catch(() => ({}));
     if (!response.ok) throw new Error(result.error || 'Could not update this order.');
     await loadOrders();
+    if (action === 'mark-paid') await loadHistory();
   } catch (error) {
     alert(error.message || 'Could not connect to the order service.');
   }
+}
+
+async function deleteHistory(orderId) {
+  if (!confirm(orderId ? 'Delete this transaction from history?' : 'Delete all transaction history?')) return;
+  try {
+    const response = await fetch('/api/orders', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${sessionStorage.getItem('kapia-admin-token') || ''}`
+      },
+      body: JSON.stringify({ history: true, ...(orderId ? { id: orderId } : {}) })
+    });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(result.error || 'Could not delete transaction history.');
+    await loadHistory();
+  } catch (error) {
+    alert(error.message || 'Could not connect to the order service.');
+  }
+}
+
+function clearAllHistory() {
+  return deleteHistory();
 }
 
 async function clearAllOrders() {
@@ -354,12 +413,14 @@ document.getElementById('admin-logout').addEventListener('click', () => {
 });
 document.getElementById('admin-tab-products').addEventListener('click', () => showTab('products'));
 document.getElementById('admin-tab-orders').addEventListener('click', () => showTab('orders'));
+document.getElementById('admin-tab-history').addEventListener('click', () => showTab('history'));
 document.getElementById('add-product').addEventListener('click', () => openProductForm());
 document.getElementById('add-product-addon').addEventListener('click', () => addAddonRow());
 document.getElementById('product-addons-list').addEventListener('click', event => {
   if (event.target.closest('[data-remove-addon]')) event.target.closest('.addon-row').remove();
 });
 document.getElementById('clear-orders').addEventListener('click', clearAllOrders);
+document.getElementById('clear-history').addEventListener('click', clearAllHistory);
 document.getElementById('product-form').addEventListener('submit', saveProduct);
 document.querySelectorAll('[data-close-product-form]').forEach(button => button.addEventListener('click', closeProductForm));
 document.getElementById('admin-products-list').addEventListener('click', event => {
@@ -374,6 +435,12 @@ document.getElementById('admin-orders-list').addEventListener('click', event => 
   const card = button?.closest('[data-order-id]');
   if (!button || !card) return;
   updateOrder(card.dataset.orderId, button.dataset.action);
+});
+document.getElementById('admin-history-list').addEventListener('click', event => {
+  const button = event.target.closest('button[data-action="delete-history"]');
+  const card = button?.closest('[data-order-id]');
+  if (!button || !card) return;
+  deleteHistory(card.dataset.orderId);
 });
 document.getElementById('product-image-url-input').addEventListener('input', event => {
   editingImage = event.target.value.trim();

@@ -29,7 +29,7 @@
     .button-primary { border: none; background: #c98c63; color: #fff; box-shadow: 0 12px 24px rgba(122, 87, 61, 0.18); }
     .button-danger { border-color: #e5b5b5; color: var(--red); }
     .button:hover { filter: brightness(.97); }
-    .tabs { display: flex; gap: 8px; margin: 24px 0; border-bottom: 1px solid var(--line); }
+    .tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 24px 0; border-bottom: 1px solid var(--line); }
     .tab { padding: 11px 18px; border: 0; border-bottom: 3px solid transparent; background: transparent; color: var(--muted); font-weight: 700; cursor: pointer; }
     .tab.active { border-bottom-color: var(--orange); color: var(--ink); }
     .section-heading { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin: 0 0 16px; }
@@ -134,6 +134,7 @@
       <nav class="tabs" aria-label="Admin sections">
         <button id="admin-tab-products" class="tab active" type="button" aria-pressed="true">Products</button>
         <button id="admin-tab-orders" class="tab" type="button" aria-pressed="false">Orders (<span id="admin-order-count">0</span>)</button>
+        <button id="admin-tab-history" class="tab" type="button" aria-pressed="false">Transaction history (<span id="admin-history-count">0</span>)</button>
       </nav>
 
       <section id="admin-products-panel">
@@ -150,6 +151,14 @@
           <button id="clear-orders" class="button button-danger" type="button">Clear orders</button>
         </div>
         <div id="admin-orders-list" class="order-list"></div>
+      </section>
+
+      <section id="admin-history-panel" hidden>
+        <div class="section-heading">
+          <div><h2>Transaction history</h2><p>Orders confirmed by an admin are saved here.</p></div>
+          <button id="clear-history" class="button button-danger" type="button">Delete all history</button>
+        </div>
+        <div id="admin-history-list" class="order-list"></div>
       </section>
     </section>
   </main>
