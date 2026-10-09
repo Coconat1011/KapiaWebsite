@@ -11,6 +11,37 @@
   <script defer src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
   <link rel="stylesheet" href="./assets/fonts.css">
   <style>
+    @view-transition {
+      navigation: auto;
+    }
+
+    ::view-transition-group(root) {
+      animation-duration: 500ms;
+    }
+
+    ::view-transition-old(root) {
+      animation: store-page-fade-out 500ms ease both;
+    }
+
+    ::view-transition-new(root) {
+      animation: store-page-slide-in 500ms cubic-bezier(.22, .61, .36, 1) both;
+    }
+
+    @keyframes store-page-slide-in {
+      from { opacity: 0; transform: translateX(100%); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes store-page-fade-out {
+      to { opacity: 0; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      ::view-transition-old(root),
+      ::view-transition-new(root),
+      ::view-transition-group(root) { animation-duration: 1ms; }
+    }
+
     :root {
       --latte-foam: #F4ECE6;
       --latte-crema: #DFBB96;
@@ -35,6 +66,7 @@
     *, *::before, *::after { box-sizing: border-box; }
 
     body { font-family: var(--font-primary); -webkit-font-smoothing: antialiased; }
+    .hidden { display: none !important; }
     body[data-template-id="__page-root"] *:not(svg):not(path):not(h1):not(h2):not(h3):not(h4):not(h5):not(h6) { font-family: var(--font-primary) !important; }
     #pay-ref-input { font-family: monospace !important; }
     .font-display { font-family: var(--font-primary); }
@@ -377,11 +409,31 @@
       background: #c79b73 !important;
       box-shadow: 0 18px 34px rgba(123, 86, 60, 0.16);
     }
+    header[data-template-id="header-section"] > img {
+      z-index: 0;
+      animation: store-hero-image-in 1s ease-out both;
+    }
+    header[data-template-id="header-section"] > div.relative {
+      animation: store-hero-copy-in 0.7s 0.12s ease-out both;
+    }
     header[data-template-id="header-section"] > div.absolute.inset-0.bg-gradient-to-b {
       background: linear-gradient(90deg, rgba(93, 63, 41, 0.62), rgba(93, 63, 41, 0.2) 70%, rgba(93, 63, 41, 0.08)) !important;
     }
-    header[data-template-id="header-section"] > img { z-index: 0; }
     header[data-template-id="header-section"] > :not(img) { z-index: 2; }
+    @keyframes store-hero-image-in {
+      from { transform: scale(1.035); }
+      to { transform: scale(1); }
+    }
+    @keyframes store-hero-copy-in {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      header[data-template-id="header-section"] > img,
+      header[data-template-id="header-section"] > div.relative {
+        animation-duration: 1ms;
+      }
+    }
     #submit-order-btn, .category-tab.active, .add-to-order-btn, #name-submit-btn,
     #pay-opt-qr, #pay-opt-cod, #pay-confirm-btn, #contact-footer button,
     [data-template-id="order-now-btn"], .social-media-link, #modal-add-btn {

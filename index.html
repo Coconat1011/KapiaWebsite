@@ -8,6 +8,37 @@
   <title>Kapia Farm Cafe | Welcome</title>
   <link rel="stylesheet" href="./assets/fonts.css">
   <style>
+    @view-transition {
+      navigation: auto;
+    }
+
+    ::view-transition-group(root) {
+      animation-duration: 500ms;
+    }
+
+    ::view-transition-old(root) {
+      animation: store-page-fade-out 500ms ease both;
+    }
+
+    ::view-transition-new(root) {
+      animation: store-page-slide-in 500ms cubic-bezier(.22, .61, .36, 1) both;
+    }
+
+    @keyframes store-page-slide-in {
+      from { opacity: 0; transform: translateX(100%); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes store-page-fade-out {
+      to { opacity: 0; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      ::view-transition-old(root),
+      ::view-transition-new(root),
+      ::view-transition-group(root) { animation-duration: 1ms; }
+    }
+
     /* CSS Reset & Base Variables */
     * {
       box-sizing: border-box;
