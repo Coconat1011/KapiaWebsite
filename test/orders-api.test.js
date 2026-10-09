@@ -104,12 +104,13 @@ test('admin confirmations are saved as separate, persistent transaction history'
   response = await request('PATCH', { id: orderId, status: 'Paid - Verified' }, { authorized: true });
   assert.equal(response.statusCode, 200);
   assert.equal(storedTransactions.length, 1);
+  assert.equal(storedOrders.length, 0);
   const firstConfirmationAt = storedTransactions[0].confirmedAt;
   assert.equal(storedTransactions[0].orderId, orderId);
   assert.equal(storedTransactions[0].status, 'Paid - Verified');
 
   response = await request('PATCH', { id: orderId, status: 'Paid - Verified' }, { authorized: true });
-  assert.equal(response.statusCode, 200);
+  assert.equal(response.statusCode, 404);
   assert.equal(storedTransactions.length, 1);
   assert.equal(storedTransactions[0].confirmedAt, firstConfirmationAt);
 
@@ -121,13 +122,12 @@ test('admin confirmations are saved as separate, persistent transaction history'
   response = await request('DELETE', { history: true, id: orderId }, { authorized: true });
   assert.equal(response.statusCode, 200);
   assert.equal(storedTransactions.length, 0);
-  assert.equal(storedOrders.length, 1);
+  assert.equal(storedOrders.length, 0);
 
-  await request('PATCH', { id: orderId, status: 'Paid - Verified' }, { authorized: true });
   response = await request('DELETE', {}, { authorized: true });
   assert.equal(response.statusCode, 200);
   assert.equal(storedOrders.length, 0);
-  assert.equal(storedTransactions.length, 1);
+  assert.equal(storedTransactions.length, 0);
 
   response = await request('DELETE', { history: true }, { authorized: true });
   assert.equal(response.statusCode, 200);

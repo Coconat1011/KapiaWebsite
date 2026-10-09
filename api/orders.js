@@ -174,6 +174,7 @@ module.exports = async function orders(request, response) {
         } catch (error) {
           if (error.code !== 11000 || !await transactionsCollection.findOne({ _id: updatedOrder.id })) throw error;
         }
+        await ordersCollection.deleteOne({ id: updatedOrder.id });
       }
       return response.status(200).json({ order: toOrder(updatedOrder) });
     }
