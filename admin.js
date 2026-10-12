@@ -27,7 +27,7 @@ function getImageSource(source) {
 }
 
 function categoryName(category) {
-  return category === 'feeds' ? 'Feeds' : category === 'foods_drinks' ? 'Foods & Drinks' : 'Fertilizer';
+  return category === 'feeds' ? 'Livestock Feed Supplements' : category === 'foods_drinks' ? 'Foods & Drinks' : 'Fertilizer';
 }
 
 function renderProducts() {
