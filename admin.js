@@ -27,7 +27,7 @@ function getImageSource(source) {
 }
 
 function categoryName(category) {
-  return category === 'feeds' ? 'Livestock Feed Supplements' : category === 'foods_drinks' ? 'Foods & Drinks' : 'Fertilizer';
+  return category === 'feeds' ? 'Livestock Feed Supplements' : category === 'foods_drinks' ? 'Foods & Drinks' : 'Fertilizers';
 }
 
 function renderProducts() {
@@ -218,7 +218,9 @@ function openProductForm(productId = '') {
   document.getElementById('product-edit-id').value = product?.id || '';
   document.getElementById('product-form-title').textContent = product ? 'Edit product' : 'Add product';
   document.getElementById('product-name-input').value = product?.name || '';
-  document.getElementById('product-category-input').value = product?.category || 'fertilizer';
+  const category = product?.category || 'fertilizer';
+  const categoryInput = document.querySelector(`input[name="product-category-input"][value="${category}"]`);
+  if (categoryInput) categoryInput.checked = true;
   document.getElementById('product-price-input').value = product?.price ?? '';
   document.getElementById('product-desc-input').value = product?.desc || '';
   document.getElementById('product-stock-input').value = product?.inStock === false ? 'out' : 'in';
@@ -259,7 +261,7 @@ async function saveProduct(event) {
   if (!name || !Number.isFinite(price) || price < 0) return;
   const productId = document.getElementById('product-edit-id').value;
   const values = {
-    category: document.getElementById('product-category-input').value,
+    category: document.querySelector('input[name="product-category-input"]:checked')?.value || '',
     name,
     price,
     desc: document.getElementById('product-desc-input').value.trim(),
