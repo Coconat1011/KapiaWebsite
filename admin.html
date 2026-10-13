@@ -185,6 +185,10 @@
         <input id="product-price-input" type="number" min="0" step="any" required>
         <label for="product-desc-input">Description</label>
         <textarea id="product-desc-input" rows="3"></textarea>
+        <div id="product-instruction-field" hidden>
+          <label for="product-instruction-input">Instruction</label>
+          <textarea id="product-instruction-input" rows="3" maxlength="2000" placeholder="How to use this product"></textarea>
+        </div>
         <label for="product-stock-input">Stock status</label>
         <select id="product-stock-input"><option value="in">In stock</option><option value="out">Out of stock</option></select>
         <fieldset class="addon-editor">

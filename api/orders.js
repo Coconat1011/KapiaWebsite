@@ -43,8 +43,10 @@ function buildItems(input) {
     const name = String(item.name || '').trim();
     const qty = Number(item.qty);
     const basePrice = Number(item.basePrice);
+    const category = String(item.category || '').slice(0, 60);
+    const instruction = String(item.instruction || '').trim();
     const inputAddons = Array.isArray(item.addons) ? item.addons : [];
-    if (!name || name.length > 200 || !Number.isInteger(qty) || qty < 1 || qty > 1000 || !Number.isFinite(basePrice) || basePrice < 0) {
+    if (!name || name.length > 200 || instruction.length > 2000 || !Number.isInteger(qty) || qty < 1 || qty > 1000 || !Number.isFinite(basePrice) || basePrice < 0) {
       throw new Error('An order item has invalid details.');
     }
     if (inputAddons.length > 30) throw new Error('An item has too many add-ons.');
@@ -65,7 +67,8 @@ function buildItems(input) {
       basePrice,
       unitPrice,
       addons,
-      category: String(item.category || '').slice(0, 60),
+      category,
+      instruction: category === 'fertilizer' || category === 'feeds' ? instruction : '',
       lineTotal: unitPrice * qty
     };
   });

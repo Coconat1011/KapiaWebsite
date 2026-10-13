@@ -87,6 +87,25 @@ function newOrder() {
   };
 }
 
+test('orders preserve fertilizer and feed product instructions', async () => {
+  storedOrders.length = 0;
+  storedTransactions.length = 0;
+
+  const order = newOrder();
+  order.items = [{
+    name: 'Layer Feed',
+    qty: 1,
+    basePrice: 100,
+    category: 'feeds',
+    instruction: 'Provide fresh water alongside feed.'
+  }];
+
+  const response = await request('POST', order);
+  assert.equal(response.statusCode, 201);
+  assert.equal(response.body.order.items[0].instruction, 'Provide fresh water alongside feed.');
+  assert.equal(storedOrders[0].items[0].instruction, 'Provide fresh water alongside feed.');
+});
+
 test('admin confirmations are saved as separate, persistent transaction history', async () => {
   storedOrders.length = 0;
   storedTransactions.length = 0;

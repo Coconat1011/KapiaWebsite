@@ -95,8 +95,9 @@ function renderOrderCard(order, index, isHistory = false) {
   const statusClass = isPaid || isCompleted ? 'status-good' : isCod ? 'status-info' : 'status-pending';
   const items = (order.items || []).map(item => {
     const addons = item.addons?.length ? ` <span class="muted">(+ ${item.addons.map(addon => escapeHTML(addon.name)).join(', ')})</span>` : '';
+    const instruction = item.instruction ? `<br><strong>Instruction: ${escapeHTML(item.instruction)}</strong>` : '';
     const total = item.lineTotal || (Number(item.unitPrice) || 0) * (Number(item.qty) || 1);
-    return `<li><strong>${escapeHTML(item.name)}</strong>${addons} × ${Number(item.qty) || 1} <span class="line-total">${formatPrice(total)}</span></li>`;
+    return `<li><strong>${escapeHTML(item.name)}</strong>${addons} × ${Number(item.qty) || 1}${instruction} <span class="line-total">${formatPrice(total)}</span></li>`;
   }).join('');
   const actions = isHistory
     ? '<button type="button" class="button button-danger" data-action="delete-history">Delete history</button>'
@@ -236,6 +237,8 @@ function openProductForm(productId = '') {
   document.getElementById('product-form-title').textContent = product ? 'Edit product' : 'Add product';
   document.getElementById('product-name-input').value = product?.name || '';
   document.getElementById('product-category-input').value = product?.category || 'fertilizer';
+  document.getElementById('product-instruction-input').value = product?.instruction || '';
+  updateInstructionField();
   document.getElementById('product-price-input').value = product?.price ?? '';
   document.getElementById('product-desc-input').value = product?.desc || '';
   document.getElementById('product-stock-input').value = product?.inStock === false ? 'out' : 'in';
@@ -268,6 +271,14 @@ function closeProductForm() {
   document.getElementById('product-form-modal').hidden = true;
 }
 
+function updateInstructionField() {
+  const category = document.getElementById('product-category-input').value;
+  const instructionField = document.getElementById('product-instruction-field');
+  const supportsInstructions = category === 'fertilizer' || category === 'feeds';
+  instructionField.hidden = !supportsInstructions;
+  if (!supportsInstructions) document.getElementById('product-instruction-input').value = '';
+}
+
 async function saveProduct(event) {
   event.preventDefault();
   if (imageUploadPromise) return;
@@ -275,11 +286,15 @@ async function saveProduct(event) {
   const price = Number(document.getElementById('product-price-input').value);
   if (!name || !Number.isFinite(price) || price < 0) return;
   const productId = document.getElementById('product-edit-id').value;
+  const category = document.getElementById('product-category-input').value;
   const values = {
-    category: document.getElementById('product-category-input').value,
+    category,
     name,
     price,
     desc: document.getElementById('product-desc-input').value.trim(),
+    instruction: category === 'fertilizer' || category === 'feeds'
+      ? document.getElementById('product-instruction-input').value.trim()
+      : '',
     image: editingImage,
     inStock: document.getElementById('product-stock-input').value === 'in',
     addons: getFormAddons()
@@ -432,6 +447,7 @@ document.getElementById('admin-tab-products').addEventListener('click', () => sh
 document.getElementById('admin-tab-orders').addEventListener('click', () => showTab('orders'));
 document.getElementById('admin-tab-history').addEventListener('click', () => showTab('history'));
 document.getElementById('add-product').addEventListener('click', () => openProductForm());
+document.getElementById('product-category-input').addEventListener('change', updateInstructionField);
 document.getElementById('product-category-tabs').addEventListener('click', event => {
   const button = event.target.closest('[data-category-filter]');
   if (button) setProductCategoryFilter(button.dataset.categoryFilter);

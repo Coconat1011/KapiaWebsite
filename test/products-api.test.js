@@ -81,10 +81,11 @@ test('product API reads defaults and protects persistent catalog changes', async
   assert.equal((await request('GET')).body[0].inStock, true);
 
   response = await request('POST', {
-    product: { name: 'New feed', category: 'feeds', price: 12, desc: '', image: '', addons: [] }
+    product: { name: 'New feed', category: 'feeds', price: 12, desc: '', instruction: 'Mix into daily feed.', image: '', addons: [] }
   }, true);
   assert.equal(response.statusCode, 201);
   const customId = response.body.product.id;
+  assert.equal(response.body.product.instruction, 'Mix into daily feed.');
   assert.equal((await request('GET')).body.length, 19);
 
   response = await request('PATCH', {
