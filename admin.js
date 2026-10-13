@@ -13,6 +13,7 @@ let cropSession = null;
 let ordersCache = [];
 let historyCache = [];
 let productsCache = [];
+let productCategoryFilter = 'all';
 
 function escapeHTML(value) {
   return String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[char]));
@@ -32,9 +33,15 @@ function categoryName(category) {
 
 function renderProducts() {
   const list = document.getElementById('admin-products-list');
-  const products = productsCache;
-  if (!products.length) {
+  const products = productCategoryFilter === 'all'
+    ? productsCache
+    : productsCache.filter(product => product.category === productCategoryFilter);
+  if (!productsCache.length) {
     list.innerHTML = '<p class="empty-state">No products found. Add a product to get started.</p>';
+    return;
+  }
+  if (!products.length) {
+    list.innerHTML = '<p class="empty-state">No products found in this category.</p>';
     return;
   }
   list.innerHTML = products.map(product => `
@@ -55,6 +62,16 @@ function renderProducts() {
   list.querySelectorAll('.product-image').forEach(image => {
     image.addEventListener('error', () => { image.src = PLACEHOLDER_IMAGE; }, { once: true });
   });
+}
+
+function setProductCategoryFilter(category) {
+  productCategoryFilter = category;
+  document.querySelectorAll('[data-category-filter]').forEach(button => {
+    const isActive = button.dataset.categoryFilter === category;
+    button.classList.toggle('active', isActive);
+    button.setAttribute('aria-pressed', String(isActive));
+  });
+  renderProducts();
 }
 
 async function loadProducts() {
@@ -218,9 +235,7 @@ function openProductForm(productId = '') {
   document.getElementById('product-edit-id').value = product?.id || '';
   document.getElementById('product-form-title').textContent = product ? 'Edit product' : 'Add product';
   document.getElementById('product-name-input').value = product?.name || '';
-  const category = product?.category || 'fertilizer';
-  const categoryInput = document.querySelector(`input[name="product-category-input"][value="${category}"]`);
-  if (categoryInput) categoryInput.checked = true;
+  document.getElementById('product-category-input').value = product?.category || 'fertilizer';
   document.getElementById('product-price-input').value = product?.price ?? '';
   document.getElementById('product-desc-input').value = product?.desc || '';
   document.getElementById('product-stock-input').value = product?.inStock === false ? 'out' : 'in';
@@ -261,7 +276,7 @@ async function saveProduct(event) {
   if (!name || !Number.isFinite(price) || price < 0) return;
   const productId = document.getElementById('product-edit-id').value;
   const values = {
-    category: document.querySelector('input[name="product-category-input"]:checked')?.value || '',
+    category: document.getElementById('product-category-input').value,
     name,
     price,
     desc: document.getElementById('product-desc-input').value.trim(),
@@ -417,6 +432,10 @@ document.getElementById('admin-tab-products').addEventListener('click', () => sh
 document.getElementById('admin-tab-orders').addEventListener('click', () => showTab('orders'));
 document.getElementById('admin-tab-history').addEventListener('click', () => showTab('history'));
 document.getElementById('add-product').addEventListener('click', () => openProductForm());
+document.getElementById('product-category-tabs').addEventListener('click', event => {
+  const button = event.target.closest('[data-category-filter]');
+  if (button) setProductCategoryFilter(button.dataset.categoryFilter);
+});
 document.getElementById('add-product-addon').addEventListener('click', () => addAddonRow());
 document.getElementById('product-addons-list').addEventListener('click', event => {
   if (event.target.closest('[data-remove-addon]')) event.target.closest('.addon-row').remove();

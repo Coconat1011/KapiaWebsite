@@ -32,6 +32,9 @@
     .tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 24px 0; border-bottom: 1px solid var(--line); }
     .tab { padding: 11px 18px; border: 0; border-bottom: 3px solid transparent; background: transparent; color: var(--muted); font-weight: 700; cursor: pointer; }
     .tab.active { border-bottom-color: var(--orange); color: var(--ink); }
+    .product-category-tabs { display: flex; gap: 10px; margin: 22px 0 16px; overflow-x: auto; }
+    .product-category-tab { flex: 1 0 max-content; min-height: 46px; padding: 10px 18px; border: 0; border-radius: 999px; background: #f8f2ec; color: var(--ink); font-weight: 700; cursor: pointer; box-shadow: 0 8px 18px rgba(122, 87, 61, 0.08); }
+    .product-category-tab.active { background: #c98c63; color: #fff; box-shadow: 0 12px 24px rgba(122, 87, 61, 0.18); }
     .section-heading { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin: 0 0 16px; }
     .section-heading h1 { margin: 0; font-size: 21px; }
     .section-heading p { margin: 4px 0 0; color: var(--muted); font-size: 14px; }
@@ -71,12 +74,6 @@
     .modal-heading h2 { margin: 0; font-size: 20px; }
     .form-actions { display: flex; gap: 8px; margin-top: 20px; }
     .form-actions .button { flex: 1; }
-    .category-picker { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 0; padding: 0; border: 0; }
-    .category-picker legend { margin-bottom: 6px; font-size: 14px; font-weight: 700; }
-    .category-choice { position: relative; display: flex; min-height: 44px; align-items: center; justify-content: center; margin: 0; padding: 8px 10px; border: 1px solid var(--line); border-radius: 999px; background: #f8f2ec; color: var(--ink); font-size: 13px; font-weight: 700; line-height: 1.25; text-align: center; cursor: pointer; }
-    .category-choice input { position: absolute; width: 1px; height: 1px; min-height: 1px; opacity: 0; }
-    .category-choice:has(input:checked) { border-color: #c98c63; background: #c98c63; color: #fff; box-shadow: 0 8px 18px rgba(122, 87, 61, 0.16); }
-    .category-choice:has(input:focus-visible) { outline: 3px solid #3D281C; outline-offset: 2px; }
     .addon-editor { margin: 18px 0 0; padding: 14px; border: 1px solid var(--line); border-radius: 8px; }
     .addon-editor legend { padding: 0 6px; font-size: 14px; font-weight: 700; }
     .addon-list { display: grid; gap: 10px; }
@@ -148,6 +145,12 @@
           <div><h2>Store Products</h2><p>Add items, update prices, or edit product images.</p></div>
           <button id="add-product" class="button button-primary" type="button">Add product</button>
         </div>
+        <nav id="product-category-tabs" class="product-category-tabs" aria-label="Filter products by category">
+          <button class="product-category-tab active" type="button" data-category-filter="all" aria-pressed="true">All products</button>
+          <button class="product-category-tab" type="button" data-category-filter="foods_drinks" aria-pressed="false">Foods &amp; Drinks</button>
+          <button class="product-category-tab" type="button" data-category-filter="fertilizer" aria-pressed="false">Fertilizers</button>
+          <button class="product-category-tab" type="button" data-category-filter="feeds" aria-pressed="false">Livestock Feed Supplements</button>
+        </nav>
         <div id="admin-products-list" class="product-grid"></div>
       </section>
 
@@ -176,12 +179,8 @@
         <input id="product-edit-id" type="hidden">
         <label for="product-name-input">Product name</label>
         <input id="product-name-input" required>
-        <fieldset class="category-picker" aria-label="Product category">
-          <legend>Category</legend>
-          <label class="category-choice"><input type="radio" name="product-category-input" value="foods_drinks">Foods &amp; Drinks</label>
-          <label class="category-choice"><input type="radio" name="product-category-input" value="fertilizer">Fertilizers</label>
-          <label class="category-choice"><input type="radio" name="product-category-input" value="feeds">Livestock Feed Supplements</label>
-        </fieldset>
+        <label for="product-category-input">Category</label>
+        <select id="product-category-input"><option value="foods_drinks">Foods &amp; Drinks</option><option value="fertilizer">Fertilizers</option><option value="feeds">Livestock Feed Supplements</option></select>
         <label for="product-price-input">Price (PHP)</label>
         <input id="product-price-input" type="number" min="0" step="any" required>
         <label for="product-desc-input">Description</label>
