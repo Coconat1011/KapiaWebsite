@@ -810,6 +810,7 @@
   <script src="/_sdk/ef0304cb8c7ed696.editing_sdk.js" integrity="sha512-kmL9L5Yuj57MQaequKbMA3aGpT/5lBUp10iGA3e3qnmMLs2ZZQ0poCcIfdd5rTgrhEvNPe4HK0ohePW7ZpgAFg=="></script>
   <script>
     const CURRENCY = '₱';
+    const PAYMENT_QR_IMAGE = './assets/gcash-qr.png';
     const DEFAULT_PLACEHOLDER_IMAGE = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="400" height="256" viewBox="0 0 400 256"><rect width="100%" height="100%" fill="#eee"/><text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" fill="#888" font-family="sans-serif" font-size="16">Kapia Farm Cafe</text></svg>');
 
     const menuData = {
@@ -1403,49 +1404,16 @@
 
     function generateRandomQR(orderId, amount) {
       const canvas = document.getElementById('qr-canvas');
-      if (!canvas) return;
-      const ctx = canvas.getContext('2d');
+      const qrImage = document.getElementById('qr-img');
+      if (!canvas || !qrImage) return;
+
       const refCode = 'REF-' + (currentQRSeed.toString().slice(-6));
       document.getElementById('pay-qr-ref').textContent = refCode;
 
-      const size = 210;
-      const gridCount = 21;
-      const cellSize = size / gridCount;
-
-      ctx.fillStyle = '#ffffff';
-      ctx.fillRect(0, 0, size, size);
-      ctx.fillStyle = '#000000';
-
-      // Seed-based pseudo-random generator
-      let seed = currentQRSeed + (orderId ? orderId.length : 0);
-      function pseudoRandom() {
-        seed = (seed * 9301 + 49297) % 233280;
-        return seed / 233280;
-      }
-
-      // Draw random matrix data
-      for (let r = 0; r < gridCount; r++) {
-        for (let c = 0; c < gridCount; c++) {
-          const isCorner = (r < 7 && c < 7) || (r < 7 && c >= gridCount - 7) || (r >= gridCount - 7 && c < 7);
-          if (!isCorner && pseudoRandom() > 0.45) {
-            ctx.fillRect(c * cellSize, r * cellSize, cellSize, cellSize);
-          }
-        }
-      }
-
-      // Draw standard QR finder patterns at 3 corners
-      function drawFinder(x, y) {
-        ctx.fillStyle = '#000000';
-        ctx.fillRect(x * cellSize, y * cellSize, 7 * cellSize, 7 * cellSize);
-        ctx.fillStyle = '#ffffff';
-        ctx.fillRect((x + 1) * cellSize, (y + 1) * cellSize, 5 * cellSize, 5 * cellSize);
-        ctx.fillStyle = '#3D281C';
-        ctx.fillRect((x + 2) * cellSize, (y + 2) * cellSize, 3 * cellSize, 3 * cellSize);
-      }
-
-      drawFinder(0, 0);
-      drawFinder(gridCount - 7, 0);
-      drawFinder(0, gridCount - 7);
+      canvas.style.display = 'none';
+      qrImage.src = PAYMENT_QR_IMAGE;
+      qrImage.style.display = 'block';
+      qrImage.alt = 'GCash payment QR code';
     }
 
     async function confirmPaymentComplete() {
