@@ -577,6 +577,7 @@
       <div class="p-4 flex flex-col flex-1" style="background:#ffffff;">
         <h3 class="font-bold text-base mb-1" style="color:var(--ink);"></h3>
         <p class="product-description text-xs leading-relaxed mb-3" style="color:var(--stone);"></p>
+        <p class="product-ingredients hidden text-xs leading-relaxed mb-3" style="color:var(--ink);"></p>
         <p class="product-instruction hidden text-xs leading-relaxed mb-3" style="color:var(--ink);"></p>
         <div class="flex items-center justify-between mt-auto">
           <span class="product-price font-bold text-lg" style="color:var(--ink);"></span>
@@ -597,6 +598,7 @@
           <div>
             <h3 id="modal-item-name" class="text-2xl font-bold" style="color:var(--ink);font-family:var(--font-primary);font-weight:700;"></h3>
             <p id="modal-item-desc" class="text-sm mt-1" style="color:var(--stone);"></p>
+            <p id="modal-item-ingredients" class="hidden text-sm mt-2" style="color:var(--ink);"></p>
             <p id="modal-item-instruction" class="hidden text-sm mt-2" style="color:var(--ink);"></p>
           </div>
           <button onclick="closeModal()" class="p-1 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer" aria-label="Close modal">
@@ -636,6 +638,7 @@
     <div class="order-item-enter flex items-start gap-3 py-3 border-b border-gray-100 last:border-0">
       <div class="flex-1 min-w-0">
         <p class="font-semibold text-sm truncate" style="color:var(--ink);"></p>
+        <p class="order-item-ingredients hidden text-xs mt-1" style="color:var(--ink);"></p>
         <p class="order-item-instruction hidden text-xs mt-1" style="color:var(--ink);"></p>
         <div class="flex items-center gap-2 mt-1">
           <span class="order-item-category text-xs font-semibold px-2.5 py-1 rounded-full"></span>
@@ -832,7 +835,7 @@
         if (!menuData[cat]) {
           menuData[cat] = { color: 'coral', items: [], addons: [] };
         }
-        menuData[cat].items.push({ ...p, image: p.image || '', instruction: p.instruction || '' });
+        menuData[cat].items.push({ ...p, image: p.image || '', instruction: p.instruction || '', ingredients: p.ingredients || '' });
       });
     }
 
@@ -856,6 +859,7 @@
         item.basePrice = Number(product.price);
         item.category = product.category || 'fertilizer';
         item.instruction = product.instruction || '';
+        item.ingredients = product.ingredients || '';
         return true;
       });
 
@@ -868,7 +872,8 @@
           modalCategory = product.category || 'fertilizer';
           document.getElementById('modal-item-name').textContent = modalItem.name;
           document.getElementById('modal-item-desc').textContent = modalItem.desc;
-          setProductInstruction(document.getElementById('modal-item-instruction'), modalItem.instruction);
+          setProductDetail(document.getElementById('modal-item-instruction'), 'Instruction:', modalItem.instruction);
+          setProductDetail(document.getElementById('modal-item-ingredients'), 'Ingredients:', modalItem.ingredients);
           document.getElementById('modal-base-price').textContent = `${CURRENCY}${Number(modalItem.price).toFixed(2)}`;
           updateModalTotal();
         }
@@ -882,14 +887,14 @@
       return String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[c]));
     }
 
-    function setProductInstruction(element, instruction) {
+    function setProductDetail(element, labelText, detail) {
       element.replaceChildren();
-      if (instruction) {
+      if (detail) {
         const label = document.createElement('strong');
-        label.textContent = 'Instruction: ';
-        element.append(label, document.createTextNode(instruction));
+        label.textContent = `${labelText} `;
+        element.append(label, document.createTextNode(detail));
       }
-      element.classList.toggle('hidden', !instruction);
+      element.classList.toggle('hidden', !detail);
     }
 
     // Customer store variables
@@ -947,7 +952,8 @@
         descEl.dataset.templateId = `${item.id}-desc`;
         descEl.textContent = item.desc;
 
-        setProductInstruction(clone.querySelector('.product-instruction'), item.instruction);
+        setProductDetail(clone.querySelector('.product-ingredients'), 'Ingredients:', item.ingredients);
+        setProductDetail(clone.querySelector('.product-instruction'), 'Instruction:', item.instruction);
 
         const priceEl = clone.querySelector('.product-price');
         priceEl.dataset.templateId = `${item.id}-price`;
@@ -1002,7 +1008,8 @@
 
       document.getElementById('modal-item-name').textContent = modalItem.name;
       document.getElementById('modal-item-desc').textContent = modalItem.desc;
-      setProductInstruction(document.getElementById('modal-item-instruction'), modalItem.instruction);
+      setProductDetail(document.getElementById('modal-item-instruction'), 'Instruction:', modalItem.instruction);
+      setProductDetail(document.getElementById('modal-item-ingredients'), 'Ingredients:', modalItem.ingredients);
       document.getElementById('modal-base-price').textContent = `${CURRENCY}${Number(modalItem.price).toFixed(2)}`;
       document.getElementById('modal-qty').textContent = '1';
 
@@ -1083,7 +1090,8 @@
           addons: newAddons,
           qty: modalQty,
           category: modalCategory,
-          instruction: modalItem.instruction || ''
+          instruction: modalItem.instruction || '',
+          ingredients: modalItem.ingredients || ''
         });
       }
       closeModal();
@@ -1120,7 +1128,8 @@
           el.querySelector('.order-item-qty').textContent = item.qty;
           el.querySelector('.order-item-price').textContent = `${CURRENCY}${itemTotal.toFixed(2)}`;
           el.querySelector('.order-item-addons').textContent = addonsText;
-          setProductInstruction(el.querySelector('.order-item-instruction'), item.instruction);
+          setProductDetail(el.querySelector('.order-item-instruction'), 'Instruction:', item.instruction);
+          setProductDetail(el.querySelector('.order-item-ingredients'), 'Ingredients:', item.ingredients);
           el.querySelector('.order-item-category').textContent = catLabel;
           el.querySelector('.order-item-category').style.backgroundColor = `var(--${catColor}-light)`;
           el.querySelector('.order-item-category').style.color = `var(--${catColor})`;
@@ -1133,7 +1142,8 @@
           wrapper.querySelector('.order-item-category').style.backgroundColor = `var(--${catColor}-light)`;
           wrapper.querySelector('.order-item-category').style.color = `var(--${catColor})`;
           wrapper.querySelector('.order-item-addons').textContent = addonsText;
-          setProductInstruction(wrapper.querySelector('.order-item-instruction'), item.instruction);
+          setProductDetail(wrapper.querySelector('.order-item-instruction'), 'Instruction:', item.instruction);
+          setProductDetail(wrapper.querySelector('.order-item-ingredients'), 'Ingredients:', item.ingredients);
           wrapper.querySelector('.order-item-qty').textContent = item.qty;
           wrapper.querySelector('.order-item-price').textContent = `${CURRENCY}${itemTotal.toFixed(2)}`;
           wrapper.querySelector('.qty-minus').setAttribute('onclick', `changeOrderQty(${item.orderId},-1)`);
@@ -1258,7 +1268,8 @@
               addons: item.addons || [],
               qty: item.qty || 1,
               category: item.category || '',
-              instruction: item.instruction || ''
+              instruction: item.instruction || '',
+              ingredients: item.ingredients || ''
             }))
           })
         });
@@ -1340,12 +1351,14 @@
       itemsContainer.innerHTML = (orderRecord.items || []).map(item => {
         const addons = item.addons && item.addons.length ? `<div style="font-size:11px;color:#777;">+ ${item.addons.map(a => esc(a.name)).join(', ')}</div>` : '';
         const instruction = item.instruction ? `<div style="font-size:12px;color:var(--ink);"><strong>Instruction:</strong> ${esc(item.instruction)}</div>` : '';
+        const ingredients = item.ingredients ? `<div style="font-size:12px;color:var(--ink);"><strong>Ingredients:</strong> ${esc(item.ingredients)}</div>` : '';
         return `
             <div style="display:flex;justify-content:space-between;align-items:flex-start;padding:8px 0;border-bottom:1px solid #f0f0f0;">
             <div style="flex:1;min-width:0;padding-right:8px;">
               <div style="font-weight:600;font-size:14px;color:var(--ink);">${esc(item.name)} <span style="color:#666;font-size:12px;">× ${item.qty || 1}</span></div>
               ${addons}
               ${instruction}
+              ${ingredients}
             </div>
             <div style="font-weight:700;font-size:14px;color:var(--ink);">${CURRENCY}${Number(item.lineTotal || (item.unitPrice || 0) * (item.qty || 1)).toFixed(2)}</div>
           </div>

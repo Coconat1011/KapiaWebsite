@@ -98,12 +98,20 @@ test('orders preserve fertilizer and feed product instructions', async () => {
     basePrice: 100,
     category: 'feeds',
     instruction: 'Provide fresh water alongside feed.'
+  }, {
+    name: 'Farm Soup',
+    qty: 1,
+    basePrice: 50,
+    category: 'foods_drinks',
+    ingredients: 'Water, vegetables, and salt.'
   }];
 
   const response = await request('POST', order);
   assert.equal(response.statusCode, 201);
   assert.equal(response.body.order.items[0].instruction, 'Provide fresh water alongside feed.');
   assert.equal(storedOrders[0].items[0].instruction, 'Provide fresh water alongside feed.');
+  assert.equal(response.body.order.items[1].ingredients, 'Water, vegetables, and salt.');
+  assert.equal(storedOrders[0].items[1].ingredients, 'Water, vegetables, and salt.');
 });
 
 test('admin confirmations are saved as separate, persistent transaction history', async () => {

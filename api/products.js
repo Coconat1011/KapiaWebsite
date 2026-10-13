@@ -19,12 +19,13 @@ function normalizeProduct(input) {
   const name = String(input.name || '').trim();
   const desc = String(input.desc || '').trim();
   const instruction = String(input.instruction || '').trim();
+  const ingredients = String(input.ingredients || '').trim();
   const price = Number(input.price);
   const image = typeof input.image === 'string' ? input.image.trim() : '';
   const inStock = input.inStock !== false;
   const inputAddons = Array.isArray(input.addons) ? input.addons : [];
 
-  if (!ALLOWED_CATEGORIES.has(category) || !name || name.length > 200 || desc.length > 2000 || instruction.length > 2000 || !Number.isFinite(price) || price < 0 || price > 1000000000) {
+  if (!ALLOWED_CATEGORIES.has(category) || !name || name.length > 200 || desc.length > 2000 || instruction.length > 2000 || ingredients.length > 2000 || !Number.isFinite(price) || price < 0 || price > 1000000000) {
     throw new Error('Enter a valid name, category, description, and price.');
   }
   if (input.inStock !== undefined && typeof input.inStock !== 'boolean') {
@@ -48,7 +49,17 @@ function normalizeProduct(input) {
     };
   });
 
-  return { category, name, desc, instruction: category === 'fertilizer' || category === 'feeds' ? instruction : '', price, image, inStock, addons };
+  return {
+    category,
+    name,
+    desc,
+    instruction: category === 'fertilizer' || category === 'feeds' ? instruction : '',
+    ingredients: category === 'foods_drinks' ? ingredients : '',
+    price,
+    image,
+    inStock,
+    addons
+  };
 }
 
 function withoutStorageFields(product) {

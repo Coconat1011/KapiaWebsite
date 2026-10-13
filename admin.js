@@ -96,8 +96,9 @@ function renderOrderCard(order, index, isHistory = false) {
   const items = (order.items || []).map(item => {
     const addons = item.addons?.length ? ` <span class="muted">(+ ${item.addons.map(addon => escapeHTML(addon.name)).join(', ')})</span>` : '';
     const instruction = item.instruction ? `<br><strong>Instruction:</strong> ${escapeHTML(item.instruction)}` : '';
+    const ingredients = item.ingredients ? `<br><strong>Ingredients:</strong> ${escapeHTML(item.ingredients)}` : '';
     const total = item.lineTotal || (Number(item.unitPrice) || 0) * (Number(item.qty) || 1);
-    return `<li><strong>${escapeHTML(item.name)}</strong>${addons} × ${Number(item.qty) || 1}${instruction} <span class="line-total">${formatPrice(total)}</span></li>`;
+    return `<li><strong>${escapeHTML(item.name)}</strong>${addons} × ${Number(item.qty) || 1}${instruction}${ingredients} <span class="line-total">${formatPrice(total)}</span></li>`;
   }).join('');
   const actions = isHistory
     ? '<button type="button" class="button button-danger" data-action="delete-history">Delete history</button>'
@@ -238,7 +239,8 @@ function openProductForm(productId = '') {
   document.getElementById('product-name-input').value = product?.name || '';
   document.getElementById('product-category-input').value = product?.category || 'fertilizer';
   document.getElementById('product-instruction-input').value = product?.instruction || '';
-  updateInstructionField();
+  document.getElementById('product-ingredients-input').value = product?.ingredients || '';
+  updateCategoryDetailFields();
   document.getElementById('product-price-input').value = product?.price ?? '';
   document.getElementById('product-desc-input').value = product?.desc || '';
   document.getElementById('product-stock-input').value = product?.inStock === false ? 'out' : 'in';
@@ -271,12 +273,16 @@ function closeProductForm() {
   document.getElementById('product-form-modal').hidden = true;
 }
 
-function updateInstructionField() {
+function updateCategoryDetailFields() {
   const category = document.getElementById('product-category-input').value;
   const instructionField = document.getElementById('product-instruction-field');
+  const ingredientsField = document.getElementById('product-ingredients-field');
   const supportsInstructions = category === 'fertilizer' || category === 'feeds';
+  const supportsIngredients = category === 'foods_drinks';
   instructionField.hidden = !supportsInstructions;
+  ingredientsField.hidden = !supportsIngredients;
   if (!supportsInstructions) document.getElementById('product-instruction-input').value = '';
+  if (!supportsIngredients) document.getElementById('product-ingredients-input').value = '';
 }
 
 async function saveProduct(event) {
@@ -294,6 +300,9 @@ async function saveProduct(event) {
     desc: document.getElementById('product-desc-input').value.trim(),
     instruction: category === 'fertilizer' || category === 'feeds'
       ? document.getElementById('product-instruction-input').value.trim()
+      : '',
+    ingredients: category === 'foods_drinks'
+      ? document.getElementById('product-ingredients-input').value.trim()
       : '',
     image: editingImage,
     inStock: document.getElementById('product-stock-input').value === 'in',
@@ -447,7 +456,7 @@ document.getElementById('admin-tab-products').addEventListener('click', () => sh
 document.getElementById('admin-tab-orders').addEventListener('click', () => showTab('orders'));
 document.getElementById('admin-tab-history').addEventListener('click', () => showTab('history'));
 document.getElementById('add-product').addEventListener('click', () => openProductForm());
-document.getElementById('product-category-input').addEventListener('change', updateInstructionField);
+document.getElementById('product-category-input').addEventListener('change', updateCategoryDetailFields);
 document.getElementById('product-category-tabs').addEventListener('click', event => {
   const button = event.target.closest('[data-category-filter]');
   if (button) setProductCategoryFilter(button.dataset.categoryFilter);

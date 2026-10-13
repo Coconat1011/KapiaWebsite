@@ -88,6 +88,15 @@ test('product API reads defaults and protects persistent catalog changes', async
   assert.equal(response.body.product.instruction, 'Mix into daily feed.');
   assert.equal((await request('GET')).body.length, 19);
 
+  response = await request('POST', {
+    product: { name: 'Farm soup', category: 'foods_drinks', price: 8, desc: '', ingredients: 'Water, vegetables, and salt.', image: '', addons: [] }
+  }, true);
+  assert.equal(response.statusCode, 201);
+  const foodId = response.body.product.id;
+  assert.equal(response.body.product.ingredients, 'Water, vegetables, and salt.');
+  assert.equal(response.body.product.instruction, '');
+  assert.equal((await request('GET')).body.length, 20);
+
   response = await request('PATCH', {
     id: 'f1',
     product: { name: 'Updated fertilizer', category: 'fertilizer', price: 15, desc: '', image: '', inStock: false, addons: [] }
@@ -102,6 +111,8 @@ test('product API reads defaults and protects persistent catalog changes', async
   assert.equal((await request('GET')).body.some(product => product.id === 'f2'), true);
 
   response = await request('DELETE', { id: customId }, true);
+  assert.equal(response.statusCode, 200);
+  response = await request('DELETE', { id: foodId }, true);
   assert.equal(response.statusCode, 200);
   assert.equal((await request('GET')).body.length, 17);
 });
