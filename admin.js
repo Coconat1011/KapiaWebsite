@@ -95,7 +95,7 @@ function renderOrderCard(order, index, isHistory = false) {
   const statusClass = isPaid || isCompleted ? 'status-good' : isCod ? 'status-info' : 'status-pending';
   const items = (order.items || []).map(item => {
     const addons = item.addons?.length ? ` <span class="muted">(+ ${item.addons.map(addon => escapeHTML(addon.name)).join(', ')})</span>` : '';
-    const instruction = item.instruction ? `<br><strong>Instruction: ${escapeHTML(item.instruction)}</strong>` : '';
+    const instruction = item.instruction ? `<br><strong>Instruction:</strong> ${escapeHTML(item.instruction)}` : '';
     const total = item.lineTotal || (Number(item.unitPrice) || 0) * (Number(item.qty) || 1);
     return `<li><strong>${escapeHTML(item.name)}</strong>${addons} × ${Number(item.qty) || 1}${instruction} <span class="line-total">${formatPrice(total)}</span></li>`;
   }).join('');

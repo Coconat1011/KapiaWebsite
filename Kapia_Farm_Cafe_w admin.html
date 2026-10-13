@@ -577,7 +577,7 @@
       <div class="p-4 flex flex-col flex-1" style="background:#ffffff;">
         <h3 class="font-bold text-base mb-1" style="color:var(--ink);"></h3>
         <p class="product-description text-xs leading-relaxed flex-1 mb-3" style="color:var(--stone);"></p>
-        <p class="product-instruction hidden text-xs leading-relaxed mb-3 font-bold" style="color:var(--ink);"></p>
+        <p class="product-instruction hidden text-xs leading-relaxed mb-3" style="color:var(--ink);"></p>
         <div class="flex items-center justify-between mt-auto">
           <span class="product-price font-bold text-lg" style="color:var(--ink);"></span>
           <button class="add-to-order-btn font-semibold text-sm px-4 py-2 rounded-xl transition-colors cursor-pointer" style="background-color:#c98c63;color:#fff;border:none;box-shadow:0 12px 24px rgba(122, 87, 61, 0.18);text-shadow:0 1px 2px rgba(0, 0, 0, 0.22);">
@@ -597,7 +597,7 @@
           <div>
             <h3 id="modal-item-name" class="text-2xl font-bold" style="color:var(--ink);font-family:var(--font-primary);font-weight:700;"></h3>
             <p id="modal-item-desc" class="text-sm mt-1" style="color:var(--stone);"></p>
-            <p id="modal-item-instruction" class="hidden text-sm mt-2 font-bold" style="color:var(--ink);"></p>
+            <p id="modal-item-instruction" class="hidden text-sm mt-2" style="color:var(--ink);"></p>
           </div>
           <button onclick="closeModal()" class="p-1 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer" aria-label="Close modal">
             <i data-lucide="x" style="width:20px;height:20px;color:var(--stone);"></i>
@@ -636,7 +636,7 @@
     <div class="order-item-enter flex items-start gap-3 py-3 border-b border-gray-100 last:border-0">
       <div class="flex-1 min-w-0">
         <p class="font-semibold text-sm truncate" style="color:var(--ink);"></p>
-        <p class="order-item-instruction hidden text-xs mt-1 font-bold" style="color:var(--ink);"></p>
+        <p class="order-item-instruction hidden text-xs mt-1" style="color:var(--ink);"></p>
         <div class="flex items-center gap-2 mt-1">
           <span class="order-item-category text-xs font-semibold px-2.5 py-1 rounded-full"></span>
           <p class="order-item-addons text-xs" style="color:var(--stone);"></p>
@@ -883,7 +883,12 @@
     }
 
     function setProductInstruction(element, instruction) {
-      element.textContent = instruction ? `Instruction: ${instruction}` : '';
+      element.replaceChildren();
+      if (instruction) {
+        const label = document.createElement('strong');
+        label.textContent = 'Instruction: ';
+        element.append(label, document.createTextNode(instruction));
+      }
       element.classList.toggle('hidden', !instruction);
     }
 
@@ -1334,7 +1339,7 @@
       const itemsContainer = document.getElementById('pay-items-list');
       itemsContainer.innerHTML = (orderRecord.items || []).map(item => {
         const addons = item.addons && item.addons.length ? `<div style="font-size:11px;color:#777;">+ ${item.addons.map(a => esc(a.name)).join(', ')}</div>` : '';
-        const instruction = item.instruction ? `<div style="font-size:12px;font-weight:700;color:var(--ink);">Instruction: ${esc(item.instruction)}</div>` : '';
+        const instruction = item.instruction ? `<div style="font-size:12px;color:var(--ink);"><strong>Instruction:</strong> ${esc(item.instruction)}</div>` : '';
         return `
             <div style="display:flex;justify-content:space-between;align-items:flex-start;padding:8px 0;border-bottom:1px solid #f0f0f0;">
             <div style="flex:1;min-width:0;padding-right:8px;">
