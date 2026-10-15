@@ -122,9 +122,22 @@
     .catalog-message { grid-column: 1 / -1; padding: 36px 16px; color: var(--stone); text-align: center; }
     .menu-card:active { transform: scale(0.98); }
     @media (hover: hover) {
+      body:has(#menu-grid .menu-card:hover)::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+        background: rgba(61, 40, 28, 0.08);
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+        pointer-events: none;
+      }
+
       .menu-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 12px 28px -8px rgba(0,0,0,0.12);
+        position: relative;
+        z-index: 1001;
+        transform: translateY(-4px) scale(1.04);
+        box-shadow: 0 18px 36px -8px rgba(0,0,0,0.24);
       }
     }
 
@@ -161,8 +174,9 @@
     @keyframes slideUp { from{opacity:0;transform:translate(-50%,-50%) translateY(20px)} to{opacity:1;transform:translate(-50%,-50%) translateY(0)} }
     @keyframes slideUpSheet { from{transform:translateY(100%)} to{transform:translateY(0)} }
     @keyframes cardIn  { from{opacity:0;transform:translateY(12px)}                  to{opacity:1;transform:translateY(0)} }
+    @keyframes menuCardIn { from{opacity:0;translate:0 12px} to{opacity:1;translate:0 0} }
 
-    .card-animate { animation: cardIn 0.35s ease forwards; }
+    .card-animate { animation: menuCardIn 0.35s ease forwards; }
     .order-item-enter { animation: cardIn 0.3s ease forwards; }
 
     /* ─── Quantity buttons ─── */
@@ -433,6 +447,7 @@
       header[data-template-id="header-section"] > div.relative {
         animation-duration: 1ms;
       }
+      .menu-card { transition: none; }
     }
     #submit-order-btn, .category-tab.active, .add-to-order-btn, #name-submit-btn,
     #pay-opt-qr, #pay-opt-cod, #pay-confirm-btn, #contact-footer button,
