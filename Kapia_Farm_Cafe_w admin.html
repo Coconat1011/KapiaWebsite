@@ -290,6 +290,20 @@
       overflow-wrap: anywhere;
       transition: max-height 260ms ease;
     }
+    .product-card-detail {
+      max-height: 0;
+      margin-bottom: 0;
+      overflow: hidden;
+      opacity: 0;
+      visibility: hidden;
+      transition: max-height 260ms ease, margin-bottom 260ms ease, opacity 180ms ease, visibility 0s linear 260ms;
+    }
+    .menu-card.is-description-expanded .product-card-detail {
+      margin-bottom: .75rem;
+      opacity: 1;
+      visibility: visible;
+      transition: max-height 260ms ease, margin-bottom 260ms ease, opacity 180ms ease, visibility 0s;
+    }
     .catalog-message { grid-column: 1 / -1; padding: 36px 16px; color: var(--stone); text-align: center; }
     .menu-card:active { transform: scale(0.98); }
     .menu-focus-backdrop {
@@ -1126,6 +1140,9 @@
       if (!description) return;
       card.classList.toggle('is-description-expanded', expanded);
       description.style.maxHeight = expanded ? `${description.scrollHeight}px` : '';
+      card.querySelectorAll('.product-card-detail').forEach(detail => {
+        detail.style.maxHeight = expanded ? `${detail.scrollHeight}px` : '';
+      });
     }
 
     function clearFocusedMenuCard() {
@@ -1203,6 +1220,9 @@
 
         setProductDetail(clone.querySelector('.product-ingredients'), 'Ingredients:', item.ingredients);
         setProductDetail(clone.querySelector('.product-instruction'), 'Instruction:', item.instruction);
+        clone.querySelectorAll('.product-ingredients, .product-instruction').forEach(detail => {
+          if (!detail.classList.contains('hidden')) detail.classList.add('product-card-detail');
+        });
 
         const priceEl = clone.querySelector('.product-price');
         priceEl.dataset.templateId = `${item.id}-price`;
