@@ -1095,7 +1095,11 @@
       if (!text) return { preview: '', remaining: '' };
 
       const sentences = typeof Intl.Segmenter === 'function'
-        ? Array.from(new Intl.Segmenter(undefined, { granularity: 'sentence' }).segment(text), segment => segment.segment.trim())
+        ? Array.from(new Intl.Segmenter(undefined, { granularity: 'sentence' }).segment(text), segment => {
+          const sentence = segment.segment.trim();
+          if (!/[.!?][A-Za-z]/.test(sentence)) return [sentence];
+          return (sentence.match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [sentence]).map(part => part.trim()).filter(Boolean);
+        }).flat()
         : (text.match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [text]).map(sentence => sentence.trim()).filter(Boolean);
 
       return {
