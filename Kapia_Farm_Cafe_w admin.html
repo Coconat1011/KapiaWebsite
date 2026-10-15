@@ -284,26 +284,11 @@
       min-width: 0;
       width: 100%;
     }
-    .product-description { overflow-wrap: anywhere; }
-    .product-description-extra {
-      display: grid;
-      grid-template-rows: 0fr;
-      opacity: 0;
-      transform: translateY(6px);
-      transition: grid-template-rows 260ms ease, opacity 180ms ease, transform 260ms ease;
-    }
-    .product-description-extra > span { min-height: 0; overflow: hidden; }
-    .menu-card:hover .product-description-extra,
-    .menu-card:focus-within .product-description-extra,
-    .menu-card.is-focused .product-description-extra {
-      grid-template-rows: 1fr;
-      opacity: 1;
-      transform: translateY(0);
-    }
-    .menu-card:hover .product-description-extra > span,
-    .menu-card:focus-within .product-description-extra > span,
-    .menu-card.is-focused .product-description-extra > span {
-      animation: descriptionTextEnter 260ms ease both;
+    .product-description {
+      max-height: 3.25em;
+      overflow: hidden;
+      overflow-wrap: anywhere;
+      transition: max-height 260ms ease;
     }
     .catalog-message { grid-column: 1 / -1; padding: 36px 16px; color: var(--stone); text-align: center; }
     .menu-card:active { transform: scale(0.98); }
@@ -385,8 +370,6 @@
     @keyframes orderDialogIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
     @keyframes cardIn  { from{opacity:0;transform:translateY(12px)}                  to{opacity:1;transform:translateY(0)} }
     @keyframes menuCardIn { from{opacity:0;translate:0 12px} to{opacity:1;translate:0 0} }
-    @keyframes descriptionTextEnter { from{opacity:0;transform:translateY(7px)} to{opacity:1;transform:translateY(0)} }
-
     .card-animate { animation: menuCardIn 0.35s ease forwards; }
     .order-item-enter { animation: cardIn 0.3s ease forwards; }
 
@@ -587,10 +570,7 @@
       }
       .menu-card { transition: none; }
       .category-tile img, .category-tile-action { transition: none; }
-      .product-description-extra { transition: none; transform: none; }
-      .menu-card:hover .product-description-extra > span,
-      .menu-card:focus-within .product-description-extra > span,
-      .menu-card.is-focused .product-description-extra > span { animation: none; }
+      .product-description { transition: none; }
     }
     #submit-order-btn, .add-to-order-btn, #name-submit-btn,
     #pay-opt-qr, #pay-opt-cod, #pay-confirm-btn, #contact-footer button,
@@ -1090,24 +1070,6 @@
       element.classList.toggle('hidden', !detail);
     }
 
-    function getProductDescriptionParts(description) {
-      const text = String(description || '').trim();
-      if (!text) return { preview: '', remaining: '' };
-
-      const sentences = typeof Intl.Segmenter === 'function'
-        ? Array.from(new Intl.Segmenter(undefined, { granularity: 'sentence' }).segment(text), segment => {
-          const sentence = segment.segment.trim();
-          if (!/[.!?][A-Za-z]/.test(sentence)) return [sentence];
-          return (sentence.match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [sentence]).map(part => part.trim()).filter(Boolean);
-        }).flat()
-        : (text.match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [text]).map(sentence => sentence.trim()).filter(Boolean);
-
-      return {
-        preview: sentences.slice(0, 2).join(' '),
-        remaining: sentences.slice(2).join(' ')
-      };
-    }
-
     // Customer store variables
     let currentCategory = '';
     let order = [];
@@ -1159,8 +1121,19 @@
       if (tile) selectCategory(tile.dataset.category);
     });
 
+    function setProductDescriptionExpanded(card, expanded) {
+      const description = card.querySelector('.product-description');
+      if (!description) return;
+      card.classList.toggle('is-description-expanded', expanded);
+      description.style.maxHeight = expanded ? `${description.scrollHeight}px` : '';
+    }
+
     function clearFocusedMenuCard() {
-      document.querySelector('#menu-grid .menu-card.is-focused')?.classList.remove('is-focused');
+      const focusedCard = document.querySelector('#menu-grid .menu-card.is-focused');
+      if (focusedCard) {
+        setProductDescriptionExpanded(focusedCard, false);
+        focusedCard.classList.remove('is-focused');
+      }
       document.getElementById('menu-focus-backdrop').classList.remove('is-visible');
     }
 
@@ -1175,9 +1148,15 @@
 
       clearFocusedMenuCard();
       card.classList.add('is-focused');
+      setProductDescriptionExpanded(card, true);
       document.getElementById('menu-focus-backdrop').classList.add('is-visible');
     });
     document.getElementById('menu-focus-backdrop').addEventListener('click', clearFocusedMenuCard);
+    window.addEventListener('resize', () => {
+      document.querySelectorAll('#menu-grid .menu-card.is-description-expanded').forEach(card => {
+        setProductDescriptionExpanded(card, true);
+      });
+    });
 
     function renderMenuGrid() {
       const grid = document.getElementById('menu-grid');
@@ -1198,6 +1177,12 @@
         const article = clone.querySelector('article');
         article.style.animationDelay = window.innerWidth <= 640 ? '0ms' : `${i * 40}ms`;
         article.style.opacity = '0';
+        article.addEventListener('mouseenter', () => setProductDescriptionExpanded(article, true));
+        article.addEventListener('mouseleave', () => setProductDescriptionExpanded(article, false));
+        article.addEventListener('focusin', () => setProductDescriptionExpanded(article, true));
+        article.addEventListener('focusout', event => {
+          if (!article.contains(event.relatedTarget)) setProductDescriptionExpanded(article, false);
+        });
 
         const img = clone.querySelector('img');
         img.dataset.templateId = `${item.id}-image`;
@@ -1214,16 +1199,7 @@
 
         const descEl = clone.querySelector('p');
         descEl.dataset.templateId = `${item.id}-desc`;
-        const description = getProductDescriptionParts(item.desc);
-        descEl.textContent = description.preview;
-        if (description.remaining) {
-          const extra = document.createElement('span');
-          extra.className = 'product-description-extra';
-          const extraText = document.createElement('span');
-          extraText.textContent = ` ${description.remaining}`;
-          extra.appendChild(extraText);
-          descEl.appendChild(extra);
-        }
+        descEl.textContent = String(item.desc || '').trim();
 
         setProductDetail(clone.querySelector('.product-ingredients'), 'Ingredients:', item.ingredients);
         setProductDetail(clone.querySelector('.product-instruction'), 'Instruction:', item.instruction);
