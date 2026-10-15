@@ -84,33 +84,94 @@
       box-shadow: 0 12px 24px rgba(122, 87, 61, 0.18) !important;
     }
 
-    /* ─── Category tabs — horizontal scroll on mobile ─── */
-    .category-tabs-wrap {
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-      padding-bottom: 4px;
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
+      gap: 20px;
     }
-    .category-tabs-wrap::-webkit-scrollbar { display: none; }
-
-    .category-tab {
-      transition: all 0.25s ease;
-      border: none;
-      background: #f5eee8;
-      color: var(--ink);
+    .category-tile {
+      position: relative;
+      display: block;
+      width: 100%;
+      aspect-ratio: 1;
+      overflow: hidden;
+      padding: 0;
+      border: 1px solid rgba(61, 40, 28, 0.12);
+      border-radius: 20px;
+      background: linear-gradient(145deg, #dfbb96, #bf8969);
+      color: #fff;
+      text-align: left;
       cursor: pointer;
-      white-space: nowrap;
-      flex-shrink: 0;
-      box-shadow: 0 8px 18px rgba(122, 87, 61, 0.08);
+      box-shadow: 0 14px 30px rgba(61, 40, 28, 0.14);
+      isolation: isolate;
     }
-    .category-tab.active {
+    .category-tile img {
+      position: absolute;
+      inset: 0;
+      z-index: -2;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 400ms ease;
+    }
+    .category-tile::after {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: linear-gradient(180deg, rgba(30, 20, 14, 0.06) 15%, rgba(30, 20, 14, 0.78) 100%);
+      content: "";
+    }
+    .category-tile-content {
+      position: absolute;
+      inset: auto 22px 22px;
+      display: grid;
+      gap: 8px;
+    }
+    .category-tile-title { margin: 0; font-size: clamp(1.35rem, 2.4vw, 2rem); font-weight: 700; line-height: 1.15; }
+    .category-tile-description { margin: 0; color: rgba(255,255,255,.88); font-size: .95rem; }
+    .category-tile-action {
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      margin-top: 4px;
+      padding: 9px 15px;
+      border-radius: 999px;
       background: #c98c63;
       color: #fff;
-      border: none;
-      box-shadow: 0 12px 24px rgba(122, 87, 61, 0.18);
+      font-size: .9rem;
+      font-weight: 700;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 180ms ease, transform 180ms ease;
     }
-    .category-tab:not(.active):hover { background: #efe0d3; }
+    .category-tile:hover img, .category-tile:focus-visible img { transform: scale(1.06); }
+    .category-tile:hover .category-tile-action,
+    .category-tile:focus-visible .category-tile-action { opacity: 1; transform: translateY(0); }
+    .category-tile:focus-visible { outline: 3px solid #c98c63; outline-offset: 4px; }
+    @media (hover: none) {
+      .category-tile-action { opacity: 1; transform: none; }
+    }
+    .category-products-heading {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+    .category-back-button {
+      display: inline-flex;
+      min-height: 44px;
+      align-items: center;
+      gap: 8px;
+      padding: 0 16px;
+      border: 1px solid #e5d2c3;
+      border-radius: 999px;
+      background: #fffaf5;
+      color: var(--ink);
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .category-back-button:hover { background: #efe0d3;     }
+    .category-products-title { margin: 0; color: var(--ink); font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 700; }
 
     /* ─── Menu cards ─── */
     .menu-card {
@@ -324,19 +385,12 @@
       /* Payment page — single column */
       #payment-page > div { padding: 16px 12px 80px !important; }
 
-      /* Category tabs on small screens */
-      nav[data-template-id="category-tabs"] {
-        flex-wrap: nowrap !important;
-        overflow-x: auto !important;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-        padding-bottom: 4px;
-      }
-      nav[data-template-id="category-tabs"]::-webkit-scrollbar { display: none; }
-      .category-tab { min-width: max-content !important; flex: 0 0 auto !important; }
-
       /* Compact card image on mobile */
       .menu-card .card-image-wrap { height: 160px !important; }
+      .category-grid { gap: 14px; }
+      .category-tile { border-radius: 16px; }
+      .category-tile-content { inset: auto 18px 18px; }
+      .category-products-heading { align-items: flex-start; flex-direction: column; gap: 10px; }
 
       /* Admin product grid — 1 col on very small, 2 on larger mobile */
       #admin-products-list { grid-template-columns: 1fr !important; }
@@ -432,7 +486,7 @@
 
     /* ─── Print styles ─── */
     @media print {
-      #order-panel-fixed, .category-tab,
+      #order-panel-fixed, #category-landing, #back-to-categories,
       #payment-page .add-to-order-btn, #payment-page button:not(#pay-confirm-btn) {
         display: none !important;
       }
@@ -471,8 +525,9 @@
         animation-duration: 1ms;
       }
       .menu-card { transition: none; }
+      .category-tile img, .category-tile-action { transition: none; }
     }
-    #submit-order-btn, .category-tab.active, .add-to-order-btn, #name-submit-btn,
+    #submit-order-btn, .add-to-order-btn, #name-submit-btn,
     #pay-opt-qr, #pay-opt-cod, #pay-confirm-btn, #contact-footer button,
     [data-template-id="order-now-btn"], .social-media-link, #modal-add-btn {
       border: none !important;
@@ -481,8 +536,6 @@
       color: #fff !important;
       text-shadow: 0 1px 2px rgba(0, 0, 0, 0.22) !important;
     }
-    .category-tab { border: none !important; color: var(--latte-espresso) !important; box-shadow: 0 8px 18px rgba(122, 87, 61, 0.08); }
-    .category-tab:not(.active):hover { background: #efe0d3 !important; }
     .text-orange-400 { color: var(--latte-body) !important; }
     #order-panel-fixed {
       border-color: #e7d5c1 !important;
@@ -544,12 +597,47 @@
   <!-- Main Content & Catalog -->
   <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 main-content-wrapper" style="padding-bottom: 30px;">
     <main>
-      <nav data-template-id="category-tabs" class="canva-tabs flex gap-2 sm:gap-3 mb-6" role="tablist" aria-label="Menu categories" style="background: transparent;">
-        <button class="category-tab active flex-1 py-3 px-4 rounded-full font-semibold text-sm sm:text-base" role="tab" aria-selected="true" data-category="foods_drinks" onclick="switchCategory('foods_drinks')">Foods &amp; Drinks</button>
-        <button class="category-tab flex-1 py-3 px-4 rounded-full font-semibold text-sm sm:text-base" role="tab" aria-selected="false" data-category="fertilizer" onclick="switchCategory('fertilizer')">Fertilizers</button>
-        <button class="category-tab flex-1 py-3 px-4 rounded-full font-semibold text-sm sm:text-base" role="tab" aria-selected="false" data-category="feeds" onclick="switchCategory('feeds')">Livestock Feed Supplements</button>
-      </nav>
-      <section id="menu-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-5" aria-label="Menu items" role="tabpanel"></section>
+      <section id="category-landing" aria-labelledby="category-landing-title">
+        <div class="mb-5">
+          <h2 id="category-landing-title" class="category-products-title">Shop by category</h2>
+          <p class="mt-2 text-sm" style="color:var(--stone);">Explore our cafe favorites and farm essentials.</p>
+        </div>
+        <div id="category-grid" class="category-grid">
+          <button class="category-tile" type="button" data-category="foods_drinks" aria-label="View Foods and Drinks">
+            <img alt="" loading="lazy" src="./assets/kapiacafe.webp">
+            <span class="category-tile-content">
+              <span class="category-tile-title">Foods &amp; Drinks</span>
+              <span class="category-tile-description">Farm-to-table favorites and refreshing drinks.</span>
+              <span class="category-tile-action">View More <span aria-hidden="true">→</span></span>
+            </span>
+          </button>
+          <button class="category-tile" type="button" data-category="fertilizer" aria-label="View Fertilizers">
+            <img alt="" loading="lazy" src="./assets/kapiacafe.webp">
+            <span class="category-tile-content">
+              <span class="category-tile-title">Fertilizers</span>
+              <span class="category-tile-description">Help your crops and garden grow strong.</span>
+              <span class="category-tile-action">View More <span aria-hidden="true">→</span></span>
+            </span>
+          </button>
+          <button class="category-tile" type="button" data-category="feeds" aria-label="View Livestock Feed Supplements">
+            <img alt="" loading="lazy" src="./assets/kapiacafe.webp">
+            <span class="category-tile-content">
+              <span class="category-tile-title">Livestock Feed Supplements</span>
+              <span class="category-tile-description">Quality nutrition for healthy livestock.</span>
+              <span class="category-tile-action">View More <span aria-hidden="true">→</span></span>
+            </span>
+          </button>
+        </div>
+      </section>
+      <section id="category-products" class="hidden" aria-labelledby="selected-category-title">
+        <div class="category-products-heading">
+          <button id="back-to-categories" class="category-back-button" type="button" onclick="showCategoryLanding()">
+            <span aria-hidden="true">←</span> All categories
+          </button>
+          <h2 id="selected-category-title" class="category-products-title"></h2>
+        </div>
+        <section id="menu-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-5" aria-label="Menu items"></section>
+      </section>
     </main>
   </div>
   <button id="menu-focus-backdrop" class="menu-focus-backdrop" type="button" aria-label="Close focused product"></button>
@@ -889,6 +977,7 @@
 
     function applyProductCatalog(products) {
       syncMenuFromProducts(products);
+      renderCategoryTiles();
       const currentProducts = new Map(products.map(product => [product.id, product]));
 
       order = order.filter(item => {
@@ -918,7 +1007,7 @@
         }
       }
 
-      renderMenuGrid();
+      if (currentCategory) renderMenuGrid();
       renderOrder();
     }
 
@@ -937,12 +1026,55 @@
     }
 
     // Customer store variables
-    let currentCategory = 'foods_drinks';
+    let currentCategory = '';
     let order = [];
     let orderIdCounter = 0;
     let modalItem = null, modalCategory = null, modalQty = 1, modalAddons = {};
     let customerName = '';
     let customerEmail = '';
+
+    const categoryDetails = {
+      foods_drinks: { title: 'Foods & Drinks' },
+      fertilizer: { title: 'Fertilizers' },
+      feeds: { title: 'Livestock Feed Supplements' }
+    };
+
+    function renderCategoryTiles() {
+      document.querySelectorAll('.category-tile').forEach(tile => {
+        const category = tile.dataset.category;
+        const firstItem = menuData[category]?.items.find(item => item.image);
+        const image = tile.querySelector('img');
+        image.src = firstItem ? getProductImageUrl(firstItem.image) : './assets/kapiacafe.webp';
+        image.onerror = function() {
+          this.onerror = null;
+          this.src = './assets/kapiacafe.webp';
+        };
+      });
+    }
+
+    function selectCategory(category) {
+      if (!categoryDetails[category] || !menuData[category]) return;
+      clearFocusedMenuCard();
+      currentCategory = category;
+      document.getElementById('selected-category-title').textContent = categoryDetails[category].title;
+      document.getElementById('category-landing').classList.add('hidden');
+      document.getElementById('category-products').classList.remove('hidden');
+      renderMenuGrid();
+      document.getElementById('category-products').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function showCategoryLanding() {
+      clearFocusedMenuCard();
+      currentCategory = '';
+      document.getElementById('category-products').classList.add('hidden');
+      document.getElementById('category-landing').classList.remove('hidden');
+      document.getElementById('category-landing').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    document.getElementById('category-grid').addEventListener('click', event => {
+      const tile = event.target.closest('.category-tile');
+      if (tile) selectCategory(tile.dataset.category);
+    });
 
     function clearFocusedMenuCard() {
       document.querySelector('#menu-grid .menu-card.is-focused')?.classList.remove('is-focused');
@@ -963,17 +1095,6 @@
       document.getElementById('menu-focus-backdrop').classList.add('is-visible');
     });
     document.getElementById('menu-focus-backdrop').addEventListener('click', clearFocusedMenuCard);
-
-    function switchCategory(cat) {
-      clearFocusedMenuCard();
-      currentCategory = cat;
-      document.querySelectorAll('.category-tab').forEach(tab => {
-        const c = tab.dataset.category === cat;
-        tab.classList.toggle('active', c);
-        tab.setAttribute('aria-selected', c);
-      });
-      renderMenuGrid();
-    }
 
     function renderMenuGrid() {
       const grid = document.getElementById('menu-grid');
@@ -1259,8 +1380,8 @@
     }
 
     function scrollToCategories() {
-      const nav = document.querySelector('nav[data-template-id="category-tabs"]');
-      if (nav) nav.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const categories = document.getElementById('category-landing');
+      if (categories) categories.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     function applyBounce(element) {
