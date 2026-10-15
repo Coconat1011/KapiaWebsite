@@ -121,18 +121,27 @@
     }
     .catalog-message { grid-column: 1 / -1; padding: 36px 16px; color: var(--stone); text-align: center; }
     .menu-card:active { transform: scale(0.98); }
+    .menu-focus-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      border: 0;
+      padding: 0;
+      background: rgba(61, 40, 28, 0.08);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 167ms steps(10, end), visibility 0s linear 167ms;
+    }
+    body:has(#menu-grid .menu-card:hover) .menu-focus-backdrop,
+    .menu-focus-backdrop.is-visible {
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 167ms steps(10, end), visibility 0s;
+    }
     @media (hover: hover) {
-      body:has(#menu-grid .menu-card:hover)::before {
-        content: "";
-        position: fixed;
-        inset: 0;
-        z-index: 1000;
-        background: rgba(61, 40, 28, 0.08);
-        backdrop-filter: blur(4px);
-        -webkit-backdrop-filter: blur(4px);
-        pointer-events: none;
-      }
-
       .menu-card:hover {
         position: relative;
         z-index: 1001;
@@ -142,16 +151,10 @@
     }
     @media (hover: none) {
       .menu-focus-backdrop {
-        position: fixed;
-        inset: 0;
         z-index: 45;
-        border: 0;
-        padding: 0;
-        background: rgba(61, 40, 28, 0.08);
-        backdrop-filter: blur(4px);
-        -webkit-backdrop-filter: blur(4px);
         cursor: pointer;
       }
+      .menu-focus-backdrop.is-visible { pointer-events: auto; }
 
       .menu-card.is-focused {
         position: relative;
@@ -549,7 +552,7 @@
       <section id="menu-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-5" aria-label="Menu items" role="tabpanel"></section>
     </main>
   </div>
-  <button id="menu-focus-backdrop" class="menu-focus-backdrop hidden" type="button" aria-label="Close focused product"></button>
+  <button id="menu-focus-backdrop" class="menu-focus-backdrop" type="button" aria-label="Close focused product"></button>
 
   <!-- Cart / Order Panel -->
   <div id="order-panel-wrapper">
@@ -943,7 +946,7 @@
 
     function clearFocusedMenuCard() {
       document.querySelector('#menu-grid .menu-card.is-focused')?.classList.remove('is-focused');
-      document.getElementById('menu-focus-backdrop').classList.add('hidden');
+      document.getElementById('menu-focus-backdrop').classList.remove('is-visible');
     }
 
     document.getElementById('menu-grid').addEventListener('click', event => {
@@ -957,7 +960,7 @@
 
       clearFocusedMenuCard();
       card.classList.add('is-focused');
-      document.getElementById('menu-focus-backdrop').classList.remove('hidden');
+      document.getElementById('menu-focus-backdrop').classList.add('is-visible');
     });
     document.getElementById('menu-focus-backdrop').addEventListener('click', clearFocusedMenuCard);
 
