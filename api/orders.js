@@ -107,9 +107,9 @@ module.exports = async function orders(request, response) {
     if (request.method === 'POST') {
       const customerName = String(request.body?.customerName || '').trim();
       const customerEmail = String(request.body?.customerEmail || '').trim();
-      const hasValidEmail = !customerEmail || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customerEmail);
+      const hasValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customerEmail);
       if (!customerName || customerName.length > 200 || !hasValidEmail || customerEmail.length > 320) {
-        return sendError(response, 400, 'Enter a customer name and a valid email if you provide one.');
+        return sendError(response, 400, 'Enter a customer name and a valid email address.');
       }
 
       let items;

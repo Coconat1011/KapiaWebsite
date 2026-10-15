@@ -87,6 +87,22 @@ function newOrder() {
   };
 }
 
+test('orders require a valid customer email', async () => {
+  storedOrders.length = 0;
+  storedTransactions.length = 0;
+
+  for (const customerEmail of ['', undefined, 'not-an-email']) {
+    const order = newOrder();
+    if (customerEmail === undefined) delete order.customerEmail;
+    else order.customerEmail = customerEmail;
+
+    const response = await request('POST', order);
+    assert.equal(response.statusCode, 400);
+    assert.match(response.body.error, /valid email address/i);
+  }
+  assert.equal(storedOrders.length, 0);
+});
+
 test('orders preserve fertilizer and feed product instructions', async () => {
   storedOrders.length = 0;
   storedTransactions.length = 0;
