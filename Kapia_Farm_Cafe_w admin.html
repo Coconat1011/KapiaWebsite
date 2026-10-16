@@ -586,8 +586,7 @@
       .category-tile img, .category-tile-action { transition: none; }
       .product-description { transition: none; }
     }
-    #submit-order-btn, .add-to-order-btn, #name-submit-btn,
-    #pay-opt-qr, #pay-opt-cod, #pay-confirm-btn, #contact-footer button,
+    #submit-order-btn, .add-to-order-btn, #name-submit-btn, #pay-confirm-btn, #contact-footer button,
     [data-template-id="order-now-btn"], .social-media-link, #modal-add-btn {
       border: none !important;
       box-shadow: 0 12px 24px rgba(122, 87, 61, 0.18) !important;
@@ -600,7 +599,7 @@
     .modal-overlay { background: rgba(61, 40, 28, .58) !important; }
     #payment-page { background: #f5efe9 !important; color: var(--latte-espresso) !important; }
     #payment-page [style*="background:#fff7ed"] { border-color: #d8bda5 !important; background: #f7efe8 !important; }
-    #pay-total-amount, #pay-qr-amount, #pay-cod-amount { color: var(--latte-espresso) !important; }
+    #pay-total-amount, #pay-cod-amount { color: var(--latte-espresso) !important; }
     #contact-footer { border-color: #e7d5c1 !important; background: #f8f2ec !important; }
     #contact-footer button:hover, .add-to-order-btn:hover, .social-media-link:hover { background: #b77d54 !important; box-shadow: 0 12px 20px rgba(122, 87, 61, 0.2) !important; }
   </style>
@@ -867,7 +866,7 @@
           <div style="width:40px;height:40px;border-radius:50%;background:#c98c63;color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:bold;">✓</div>
           <div>
             <div style="font-weight:700;font-size:16px;color:#9a3412;">Order Submitted Successfully!</div>
-            <div style="font-size:13px;color:#7c2d12;">Please scan the QR code below to complete your payment.</div>
+            <div style="font-size:13px;color:#7c2d12;">Choose PayMongo for secure online payment or cash on delivery / pickup.</div>
           </div>
         </div>
         <div id="payment-status-badge" style="background:#fef3c7;color:#92400e;padding:6px 16px;border-radius:999px;font-size:13px;font-weight:700;">
@@ -904,64 +903,30 @@
           </div>
         </div>
 
-        <!-- Right Column: Payment & QR code -->
+        <!-- Right Column: Payment options -->
         <div style="background:#fff;border:2px solid #111;border-radius:16px;padding:24px;box-shadow:0 6px 20px rgba(0,0,0,0.04);">
           
           <h3 style="font-size:20px;font-weight:700;margin:0 0 6px;">Select Payment Method</h3>
-          <p style="color:#666;font-size:13px;margin:0 0 16px;">Choose how you would like to settle this order:</p>
+          <p style="color:#666;font-size:13px;margin:0 0 16px;">Pay securely online, or choose cash on delivery / pickup:</p>
 
-          <!-- Payment Options Tabs -->
+          <!-- PayMongo is the primary option; COD remains available. -->
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;">
-            <button id="pay-opt-qr" onclick="selectPaymentMethod('qr')" style="padding:10px;border:none;border-radius:10px;background:#c98c63;color:#fff;font-weight:700;font-size:13px;cursor:pointer;text-align:center;box-shadow:0 12px 24px rgba(122, 87, 61, 0.18);text-shadow:0 1px 2px rgba(0, 0, 0, 0.22);">
-              📱 QR PH / GCash / Maya
+            <button id="pay-opt-paymongo" type="button" aria-pressed="true" onclick="selectPaymentMethod('paymongo')" style="padding:10px;border:none;border-radius:10px;background:#c98c63;color:#fff;font-weight:700;font-size:13px;cursor:pointer;text-align:center;box-shadow:0 12px 24px rgba(122, 87, 61, 0.18);text-shadow:0 1px 2px rgba(0, 0, 0, 0.22);">
+              Pay online with PayMongo
             </button>
-            <button id="pay-opt-cod" onclick="selectPaymentMethod('cod')" style="padding:10px;border:none;border-radius:10px;background:#fff;font-weight:700;font-size:13px;cursor:pointer;text-align:center;box-shadow:0 8px 18px rgba(122, 87, 61, 0.08);">
+            <button id="pay-opt-cod" type="button" aria-pressed="false" onclick="selectPaymentMethod('cod')" style="padding:10px;border:none;border-radius:10px;background:#fff;font-weight:700;font-size:13px;cursor:pointer;text-align:center;box-shadow:0 8px 18px rgba(122, 87, 61, 0.08);">
               💵 Cash on Delivery / Pickup
             </button>
           </div>
 
-          <!-- QR Section -->
-          <div id="payment-qr-section">
-            <div style="background:#fafafa;border:2px solid #111;border-radius:16px;padding:20px;text-align:center;position:relative;">
-              <span style="display:inline-block;background:#000;color:#fff;font-size:11px;font-weight:700;padding:3px 12px;border-radius:999px;margin-bottom:12px;text-transform:uppercase;letter-spacing:1px;">
-                Scan to Pay (QR PH)
-              </span>
-
-              <!-- QR Display Area -->
-              <div style="width:230px;height:230px;margin:0 auto 12px;background:#fff;border:2px solid #ddd;border-radius:12px;display:flex;align-items:center;justify-content:center;padding:10px;box-shadow:0 4px 12px rgba(0,0,0,0.06);position:relative;">
-                <canvas id="qr-canvas" width="210" height="210" style="display:block;width:210px;height:210px;border-radius:6px;"></canvas>
-                <img id="qr-img" style="display:none;width:210px;height:210px;object-fit:contain;border-radius:6px;" alt="Payment QR code">
-              </div>
-
-              <!-- Download QR image -->
-              <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:12px;">
-                <button id="download-qr-btn" type="button" onclick="downloadPaymentQR()" style="padding:8px 14px;border:1.5px solid var(--latte-body);border-radius:8px;background:#fff;color:var(--ink);font:700 14px var(--font-primary);cursor:pointer;display:flex;align-items:center;gap:8px;box-shadow:0 2px 4px rgba(0,0,0,0.05);">
-                  <i data-lucide="download" aria-hidden="true" style="width:16px;height:16px;"></i>
-                  Download QR image
-                </button>
-              </div>
-
-              <div style="font-size:15px;font-weight:700;color:var(--ink);margin-bottom:2px;">Account: Kapia Farm Cafe</div>
-              <div style="font-size:13px;color:#555;margin-bottom:10px;">Reference Code: <b id="pay-qr-ref">REF-000000</b></div>
-              
-              <div style="background:#fff;border:1px solid #ddd;border-radius:10px;padding:10px 14px;font-size:13px;color:#444;text-align:left;line-height:1.4;">
-                <b>Payment Instructions:</b>
-                <ol style="margin:4px 0 0 16px;padding:0;">
-                  <li>Open GCash, Maya, or any QRPH-supported banking app.</li>
-                  <li>Scan the QR code and confirm amount: <b id="pay-qr-amount" style="color:#ff6105;">₱0.00</b>.</li>
-                  <li>After paying, enter your reference number below and report the payment for cafe verification.</li>
-                </ol>
-              </div>
-            </div>
-
-            <!-- Reference Number Input -->
-            <div style="margin-top:16px;">
-              <label style="font-weight:700;display:block;margin-bottom:6px;font-size:14px;">GCash / Maya Reference No. (Optional)</label>
-              <input id="pay-ref-input" type="text" placeholder="e.g. 1029 4819 0284" style="width:100%;box-sizing:border-box;padding:11px 14px;border:1px solid #ccc;border-radius:10px;font-size:14px;font-family:monospace;">
-            </div>
+          <div id="payment-paymongo-section" style="background:#fafafa;border:2px solid #c98c63;border-radius:16px;padding:20px;text-align:center;">
+            <div style="font-size:36px;margin-bottom:8px;">🔒</div>
+            <h4 style="font-size:18px;font-weight:700;margin:0 0 8px;">Secure PayMongo checkout</h4>
+            <p style="font-size:14px;color:#555;line-height:1.5;margin:0;">
+              Pay securely on PayMongo using the available methods, including GCash, QR Ph, or card. Your payment is confirmed automatically.
+            </p>
           </div>
 
-          <!-- Cash on Delivery Section -->
           <div id="payment-cod-section" style="display:none;background:#fafafa;border:2px solid #111;border-radius:16px;padding:20px;">
             <div style="text-align:center;font-size:42px;margin-bottom:8px;">📦</div>
             <h4 style="font-size:18px;font-weight:700;text-align:center;margin:0 0 8px;">Cash on Delivery / Pickup</h4>
@@ -977,18 +942,20 @@
           <!-- Action Buttons -->
           <div style="margin-top:20px;display:flex;flex-direction:column;gap:10px;">
             <button id="pay-confirm-btn" onclick="confirmPaymentComplete()" style="width:100%;padding:14px;border:none;border-radius:999px;background:#c98c63;color:#fff;font-weight:700;font-size:16px;cursor:pointer;transition:all 0.2s ease;box-shadow:0 12px 24px rgba(122, 87, 61, 0.18);text-shadow:0 1px 2px rgba(0, 0, 0, 0.22);">
-              ✓ I Have Completed Payment
+              Continue to secure PayMongo checkout
             </button>
             <button onclick="closePaymentPage()" style="width:100%;padding:12px;border:2px solid #ccc;border-radius:999px;background:#fff;color:#555;font-weight:700;font-size:14px;cursor:pointer;">
               Return to Store
             </button>
           </div>
 
+          <p id="payment-error-message" role="alert" style="display:none;margin:12px 0 0;color:#b91c1c;font-size:13px;"></p>
+
           <!-- Success Confirmation Banner -->
           <div id="payment-success-banner" style="display:none;margin-top:16px;background:#ecfdf5;border:2px solid #059669;border-radius:12px;padding:16px;text-align:center;">
             <div style="font-size:28px;margin-bottom:4px;">🎉</div>
-            <div id="payment-success-title" style="font-weight:700;color:#065f46;font-size:16px;">Payment reported</div>
-            <p id="payment-success-message" style="color:#047857;font-size:13px;margin:4px 0 10px;">Your payment report will be verified by the cafe.</p>
+            <div id="payment-success-title" style="font-weight:700;color:#065f46;font-size:16px;">Pickup request received</div>
+            <p id="payment-success-message" style="color:#047857;font-size:13px;margin:4px 0 10px;">Your order is awaiting cash payment at delivery or pickup.</p>
             <button onclick="closePaymentPage()" style="padding:8px 18px;border:2px solid #065f46;border-radius:8px;background:#fff;color:#065f46;font-weight:700;font-size:13px;cursor:pointer;">
               Done &amp; Return to Store
             </button>
@@ -1002,7 +969,6 @@
   <script src="/_sdk/ef0304cb8c7ed696.editing_sdk.js" integrity="sha512-kmL9L5Yuj57MQaequKbMA3aGpT/5lBUp10iGA3e3qnmMLs2ZZQ0poCcIfdd5rTgrhEvNPe4HK0ohePW7ZpgAFg=="></script>
   <script>
     const CURRENCY = '₱';
-    const PAYMENT_QR_IMAGE = './assets/gcash-qr.png';
     const DEFAULT_PLACEHOLDER_IMAGE = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="400" height="256" viewBox="0 0 400 256"><rect width="100%" height="100%" fill="#eee"/><text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" fill="#888" font-family="sans-serif" font-size="16">Kapia Farm Cafe</text></svg>');
 
     const menuData = {
@@ -1600,15 +1566,13 @@
       setTimeout(() => successEl.classList.add('hidden'), 4000);
     }
 
-    // Payment page QR image logic
+    // Payment page state.
     let currentPaymentOrder = null;
-    let currentPaymentMethod = 'qr';
-    let currentQRSeed = Date.now();
+    let currentPaymentMethod = 'paymongo';
 
     function openPaymentPage(orderRecord) {
       currentPaymentOrder = orderRecord;
-      currentPaymentMethod = 'qr';
-      currentQRSeed = Date.now();
+      currentPaymentMethod = 'paymongo';
 
       // Populate Order Receipt Details
       document.getElementById('pay-order-id').textContent = '#' + (orderRecord.id || 'KAP');
@@ -1618,7 +1582,6 @@
       
       const formattedTotal = CURRENCY + Number(orderRecord.total || 0).toFixed(2);
       document.getElementById('pay-total-amount').textContent = formattedTotal;
-      document.getElementById('pay-qr-amount').textContent = formattedTotal;
       document.getElementById('pay-cod-amount').textContent = formattedTotal;
 
       // Render Itemized Receipt
@@ -1640,20 +1603,18 @@
         `;
       }).join('');
 
-      // Reset Form State
-      document.getElementById('pay-ref-input').value = '';
+      // Reset payment status for this order.
       document.getElementById('payment-success-banner').style.display = 'none';
+      document.getElementById('payment-error-message').style.display = 'none';
       document.getElementById('pay-confirm-btn').disabled = false;
       document.getElementById('pay-confirm-btn').style.opacity = '1';
-      document.getElementById('pay-confirm-btn').textContent = '✓ I Have Completed Payment';
       
       const badge = document.getElementById('payment-status-badge');
       badge.textContent = 'Awaiting Payment';
       badge.style.background = '#fef3c7';
       badge.style.color = '#92400e';
 
-      selectPaymentMethod('qr');
-      generateRandomQR(orderRecord.id, orderRecord.total);
+      selectPaymentMethod('paymongo');
 
       // Display the payment page
       document.getElementById('payment-page').style.display = 'block';
@@ -1667,103 +1628,149 @@
 
     function selectPaymentMethod(method) {
       currentPaymentMethod = method;
-      const qrBtn = document.getElementById('pay-opt-qr');
+      const errorEl = document.getElementById('payment-error-message');
+      errorEl.style.display = 'none';
+      errorEl.textContent = '';
+      const paymongoBtn = document.getElementById('pay-opt-paymongo');
       const codBtn = document.getElementById('pay-opt-cod');
-      const qrSection = document.getElementById('payment-qr-section');
+      const paymongoSection = document.getElementById('payment-paymongo-section');
       const codSection = document.getElementById('payment-cod-section');
+      const paymongoSelected = method === 'paymongo';
 
-      if (method === 'qr') {
-        qrBtn.style.background = '#c98c63';
-        qrBtn.style.color = '#fff';
-        qrBtn.style.boxShadow = '0 12px 24px rgba(122, 87, 61, 0.18)';
-        codBtn.style.background = '#fff';
-        codBtn.style.color = '#4b2e1f';
-        codBtn.style.boxShadow = '0 8px 18px rgba(122, 87, 61, 0.08)';
-        qrSection.style.display = 'block';
-        codSection.style.display = 'none';
-      } else {
-        qrBtn.style.background = '#fff';
-        qrBtn.style.color = '#4b2e1f';
-        qrBtn.style.boxShadow = '0 8px 18px rgba(122, 87, 61, 0.08)';
-        codBtn.style.background = '#c98c63';
-        codBtn.style.color = '#fff';
-        codBtn.style.boxShadow = '0 12px 24px rgba(122, 87, 61, 0.18)';
-        qrSection.style.display = 'none';
-        codSection.style.display = 'block';
-      }
+      paymongoBtn.setAttribute('aria-pressed', String(paymongoSelected));
+      codBtn.setAttribute('aria-pressed', String(!paymongoSelected));
+      paymongoBtn.style.background = paymongoSelected ? '#c98c63' : '#fff';
+      paymongoBtn.style.color = paymongoSelected ? '#fff' : '#4b2e1f';
+      paymongoBtn.style.boxShadow = paymongoSelected
+        ? '0 12px 24px rgba(122, 87, 61, 0.18)'
+        : '0 8px 18px rgba(122, 87, 61, 0.08)';
+      codBtn.style.background = paymongoSelected ? '#fff' : '#c98c63';
+      codBtn.style.color = paymongoSelected ? '#4b2e1f' : '#fff';
+      codBtn.style.boxShadow = paymongoSelected
+        ? '0 8px 18px rgba(122, 87, 61, 0.08)'
+        : '0 12px 24px rgba(122, 87, 61, 0.18)';
+      paymongoSection.style.display = paymongoSelected ? 'block' : 'none';
+      codSection.style.display = paymongoSelected ? 'none' : 'block';
       document.getElementById('pay-confirm-btn').textContent = method === 'cod'
         ? 'Request cash on delivery / pickup'
-        : '✓ I Have Completed Payment';
-    }
-
-    function downloadPaymentQR() {
-      const qrImage = document.getElementById('qr-img');
-      const canvas = document.getElementById('qr-canvas');
-      const imageUrl = qrImage && getComputedStyle(qrImage).display !== 'none' && qrImage.complete && qrImage.naturalWidth
-        ? qrImage.src
-        : canvas?.toDataURL('image/png');
-      if (!imageUrl) return;
-
-      const referenceCode = document.getElementById('pay-qr-ref').textContent.trim() || 'qr-code';
-      const filename = `kapia-payment-${referenceCode.toLowerCase().replace(/[^a-z0-9-]/g, '')}.png`;
-      const downloadLink = document.createElement('a');
-      downloadLink.href = imageUrl;
-      downloadLink.download = filename;
-      document.body.appendChild(downloadLink);
-      downloadLink.click();
-      downloadLink.remove();
-    }
-
-    function generateRandomQR(orderId, amount) {
-      const canvas = document.getElementById('qr-canvas');
-      const qrImage = document.getElementById('qr-img');
-      if (!canvas || !qrImage) return;
-
-      const refCode = 'REF-' + (currentQRSeed.toString().slice(-6));
-      document.getElementById('pay-qr-ref').textContent = refCode;
-
-      canvas.style.display = 'none';
-      qrImage.src = PAYMENT_QR_IMAGE;
-      qrImage.style.display = 'block';
-      qrImage.alt = 'GCash payment QR code';
+        : 'Continue to secure PayMongo checkout';
     }
 
     async function confirmPaymentComplete() {
       if (!currentPaymentOrder) return;
-      const refInput = document.getElementById('pay-ref-input').value.trim();
       const btn = document.getElementById('pay-confirm-btn');
       btn.disabled = true;
-      const updatedStatus = currentPaymentMethod === 'cod' ? 'Awaiting COD / Pickup' : 'Payment Reported';
-      const methodText = currentPaymentMethod === 'cod'
-        ? 'Cash on Delivery'
-        : refInput ? `QR PH (Ref: ${refInput})` : 'QR PH / GCash (Payment reported)';
 
       try {
+        if (currentPaymentMethod === 'paymongo') {
+          const response = await fetch('/api/paymongo-checkout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ orderId: currentPaymentOrder.id })
+          });
+          const result = await response.json().catch(() => ({}));
+          if (!response.ok) throw new Error(result.error || 'Could not start PayMongo checkout.');
+          const checkoutUrl = new URL(result.checkoutUrl);
+          if (checkoutUrl.protocol !== 'https:' || checkoutUrl.hostname !== 'checkout.paymongo.com') {
+            throw new Error('PayMongo returned an invalid checkout link.');
+          }
+          window.location.assign(checkoutUrl.toString());
+          return;
+        }
+
         const response = await fetch('/api/orders', {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ id: currentPaymentOrder.id, status: updatedStatus, paymentMethod: methodText })
+          body: JSON.stringify({
+            id: currentPaymentOrder.id,
+            status: 'Awaiting COD / Pickup',
+            paymentMethod: 'Cash on Delivery'
+          })
         });
         const result = await response.json().catch(() => ({}));
         if (!response.ok) throw new Error(result.error || 'Could not update your order.');
 
         currentPaymentOrder = result.order;
+        const updatedStatus = result.order.status;
         const badge = document.getElementById('payment-status-badge');
         badge.textContent = updatedStatus;
-        badge.style.background = currentPaymentMethod === 'cod' ? '#eff6ff' : '#fffbeb';
-        badge.style.color = currentPaymentMethod === 'cod' ? '#1d4ed8' : '#92400e';
+        badge.style.background = '#eff6ff';
+        badge.style.color = '#1d4ed8';
 
-        document.getElementById('payment-success-title').textContent = currentPaymentMethod === 'cod' ? 'Pickup request received' : 'Payment reported';
-        document.getElementById('payment-success-message').textContent = currentPaymentMethod === 'cod'
-          ? 'Your order is awaiting cash payment at delivery or pickup.'
-          : 'Your payment report was sent to the cafe. The admin will verify it and update your order.';
+        document.getElementById('payment-success-title').textContent = 'Pickup request received';
+        document.getElementById('payment-success-message').textContent = 'Your order is awaiting cash payment at delivery or pickup.';
         document.getElementById('payment-success-banner').style.display = 'block';
         btn.style.opacity = '0.5';
         btn.textContent = '✓ Order updated';
       } catch (error) {
-        alert(error.message || 'Could not update your order. Please try again.');
         btn.disabled = false;
+        const errorEl = document.getElementById('payment-error-message');
+        errorEl.textContent = error.message || 'Could not update your order. Please try again.';
+        errorEl.style.display = 'block';
       }
+    }
+
+    function showPaymentReturnNotice() {
+      const returnUrl = new URL(window.location.href);
+      const paymentResult = returnUrl.searchParams.get('payment');
+      const orderId = returnUrl.searchParams.get('order') || '';
+      if (!['success', 'cancelled'].includes(paymentResult) || !/^KAP-[0-9]+-[A-F0-9]{6}$/.test(orderId)) return;
+
+      returnUrl.searchParams.delete('payment');
+      returnUrl.searchParams.delete('order');
+      window.history.replaceState(null, '', returnUrl.toString());
+
+      const notice = document.createElement('section');
+      notice.setAttribute('role', 'status');
+      notice.setAttribute('aria-live', 'polite');
+      notice.style.cssText = 'position:fixed;z-index:1000;top:16px;left:50%;transform:translateX(-50%);width:min(680px,calc(100% - 32px));padding:18px;background:#fffaf5;border:2px solid #c98c63;border-radius:12px;box-shadow:0 12px 32px rgba(61,40,28,.2);color:#3d281c;';
+
+      const title = document.createElement('strong');
+      title.textContent = paymentResult === 'success' ? 'Thanks for ordering with Kapia Farm Cafe' : 'Payment was not completed';
+      const message = document.createElement('p');
+      message.style.margin = '6px 0 12px';
+      message.textContent = paymentResult === 'success'
+        ? `PayMongo returned you to the store for order ${orderId}. The cafe will update the order after the payment is confirmed.`
+        : `Order ${orderId} is still pending. Reopen PayMongo checkout below to complete your payment.`;
+      notice.append(title, message);
+
+      if (paymentResult === 'cancelled') {
+        const retryButton = document.createElement('button');
+        retryButton.type = 'button';
+        retryButton.textContent = 'Reopen PayMongo checkout';
+        retryButton.style.cssText = 'padding:9px 14px;border:0;border-radius:8px;background:#c98c63;color:#fff;font-weight:700;cursor:pointer;';
+        retryButton.addEventListener('click', async () => {
+          retryButton.disabled = true;
+          retryButton.textContent = 'Opening checkout...';
+          try {
+            const response = await fetch('/api/paymongo-checkout', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ orderId })
+            });
+            const result = await response.json().catch(() => ({}));
+            if (!response.ok) throw new Error(result.error || 'Could not reopen PayMongo checkout.');
+            const checkoutUrl = new URL(result.checkoutUrl);
+            if (checkoutUrl.protocol !== 'https:' || checkoutUrl.hostname !== 'checkout.paymongo.com') {
+              throw new Error('PayMongo returned an invalid checkout link.');
+            }
+            window.location.assign(checkoutUrl.toString());
+          } catch (error) {
+            message.textContent = error.message || 'Could not reopen PayMongo checkout.';
+            retryButton.disabled = false;
+            retryButton.textContent = 'Try again';
+          }
+        });
+        notice.appendChild(retryButton);
+      }
+
+      const closeButton = document.createElement('button');
+      closeButton.type = 'button';
+      closeButton.textContent = 'Dismiss';
+      closeButton.style.cssText = 'margin-left:10px;padding:9px 14px;border:1px solid #c98c63;border-radius:8px;background:#fff;color:#3d281c;font-weight:700;cursor:pointer;';
+      closeButton.addEventListener('click', () => notice.remove());
+      notice.appendChild(closeButton);
+      document.body.appendChild(notice);
     }
 
     function openSocialMediaModal() {
@@ -1788,6 +1795,7 @@
 
     // App Initialization
     window.addEventListener('DOMContentLoaded', () => {
+      showPaymentReturnNotice();
       syncMenuFromProducts([]);
       document.getElementById('menu-grid').innerHTML = '<p class="catalog-message">Loading products...</p>';
       renderOrder();

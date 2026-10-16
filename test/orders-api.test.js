@@ -3,14 +3,21 @@ const test = require('node:test');
 
 const storedOrders = [];
 const storedTransactions = [];
+const storedProducts = [
+  { id: 'test-coffee', name: 'Coffee', category: 'foods_drinks', price: 25, addons: [{ name: 'Extra shot', price: 10 }], inStock: true },
+  { id: 'test-feed', name: 'Layer Feed', category: 'feeds', price: 100, addons: [], instruction: 'Provide fresh water alongside feed.', inStock: true },
+  { id: 'test-soup', name: 'Farm Soup', category: 'foods_drinks', price: 50, addons: [], ingredients: 'Water, vegetables, and salt.', inStock: true }
+];
 const collections = {
   orders: createCollection(storedOrders),
-  transactions: createCollection(storedTransactions)
+  transactions: createCollection(storedTransactions),
+  products: createCollection(storedProducts)
 };
 
 function createCollection(rows) {
   return {
     find: () => ({
+      toArray: async () => [...rows],
       sort: sortBy => ({
         limit: () => ({
           toArray: async () => [...rows].sort((left, right) => {
@@ -83,7 +90,7 @@ function newOrder() {
   return {
     customerName: 'Test Customer',
     customerEmail: 'customer@example.com',
-    items: [{ name: 'Coffee', qty: 2, basePrice: 25, addons: [] }]
+    items: [{ id: 'test-coffee', name: 'Coffee', qty: 2, basePrice: 25, addons: [] }]
   };
 }
 
@@ -109,12 +116,14 @@ test('orders preserve fertilizer and feed product instructions', async () => {
 
   const order = newOrder();
   order.items = [{
+    id: 'test-feed',
     name: 'Layer Feed',
     qty: 1,
     basePrice: 100,
     category: 'feeds',
     instruction: 'Provide fresh water alongside feed.'
   }, {
+    id: 'test-soup',
     name: 'Farm Soup',
     qty: 1,
     basePrice: 50,
@@ -128,6 +137,32 @@ test('orders preserve fertilizer and feed product instructions', async () => {
   assert.equal(storedOrders[0].items[0].instruction, 'Provide fresh water alongside feed.');
   assert.equal(response.body.order.items[1].ingredients, 'Water, vegetables, and salt.');
   assert.equal(storedOrders[0].items[1].ingredients, 'Water, vegetables, and salt.');
+});
+
+test('order totals and item details come from the server catalog', async () => {
+  storedOrders.length = 0;
+  const order = newOrder();
+  order.items[0].name = 'Free Coffee';
+  order.items[0].basePrice = 0.01;
+
+  const response = await request('POST', order);
+  assert.equal(response.statusCode, 201);
+  assert.equal(response.body.order.items[0].name, 'Coffee');
+  assert.equal(response.body.order.items[0].basePrice, 25);
+  assert.equal(response.body.order.total, 50);
+  assert.equal(response.body.order.paymentMethod, 'PayMongo Checkout');
+
+  order.items[0].addons = [{ name: 'Extra shot', price: 0.01 }];
+  const addonOrder = await request('POST', order);
+  assert.equal(addonOrder.statusCode, 201);
+  assert.equal(addonOrder.body.order.total, 70);
+  assert.equal(addonOrder.body.order.items[0].addons[0].price, 10);
+
+  const invalidProduct = await request('POST', {
+    ...newOrder(),
+    items: [{ id: 'unknown', name: 'Coffee', qty: 1, basePrice: 0.01, addons: [] }]
+  });
+  assert.equal(invalidProduct.statusCode, 400);
 });
 
 test('admin confirmations are saved as separate, persistent transaction history', async () => {

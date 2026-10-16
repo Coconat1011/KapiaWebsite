@@ -1,6 +1,8 @@
 const crypto = require('node:crypto');
-const { getOrdersCollection, getTransactionsCollection } = require('../lib/mongodb');
+const { getOrdersCollection, getProductsCollection, getTransactionsCollection } = require('../lib/mongodb');
 const { getAdminPassword, isAdminRequest } = require('../lib/admin-auth');
+const { listProducts } = require('../lib/catalog');
+const { archiveTransaction } = require('../lib/transactions');
 
 const ALLOWED_STATUSES = new Set([
   'Awaiting Payment',
@@ -34,44 +36,54 @@ function toTransaction(row) {
   };
 }
 
-function buildItems(input) {
+function buildItems(input, products) {
   if (!Array.isArray(input) || input.length < 1 || input.length > 50) {
     throw new Error('An order must contain between 1 and 50 items.');
   }
 
   return input.map(item => {
-    const name = String(item.name || '').trim();
+    if (!item || typeof item !== 'object' || Array.isArray(item)) {
+      throw new Error('An order item has invalid details.');
+    }
+    const id = String(item.id || '').trim();
+    const product = products.find(entry => entry.id === id);
     const qty = Number(item.qty);
-    const basePrice = Number(item.basePrice);
-    const category = String(item.category || '').slice(0, 60);
-    const instruction = String(item.instruction || '').trim();
-    const ingredients = String(item.ingredients || '').trim();
     const inputAddons = Array.isArray(item.addons) ? item.addons : [];
-    if (!name || name.length > 200 || instruction.length > 2000 || ingredients.length > 2000 || !Number.isInteger(qty) || qty < 1 || qty > 1000 || !Number.isFinite(basePrice) || basePrice < 0) {
+    if (!product || product.inStock === false || !Number.isInteger(qty) || qty < 1 || qty > 1000) {
       throw new Error('An order item has invalid details.');
     }
     if (inputAddons.length > 30) throw new Error('An item has too many add-ons.');
 
     const addons = inputAddons.map(addon => {
-      const addonName = String(addon.name || '').trim();
-      const price = Number(addon.price);
-      if (!addonName || addonName.length > 120 || !Number.isFinite(price) || price < 0) {
+      const addonName = typeof addon?.name === 'string' ? addon.name.trim() : '';
+      const catalogAddon = (product.addons || []).find(entry => entry.name === addonName);
+      if (!catalogAddon) {
         throw new Error('An order add-on has invalid details.');
       }
-      return { name: addonName, price };
+      return { name: catalogAddon.name, price: Number(catalogAddon.price) };
     });
-    const unitPrice = basePrice + addons.reduce((sum, addon) => sum + addon.price, 0);
+    const basePrice = Number(product.price);
+    const basePriceCents = Math.round(basePrice * 100);
+    const addonPriceCents = addons.map(addon => Math.round(addon.price * 100));
+    if (!Number.isSafeInteger(basePriceCents) || basePriceCents < 0 || addonPriceCents.some(price => !Number.isSafeInteger(price) || price < 0)) {
+      throw new Error('An order item has invalid details.');
+    }
+    const unitPriceCents = basePriceCents + addonPriceCents.reduce((sum, price) => sum + price, 0);
+    if (!Number.isSafeInteger(unitPriceCents) || !Number.isSafeInteger(unitPriceCents * qty)) {
+      throw new Error('An order item has invalid details.');
+    }
+    const category = String(product.category || '').slice(0, 60);
     return {
-      id: String(item.id || '').slice(0, 100),
-      name,
+      id,
+      name: product.name,
       qty,
-      basePrice,
-      unitPrice,
+      basePrice: Math.round(basePrice * 100) / 100,
+      unitPrice: unitPriceCents / 100,
       addons,
       category,
-      instruction: category === 'fertilizer' || category === 'feeds' ? instruction : '',
-      ingredients: category === 'foods_drinks' ? ingredients : '',
-      lineTotal: unitPrice * qty
+      instruction: category === 'fertilizer' || category === 'feeds' ? String(product.instruction || '').slice(0, 2000) : '',
+      ingredients: category === 'foods_drinks' ? String(product.ingredients || '').slice(0, 2000) : '',
+      lineTotal: unitPriceCents * qty / 100
     };
   });
 }
@@ -112,21 +124,22 @@ module.exports = async function orders(request, response) {
         return sendError(response, 400, 'Enter a customer name and a valid email address.');
       }
 
+      const products = await listProducts(await getProductsCollection());
       let items;
       try {
-        items = buildItems(request.body.items);
+        items = buildItems(request.body.items, products);
       } catch (error) {
         return sendError(response, 400, error.message);
       }
-      const total = items.reduce((sum, item) => sum + item.lineTotal, 0);
+      const totalCents = items.reduce((sum, item) => sum + Math.round(item.lineTotal * 100), 0);
       const order = {
         id: `KAP-${Date.now()}-${crypto.randomBytes(3).toString('hex').toUpperCase()}`,
         createdAt: new Date(),
         customerName,
         customerEmail,
-        paymentMethod: 'QR PH / GCash (Pending)',
+        paymentMethod: 'PayMongo Checkout',
         status: 'Awaiting Payment',
-        total,
+        total: totalCents / 100,
         items
       };
       await ordersCollection.insertOne(order);
@@ -155,30 +168,7 @@ module.exports = async function orders(request, response) {
       if (!result.matchedCount) return sendError(response, 404, 'Order not found.');
       const updatedOrder = await ordersCollection.findOne({ id: orderId });
       if (status === 'Paid - Verified') {
-        const transactionsCollection = await getTransactionsCollection();
-        try {
-          await transactionsCollection.updateOne(
-            { _id: updatedOrder.id },
-            {
-              $setOnInsert: {
-                _id: updatedOrder.id,
-                orderId: updatedOrder.id,
-                id: updatedOrder.id,
-                createdAt: updatedOrder.createdAt,
-                confirmedAt: new Date(),
-                customerName: updatedOrder.customerName,
-                customerEmail: updatedOrder.customerEmail,
-                paymentMethod: updatedOrder.paymentMethod,
-                status: updatedOrder.status,
-                total: updatedOrder.total,
-                items: updatedOrder.items
-              }
-            },
-            { upsert: true }
-          );
-        } catch (error) {
-          if (error.code !== 11000 || !await transactionsCollection.findOne({ _id: updatedOrder.id })) throw error;
-        }
+        await archiveTransaction(updatedOrder);
         await ordersCollection.deleteOne({ id: updatedOrder.id });
       }
       return response.status(200).json({ order: toOrder(updatedOrder) });
