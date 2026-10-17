@@ -11,7 +11,7 @@
   --font-secondary: var(--font-primary);
 }
 
-body { font-size: 19px; }
+body { font-size: 24px; }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-secondary) !important;
@@ -40,7 +40,7 @@ body[data-template-id="__page-root"] nav[data-template-id="category-tabs"] butto
   .welcome-category span { font-size: 15px !important; }
   .welcome-category strong { font-size: 22px !important; }
 
-  body { font-size: 21px; }
+  body { font-size: 26px; }
   .brand { font-size: 24px !important; }
   .section-heading h1 { font-size: 24px !important; }
   .section-heading p, label, .addon-editor legend { font-size: 17px !important; }
