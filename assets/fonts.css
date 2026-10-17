@@ -1,13 +1,13 @@
 @font-face {
-  font-family: 'Fledgling';
-  src: url('./fledgling-sb.otf') format('opentype');
+  font-family: 'Mops';
+  src: url('./mops.ttf') format('truetype');
   font-style: normal;
-  font-weight: 100 900;
+  font-weight: 500;
   font-display: swap;
 }
 
 :root {
-  --font-primary: 'Fledgling', sans-serif;
+  --font-primary: 'Mops', sans-serif;
   --font-secondary: var(--font-primary);
 }
 
