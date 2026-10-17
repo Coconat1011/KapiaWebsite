@@ -19,11 +19,18 @@
     .nav-link:hover { transform: translateY(-2px); background: #fffaf5; }
     .about-hero { width: min(1120px, calc(100% - 40px)); min-height: 360px; margin: 22px auto 0; padding: clamp(32px, 7vw, 84px); display: flex; align-items: end; border-radius: 24px; background: linear-gradient(180deg, rgba(61,40,28,.02), rgba(61,40,28,.82)), url('./assets/kapiacafe.webp') center / cover; color: #fff; box-shadow: 0 20px 40px rgba(122, 87, 61, .16); }
     .about-hero h1 { max-width: 700px; margin: 0; font-size: clamp(42px, 8vw, 78px); line-height: 1; }
+    .about-gallery { display: grid; grid-template-columns: 1.2fr .8fr .8fr; grid-auto-rows: 220px; gap: 14px; width: min(1120px, calc(100% - 40px)); margin: 28px auto 0; }
+    .about-gallery figure { position: relative; overflow: hidden; min-height: 0; margin: 0; border-radius: 16px; background: #dfbb96; box-shadow: 0 12px 24px rgba(122, 87, 61, .1); }
+    .about-gallery figure:first-child { grid-row: span 2; }
+    .about-gallery figure:nth-child(4) { grid-column: span 2; }
+    .about-gallery img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .3s ease; }
+    .about-gallery figure:hover img { transform: scale(1.04); }
+    .about-gallery figcaption { position: absolute; right: 0; bottom: 0; left: 0; padding: 12px 14px; color: #fff; background: linear-gradient(transparent, rgba(61,40,28,.8)); font-weight: 700; }
     .about-content { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; width: min(920px, calc(100% - 40px)); margin: 32px auto 70px; }
     .about-card { padding: 26px; background: #fffaf5; border: 1px solid #e2d0be; border-radius: 16px; box-shadow: 0 12px 24px rgba(122, 87, 61, .07); }
     .about-card h2 { margin: 0 0 10px; font-size: 28px; }
     .about-card p { margin: 0; color: var(--muted); font-size: 18px; line-height: 1.6; }
-    @media (max-width: 680px) { .about-nav, .about-hero, .about-content { width: calc(100% - 28px); } .about-nav { align-items: flex-start; flex-direction: column; } .about-content { grid-template-columns: 1fr; } .brand { font-size: 21px; } }
+    @media (max-width: 680px) { .about-nav, .about-hero, .about-gallery, .about-content { width: calc(100% - 28px); } .about-nav { align-items: flex-start; flex-direction: column; } .about-gallery { grid-template-columns: 1fr 1fr; grid-auto-rows: 180px; } .about-gallery figure:first-child { grid-row: span 1; } .about-gallery figure:nth-child(4) { grid-column: span 1; } .about-content { grid-template-columns: 1fr; } .brand { font-size: 21px; } }
   </style>
 </head>
 <body>
@@ -37,6 +44,13 @@
   <main>
     <section class="about-hero" aria-labelledby="about-title">
       <h1 id="about-title">About Ragsak Farm Cafe</h1>
+    </section>
+    <section class="about-gallery" aria-label="Ragsak Farm Cafe photo gallery">
+      <figure><img src="./assets/about-farm-gazebo.png" alt="Garden gazebo beside the farm pond" loading="lazy"><figcaption>Nature and quiet farm views</figcaption></figure>
+      <figure><img src="./assets/about-farm-animals.png" alt="Sheep in the farm shelter" loading="lazy"><figcaption>Life on the farm</figcaption></figure>
+      <figure><img src="./assets/about-cafe-exterior.png" alt="Ragsak Farm Cafe exterior" loading="lazy"><figcaption>Our cafe</figcaption></figure>
+      <figure><img src="./assets/about-community.png" alt="Friends enjoying time together at the cafe" loading="lazy"><figcaption>A place to gather</figcaption></figure>
+      <figure><img src="./assets/about-awards.png" alt="Ragsak Farm Cafe awards" loading="lazy"><figcaption>Celebrating our work</figcaption></figure>
     </section>
     <section class="about-content">
       <article class="about-card">
