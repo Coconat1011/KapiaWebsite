@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#F4ECE6">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <title>About Us | Ragsak Farm Cafe</title>
+  <link rel="stylesheet" href="./assets/fonts.css">
+  <style>
+    :root { --foam: #F4ECE6; --crema: #DFBB96; --body: #BF8969; --espresso: #3D281C; --muted: #765B4D; }
+    * { box-sizing: border-box; }
+    body { min-height: 100vh; margin: 0; background: var(--foam); color: var(--espresso); font-family: var(--font-primary); }
+    .about-nav { display: flex; align-items: center; justify-content: space-between; gap: 16px; width: min(1120px, calc(100% - 40px)); margin: 0 auto; padding: 22px 0; }
+    .brand, .nav-link { color: var(--espresso); font-weight: 700; text-decoration: none; }
+    .brand { font-size: 24px; }
+    .nav-links { display: flex; gap: 10px; align-items: center; }
+    .nav-link { padding: 10px 16px; border: 1px solid var(--crema); border-radius: 999px; transition: transform .18s ease, background .18s ease; }
+    .nav-link:hover { transform: translateY(-2px); background: #fffaf5; }
+    .about-hero { width: min(1120px, calc(100% - 40px)); min-height: 360px; margin: 22px auto 0; padding: clamp(32px, 7vw, 84px); display: flex; align-items: end; border-radius: 24px; background: linear-gradient(180deg, rgba(61,40,28,.02), rgba(61,40,28,.82)), url('./assets/kapiacafe.webp') center / cover; color: #fff; box-shadow: 0 20px 40px rgba(122, 87, 61, .16); }
+    .about-hero h1 { max-width: 700px; margin: 0; font-size: clamp(42px, 8vw, 78px); line-height: 1; }
+    .about-content { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; width: min(920px, calc(100% - 40px)); margin: 32px auto 70px; }
+    .about-card { padding: 26px; background: #fffaf5; border: 1px solid #e2d0be; border-radius: 16px; box-shadow: 0 12px 24px rgba(122, 87, 61, .07); }
+    .about-card h2 { margin: 0 0 10px; font-size: 28px; }
+    .about-card p { margin: 0; color: var(--muted); font-size: 18px; line-height: 1.6; }
+    @media (max-width: 680px) { .about-nav, .about-hero, .about-content { width: calc(100% - 28px); } .about-nav { align-items: flex-start; flex-direction: column; } .about-content { grid-template-columns: 1fr; } .brand { font-size: 21px; } }
+  </style>
+</head>
+<body>
+  <header class="about-nav">
+    <a class="brand" href="./index.html">Ragsak Farm Cafe</a>
+    <nav class="nav-links" aria-label="About page navigation">
+      <a class="nav-link" href="./index.html">Welcome</a>
+      <a class="nav-link" href="./Kapia_Farm_Cafe_w%20admin.html">Visit the store</a>
+    </nav>
+  </header>
+  <main>
+    <section class="about-hero" aria-labelledby="about-title">
+      <h1 id="about-title">About Ragsak Farm Cafe</h1>
+    </section>
+    <section class="about-content">
+      <article class="about-card">
+        <h2>Our story</h2>
+        <p>Ragsak Farm Cafe brings farm essentials and cafe favorites together in one welcoming place. We make it easier to find quality supplies while enjoying food and drinks made for sharing.</p>
+      </article>
+      <article class="about-card">
+        <h2>What we offer</h2>
+        <p>Explore freshly prepared food and drinks, reliable fertilizers, and livestock feed supplements selected for everyday farm and family needs.</p>
+      </article>
+    </section>
+  </main>
+</body>
+</html>
