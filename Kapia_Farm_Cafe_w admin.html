@@ -1055,12 +1055,17 @@
       feeds: { title: 'Livestock Feed Supplements' }
     };
 
+    const categoryCoverImages = {
+      foods_drinks: './assets/foods-drinks-category.jpg',
+      fertilizer: './assets/fertilizers-category.jpg',
+      feeds: './assets/livestock-feed-supplements-category.jpg'
+    };
+
     function renderCategoryTiles() {
       document.querySelectorAll('.category-tile').forEach(tile => {
         const category = tile.dataset.category;
-        const firstItem = menuData[category]?.items.find(item => item.image);
         const image = tile.querySelector('img');
-        image.src = firstItem ? getProductImageUrl(firstItem.image) : './assets/kapiacafe.webp';
+        image.src = categoryCoverImages[category] || './assets/kapiacafe.webp';
         image.onerror = function() {
           this.onerror = null;
           this.src = './assets/kapiacafe.webp';
