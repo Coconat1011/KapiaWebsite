@@ -11,7 +11,7 @@ const ALLOWED_STATUSES = new Set([
   'Awaiting COD / Pickup',
   'Completed'
 ]);
-const MAX_PAYMENT_SCREENSHOT_SIZE = 2 * 1024 * 1024;
+const MAX_PAYMENT_SCREENSHOT_SIZE = 5 * 1024 * 1024;
 
 function isValidPaymentScreenshot(value) {
   if (typeof value !== 'string') return false;
@@ -119,7 +119,7 @@ module.exports = async function orders(request, response) {
       return sendError(response, 401, 'Admin login is required.');
     }
     if (isCustomerUpdate && request.body?.paymentScreenshot !== undefined && !hasScreenshot) {
-      return sendError(response, 400, 'Upload a valid payment screenshot no larger than 2 MB.');
+      return sendError(response, 400, 'Upload a valid payment screenshot no larger than 5 MB.');
     }
     if (isCustomerUpdate && !hasScreenshot && requestedStatus !== 'Awaiting Payment') {
       return sendError(response, 400, 'A payment screenshot is required before confirming this order.');
