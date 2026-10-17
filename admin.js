@@ -11,6 +11,7 @@ let editingImage = '';
 let imageUploadPromise = null;
 let cropSession = null;
 let ordersCache = [];
+let ordersLoaded = false;
 let historyCache = [];
 let productsCache = [];
 let productCategoryFilter = 'all';
@@ -153,6 +154,7 @@ async function loadOrders() {
     }
     if (!response.ok) throw new Error(result.error || 'Could not load customer orders.');
     ordersCache = Array.isArray(result) ? result : [];
+    ordersLoaded = true;
     renderOrders();
   } catch (error) {
     list.textContent = error.message || 'Could not connect to the order service.';
@@ -193,8 +195,9 @@ function showTab(tab) {
   document.getElementById('admin-tab-orders').setAttribute('aria-pressed', ordersSelected);
   document.getElementById('admin-tab-history').setAttribute('aria-pressed', tab === 'history');
   if (productsSelected) loadProducts();
-  else if (ordersSelected) loadOrders();
-  else loadHistory();
+  else if (ordersSelected) {
+    if (!ordersLoaded) loadOrders();
+  } else loadHistory();
 }
 
 function showDashboard() {
@@ -740,6 +743,3 @@ async function restoreAdminSession() {
 }
 
 restoreAdminSession();
-window.setInterval(() => {
-  if (!document.getElementById('admin-dashboard').hidden && !document.getElementById('admin-orders-panel').hidden) loadOrders();
-}, 20000);
