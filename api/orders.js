@@ -154,7 +154,7 @@ module.exports = async function orders(request, response) {
         createdAt: new Date(),
         customerName,
         customerEmail,
-        paymentMethod: 'PayMongo Checkout',
+        paymentMethod: 'InstaPay QR',
         status: 'Awaiting Payment',
         total: totalCents / 100,
         items
