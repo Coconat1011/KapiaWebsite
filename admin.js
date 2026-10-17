@@ -117,6 +117,7 @@ function renderOrderCard(order, index, isHistory = false) {
         <p><strong>Total</strong><span class="product-price">${formatPrice(order.total)}</span></p>
       </div>
       <div class="ordered-items"><strong>Ordered items</strong><ul>${items}</ul></div>
+      ${order.paymentScreenshot ? `<div class="payment-proof"><strong>Payment screenshot</strong><a href="${escapeHTML(order.paymentScreenshot)}" target="_blank" rel="noopener"><img src="${escapeHTML(order.paymentScreenshot)}" alt="Customer payment screenshot" loading="lazy"></a></div>` : '<p class="muted">No payment screenshot uploaded.</p>'}
       <div class="order-actions">${actions}</div>
     </article>`;
 }

@@ -939,10 +939,18 @@
             </div>
           </div>
 
+          <div id="payment-proof-section" style="margin-top:20px;background:#fff7ed;border:2px solid #c98c63;border-radius:16px;padding:18px;">
+            <h4 style="font-size:17px;font-weight:700;margin:0 0 6px;">Payment screenshot required</h4>
+            <p style="font-size:13px;color:#555;line-height:1.5;margin:0 0 12px;">Upload a screenshot of your payment confirmation before you confirm this order.</p>
+            <label for="payment-screenshot-input" style="display:block;font-size:13px;font-weight:700;margin-bottom:6px;">Upload payment screenshot (JPEG, PNG, WebP, or GIF; max 2 MB)</label>
+            <input id="payment-screenshot-input" type="file" accept="image/jpeg,image/png,image/webp,image/gif" style="width:100%;padding:9px;border:1px solid #cbb39d;border-radius:8px;background:#fff;">
+            <img id="payment-screenshot-preview" alt="Payment screenshot preview" style="display:none;width:100%;max-height:190px;object-fit:contain;margin-top:10px;border:1px solid #e2d0be;border-radius:8px;background:#fff;">
+            <p id="payment-screenshot-status" role="status" style="margin:8px 0 0;font-size:13px;color:#b91c1c;"></p>
+          </div>
           <!-- Action Buttons -->
           <div style="margin-top:20px;display:flex;flex-direction:column;gap:10px;">
             <button id="pay-confirm-btn" onclick="confirmPaymentComplete()" style="width:100%;padding:14px;border:none;border-radius:999px;background:#c98c63;color:#fff;font-weight:700;font-size:16px;cursor:pointer;transition:all 0.2s ease;box-shadow:0 12px 24px rgba(122, 87, 61, 0.18);text-shadow:0 1px 2px rgba(0, 0, 0, 0.22);">
-              Continue to secure PayMongo checkout
+              I have completed the payment - continue to PayMongo checkout
             </button>
             <button onclick="closePaymentPage()" style="width:100%;padding:12px;border:2px solid #ccc;border-radius:999px;background:#fff;color:#555;font-weight:700;font-size:14px;cursor:pointer;">
               Return to Store
@@ -1603,7 +1611,11 @@
         `;
       }).join('');
 
-      // Reset payment status for this order.
+      // Reset payment status and payment proof for this order.
+      document.getElementById('payment-screenshot-input').value = '';
+      document.getElementById('payment-screenshot-preview').style.display = 'none';
+      document.getElementById('payment-screenshot-preview').removeAttribute('src');
+      document.getElementById('payment-screenshot-status').textContent = '';
       document.getElementById('payment-success-banner').style.display = 'none';
       document.getElementById('payment-error-message').style.display = 'none';
       document.getElementById('pay-confirm-btn').disabled = false;
@@ -1652,17 +1664,46 @@
       paymongoSection.style.display = paymongoSelected ? 'block' : 'none';
       codSection.style.display = paymongoSelected ? 'none' : 'block';
       document.getElementById('pay-confirm-btn').textContent = method === 'cod'
-        ? 'Request cash on delivery / pickup'
-        : 'Continue to secure PayMongo checkout';
+        ? 'I have completed the payment - request cash on delivery / pickup'
+        : 'I have completed the payment - continue to PayMongo checkout';
     }
 
+    function readPaymentScreenshot() {
+      const input = document.getElementById('payment-screenshot-input');
+      const file = input.files && input.files[0];
+      if (!file) return Promise.reject(new Error('Upload a payment screenshot before confirming your order.'));
+      if (!['image/jpeg', 'image/png', 'image/webp', 'image/gif'].includes(file.type) || file.size > 2 * 1024 * 1024) {
+        return Promise.reject(new Error('Choose a JPEG, PNG, WebP, or GIF screenshot no larger than 2 MB.'));
+      }
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = () => reject(new Error('Could not read the payment screenshot.'));
+        reader.readAsDataURL(file);
+      });
+    }
+
+    async function savePaymentScreenshot(status, paymentMethod, screenshot) {
+      const response = await fetch('/api/orders', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: currentPaymentOrder.id, status, paymentMethod, paymentScreenshot: screenshot })
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(result.error || 'Could not save the payment screenshot.');
+      currentPaymentOrder = result.order;
+    }
     async function confirmPaymentComplete() {
       if (!currentPaymentOrder) return;
       const btn = document.getElementById('pay-confirm-btn');
       btn.disabled = true;
+      const errorEl = document.getElementById('payment-error-message');
+      errorEl.style.display = 'none';
 
       try {
+        const screenshot = await readPaymentScreenshot();
         if (currentPaymentMethod === 'paymongo') {
+          await savePaymentScreenshot('Awaiting Payment', 'PayMongo Checkout', screenshot);
           const response = await fetch('/api/paymongo-checkout', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -1678,19 +1719,9 @@
           return;
         }
 
-        const response = await fetch('/api/orders', {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            id: currentPaymentOrder.id,
-            status: 'Awaiting COD / Pickup',
-            paymentMethod: 'Cash on Delivery'
-          })
-        });
-        const result = await response.json().catch(() => ({}));
-        if (!response.ok) throw new Error(result.error || 'Could not update your order.');
+        await savePaymentScreenshot('Awaiting COD / Pickup', 'Cash on Delivery', screenshot);
+        const result = { order: currentPaymentOrder };
 
-        currentPaymentOrder = result.order;
         const updatedStatus = result.order.status;
         const badge = document.getElementById('payment-status-badge');
         badge.textContent = updatedStatus;

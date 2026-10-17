@@ -11,6 +11,15 @@ const ALLOWED_STATUSES = new Set([
   'Awaiting COD / Pickup',
   'Completed'
 ]);
+const MAX_PAYMENT_SCREENSHOT_SIZE = 2 * 1024 * 1024;
+
+function isValidPaymentScreenshot(value) {
+  if (typeof value !== 'string') return false;
+  const match = /^data:(image\/(?:jpeg|png|webp|gif));base64,([A-Za-z0-9+/]+={0,2})$/.exec(value);
+  if (!match) return false;
+  const buffer = Buffer.from(match[2], 'base64');
+  return buffer.length > 0 && buffer.length <= MAX_PAYMENT_SCREENSHOT_SIZE && buffer.toString('base64') === match[2];
+}
 
 function sendError(response, status, message) {
   return response.status(status).json({ error: message });
@@ -25,7 +34,8 @@ function toOrder(row) {
     paymentMethod: row.paymentMethod,
     status: row.status,
     total: Number(row.total),
-    items: row.items
+    items: row.items,
+    paymentScreenshot: row.paymentScreenshot || ''
   };
 }
 
@@ -103,9 +113,16 @@ module.exports = async function orders(request, response) {
   }
   if (request.method === 'PATCH') {
     const requestedStatus = String(request.body?.status || '');
-    const isCustomerUpdate = requestedStatus === 'Payment Reported' || requestedStatus === 'Awaiting COD / Pickup';
+    const hasScreenshot = isValidPaymentScreenshot(request.body?.paymentScreenshot);
+    const isCustomerUpdate = requestedStatus === 'Payment Reported' || requestedStatus === 'Awaiting COD / Pickup' || requestedStatus === 'Awaiting Payment';
     if (!isCustomerUpdate && !isAdminRequest(request, adminPassword)) {
       return sendError(response, 401, 'Admin login is required.');
+    }
+    if (isCustomerUpdate && request.body?.paymentScreenshot !== undefined && !hasScreenshot) {
+      return sendError(response, 400, 'Upload a valid payment screenshot no larger than 2 MB.');
+    }
+    if (isCustomerUpdate && !hasScreenshot && requestedStatus !== 'Awaiting Payment') {
+      return sendError(response, 400, 'A payment screenshot is required before confirming this order.');
     }
   }
   if (!mongoUri) {
@@ -160,10 +177,12 @@ module.exports = async function orders(request, response) {
       const orderId = String(request.body?.id || '').trim();
       const status = String(request.body?.status || '');
       const paymentMethod = typeof request.body?.paymentMethod === 'string' ? request.body.paymentMethod.slice(0, 160) : null;
+      const hasScreenshot = isValidPaymentScreenshot(request.body?.paymentScreenshot);
       if (!orderId || !ALLOWED_STATUSES.has(status)) return sendError(response, 400, 'Invalid order update.');
 
       const update = { status };
       if (paymentMethod !== null) update.paymentMethod = paymentMethod;
+      if (hasScreenshot) update.paymentScreenshot = request.body.paymentScreenshot;
       const result = await ordersCollection.updateOne({ id: orderId }, { $set: update });
       if (!result.matchedCount) return sendError(response, 404, 'Order not found.');
       const updatedOrder = await ordersCollection.findOne({ id: orderId });
