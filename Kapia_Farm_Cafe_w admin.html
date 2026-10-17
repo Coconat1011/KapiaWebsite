@@ -1602,6 +1602,25 @@
       document.body.style.overflow = 'hidden';
     }
 
+    function downloadReceipt() {
+      if (!currentPaymentOrder) return;
+      const receipt = currentPaymentOrder;
+      const items = (receipt.items || []).map(item => {
+        const addons = item.addons?.length ? ` <small>(${item.addons.map(addon => esc(addon.name)).join(', ')})</small>` : '';
+        const lineTotal = Number(item.lineTotal || (item.unitPrice || 0) * (item.qty || 1));
+        return `<tr><td>${esc(item.name)}${addons}</td><td>${Number(item.qty) || 1}</td><td>${CURRENCY}${lineTotal.toFixed(2)}</td></tr>`;
+      }).join('');
+      const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Kapia Farm Cafe Receipt ${esc(receipt.id)}</title><style>body{font:16px Arial,sans-serif;max-width:720px;margin:40px auto;padding:0 20px;color:#3d281c}h1{margin-bottom:4px}p{color:#765b4d}table{width:100%;border-collapse:collapse;margin-top:24px}th,td{padding:10px 6px;border-bottom:1px solid #e2d0be;text-align:left}th:last-child,td:last-child{text-align:right}.total{margin-top:24px;text-align:right;font-size:22px;font-weight:700}.meta{line-height:1.7}</style></head><body><h1>Kapia Farm Cafe</h1><p>Payment receipt</p><div class="meta"><strong>Order:</strong> ${esc(receipt.id)}<br><strong>Date:</strong> ${esc(receipt.date || new Date().toLocaleString())}<br><strong>Customer:</strong> ${esc(receipt.customerName)}<br><strong>Email:</strong> ${esc(receipt.customerEmail)}<br><strong>Payment:</strong> ${esc(receipt.paymentMethod || 'InstaPay QR')}<br><strong>Status:</strong> ${esc(receipt.status || 'Awaiting Payment')}</div><table><thead><tr><th>Item</th><th>Qty</th><th>Amount</th></tr></thead><tbody>${items}</tbody></table><div class="total">Total: ${CURRENCY}${Number(receipt.total || 0).toFixed(2)}</div></body></html>`;
+      const url = URL.createObjectURL(new Blob([html], { type: 'text/html;charset=utf-8' }));
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `Kapia-Receipt-${String(receipt.id || 'order').replace(/[^a-z0-9_-]/gi, '-')}.html`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+    }
+
     function closePaymentPage() {
       document.getElementById('payment-page').style.display = 'none';
       document.body.style.overflow = '';
