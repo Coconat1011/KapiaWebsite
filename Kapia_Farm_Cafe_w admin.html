@@ -906,10 +906,10 @@
         <!-- Right Column: InstaPay QR payment -->
         <div style="background:#fff;border:2px solid #111;border-radius:16px;padding:24px;box-shadow:0 6px 20px rgba(0,0,0,0.04);">
           <h3 style="font-size:20px;font-weight:700;margin:0 0 6px;">Select Payment Method</h3>
-          <p style="color:#666;font-size:13px;line-height:1.5;margin:0 0 16px;">Choose InstaPay QR or cash payment. Upload your payment receipt before completing the order.</p>
+          <p style="color:#666;font-size:13px;line-height:1.5;margin:0 0 16px;">Choose InstaPay QR or on-the-counter payment. Upload your payment receipt before completing the order.</p>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
             <button id="pay-opt-qr" type="button" onclick="selectPaymentMethod('qr')" style="padding:10px;border:none;border-radius:10px;background:#c98c63;color:#fff;font-weight:700;cursor:pointer;">InstaPay QR</button>
-            <button id="pay-opt-cash" type="button" onclick="selectPaymentMethod('cash')" style="padding:10px;border:1px solid #cbb39d;border-radius:10px;background:#fff;color:#4b2e1f;font-weight:700;cursor:pointer;">Cash Payment</button>
+            <button id="pay-opt-cash" type="button" onclick="selectPaymentMethod('counter')" style="padding:10px;border:1px solid #cbb39d;border-radius:10px;background:#fff;color:#4b2e1f;font-weight:700;cursor:pointer;">On-the-Counter Payment</button>
           </div>
           <div id="payment-qr-section" style="background:#fafafa;border:2px solid #c98c63;border-radius:16px;padding:16px;text-align:center;">
             <img src="/assets/instapay-qr.png" alt="Kapia Farm Cafe InstaPay QR code" style="display:block;width:min(100%,360px);margin:0 auto;border-radius:10px;">
@@ -917,7 +917,7 @@
           </div>
           <div id="payment-cash-section" style="display:none;background:#fafafa;border:2px solid #c98c63;border-radius:16px;padding:20px;text-align:center;">
             <div style="font-size:38px;margin-bottom:8px;">💵</div>
-            <h4 style="font-size:18px;font-weight:700;margin:0 0 8px;">Cash Payment</h4>
+            <h4 style="font-size:18px;font-weight:700;margin:0 0 8px;">On-the-Counter Payment</h4>
             <p style="font-size:14px;color:#555;line-height:1.5;margin:0;">Pay the exact order amount in cash, keep the receipt, and upload a clear photo of that receipt below before completing the order.</p>
           </div>
 
@@ -1616,19 +1616,19 @@
     }
 
     function selectPaymentMethod(method) {
-      currentPaymentMethod = method === 'cash' ? 'cash' : 'qr';
-      const isCash = currentPaymentMethod === 'cash';
+      currentPaymentMethod = method === 'counter' ? 'counter' : 'qr';
+      const isCash = currentPaymentMethod === 'counter';
       document.getElementById('payment-qr-section').style.display = isCash ? 'none' : 'block';
       document.getElementById('payment-cash-section').style.display = isCash ? 'block' : 'none';
       document.getElementById('pay-opt-qr').style.background = isCash ? '#fff' : '#c98c63';
       document.getElementById('pay-opt-qr').style.color = isCash ? '#4b2e1f' : '#fff';
       document.getElementById('pay-opt-cash').style.background = isCash ? '#c98c63' : '#fff';
       document.getElementById('pay-opt-cash').style.color = isCash ? '#fff' : '#4b2e1f';
-      document.getElementById('payment-proof-title').textContent = isCash ? 'Cash receipt required' : 'Payment screenshot required';
+      document.getElementById('payment-proof-title').textContent = isCash ? 'Counter payment receipt required' : 'Payment screenshot required';
       document.getElementById('payment-proof-description').textContent = isCash
-        ? 'Upload a clear photo of your cash payment receipt before completing this order.'
+        ? 'Upload a clear photo of your on-the-counter payment receipt before completing this order.'
         : 'Upload a screenshot of your InstaPay payment confirmation before completing this order.';
-      document.getElementById('pay-confirm-btn').textContent = isCash ? 'I have completed the cash payment' : 'I have completed the payment';
+      document.getElementById('pay-confirm-btn').textContent = isCash ? 'I have completed the counter payment' : 'I have completed the payment';
       document.getElementById('payment-error-message').style.display = 'none';
     }
 
@@ -1690,7 +1690,7 @@
 
       try {
         const screenshot = await readPaymentScreenshot();
-        await savePaymentScreenshot('Payment Reported', currentPaymentMethod === 'cash' ? 'Cash Payment' : 'InstaPay QR', screenshot);
+        await savePaymentScreenshot('Payment Reported', currentPaymentMethod === 'counter' ? 'On-the-Counter Payment' : 'InstaPay QR', screenshot);
         const badge = document.getElementById('payment-status-badge');
         badge.textContent = 'Payment Reported';
         badge.style.background = '#eff6ff';
