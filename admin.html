@@ -25,15 +25,20 @@
     label { display: block; margin: 14px 0 6px; font-size: 14px; font-weight: 700; }
     input, select, textarea { width: 100%; min-height: 44px; padding: 10px 12px; color: var(--ink); background: #FFFAF6; border: 1px solid #CBB39D; border-radius: 6px; }
     textarea { resize: vertical; }
-    .button { display: inline-flex; min-height: 42px; align-items: center; justify-content: center; padding: 9px 14px; border: none; border-radius: 8px; background: #fffaf5; color: var(--ink); font-weight: 700; text-decoration: none; cursor: pointer; box-shadow: 0 10px 20px rgba(122, 88, 61, 0.12); }
+    .button { display: inline-flex; min-height: 42px; align-items: center; justify-content: center; padding: 9px 14px; border: none; border-radius: 8px; background: #fffaf5; color: var(--ink); font-weight: 700; text-decoration: none; cursor: pointer; box-shadow: 0 10px 20px rgba(122, 88, 61, 0.12); transition: transform .16s ease, filter .16s ease, box-shadow .16s ease; }
     .button-primary { border: none; background: #c98c63; color: #fff; box-shadow: 0 12px 24px rgba(122, 87, 61, 0.18); }
     .button-danger { border-color: #e5b5b5; color: var(--red); }
-    .button:hover { filter: brightness(.97); }
+    .button:hover { filter: brightness(.97); transform: translateY(-2px); box-shadow: 0 13px 24px rgba(122, 88, 61, 0.18); }
+    .button:active { transform: translateY(1px) scale(.97); box-shadow: 0 5px 10px rgba(122, 88, 61, 0.12); transition-duration: .06s; }
+    .button:focus-visible, .tab:focus-visible, .product-category-tab:focus-visible { outline: 3px solid #3d281c; outline-offset: 3px; }
+    .button:disabled { cursor: wait; opacity: .65; transform: none; }
     .tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 24px 0; border-bottom: 1px solid var(--line); }
-    .tab { padding: 11px 18px; border: 0; border-bottom: 3px solid transparent; background: transparent; color: var(--muted); font-weight: 700; cursor: pointer; }
+    .tab { padding: 11px 18px; border: 0; border-bottom: 3px solid transparent; background: transparent; color: var(--muted); font-weight: 700; cursor: pointer; transition: color .16s ease, transform .16s ease, border-color .16s ease; }
+    .tab:hover, .product-category-tab:hover { transform: translateY(-1px); }
+    .tab:active, .product-category-tab:active { transform: translateY(1px) scale(.97); transition-duration: .06s; }
     .tab.active { border-bottom-color: var(--orange); color: var(--ink); }
     .product-category-tabs { display: flex; gap: 10px; margin: 22px 0 16px; overflow-x: auto; }
-    .product-category-tab { flex: 1 0 max-content; min-height: 46px; padding: 10px 18px; border: 0; border-radius: 999px; background: #f8f2ec; color: var(--ink); font-weight: 700; cursor: pointer; box-shadow: 0 8px 18px rgba(122, 87, 61, 0.08); }
+    .product-category-tab { flex: 1 0 max-content; min-height: 46px; padding: 10px 18px; border: 0; border-radius: 999px; background: #f8f2ec; color: var(--ink); font-weight: 700; cursor: pointer; box-shadow: 0 8px 18px rgba(122, 87, 61, 0.08); transition: transform .16s ease, filter .16s ease, box-shadow .16s ease; }
     .product-category-tab.active { background: #c98c63; color: #fff; box-shadow: 0 12px 24px rgba(122, 87, 61, 0.18); }
     .section-heading { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin: 0 0 16px; }
     .section-heading h1 { margin: 0; font-size: 21px; }
