@@ -118,7 +118,7 @@ function renderOrderCard(order, index, isHistory = false) {
         <p><strong>Total</strong><span class="product-price">${formatPrice(order.total)}</span></p>
       </div>
       <div class="ordered-items"><strong>Ordered items</strong><ul>${items}</ul></div>
-      ${order.paymentScreenshot ? `<div class="payment-proof"><strong>Payment screenshot</strong><button type="button" class="payment-proof-trigger" data-payment-screenshot="${escapeHTML(order.paymentScreenshot)}" aria-label="Zoom payment screenshot"><img src="${escapeHTML(order.paymentScreenshot)}" alt="Customer payment screenshot" loading="lazy"></button></div>` : '<p class="muted">No payment screenshot uploaded.</p>'}
+      ${order.paymentScreenshot ? `<div class="payment-proof"><strong>Payment screenshot</strong><button type="button" class="payment-proof-trigger" aria-label="Zoom payment screenshot"><img src="${escapeHTML(order.paymentScreenshot)}" alt="Customer payment screenshot" loading="lazy"></button></div>` : '<p class="muted">No payment screenshot uploaded.</p>'}
       <div class="order-actions">${actions}</div>
     </article>`;
 }
@@ -509,7 +509,8 @@ function closePaymentScreenshot() {
 document.querySelectorAll('#admin-orders-list, #admin-history-list').forEach(list => {
   list.addEventListener('click', event => {
     const button = event.target.closest('.payment-proof-trigger');
-    if (button) openPaymentScreenshot(button.dataset.paymentScreenshot);
+    const image = button?.querySelector('img');
+    if (image) openPaymentScreenshot(image.currentSrc || image.src);
   });
 });
 document.getElementById('payment-screenshot-close').addEventListener('click', closePaymentScreenshot);
