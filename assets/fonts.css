@@ -1,13 +1,13 @@
 @font-face {
-  font-family: 'Anak Orang';
-  src: url('./fonts/AnakOrang-Regular.ttf') format('truetype');
+  font-family: 'Fledgling';
+  src: url('./fledgling-sb.otf') format('opentype');
   font-style: normal;
-  font-weight: 400;
+  font-weight: 100 900;
   font-display: swap;
 }
 
 :root {
-  --font-primary: 'Anak Orang', cursive;
+  --font-primary: 'Fledgling', sans-serif;
   --font-secondary: var(--font-primary);
 }
 
