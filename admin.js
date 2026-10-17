@@ -118,7 +118,7 @@ function renderOrderCard(order, index, isHistory = false) {
         <p><strong>Total</strong><span class="product-price">${formatPrice(order.total)}</span></p>
       </div>
       <div class="ordered-items"><strong>Ordered items</strong><ul>${items}</ul></div>
-      ${order.paymentScreenshot ? `<div class="payment-proof"><strong>Payment screenshot</strong><a href="${escapeHTML(order.paymentScreenshot)}" target="_blank" rel="noopener"><img src="${escapeHTML(order.paymentScreenshot)}" alt="Customer payment screenshot" loading="lazy"></a></div>` : '<p class="muted">No payment screenshot uploaded.</p>'}
+      ${order.paymentScreenshot ? `<div class="payment-proof"><strong>Payment screenshot</strong><button type="button" class="payment-proof-trigger" data-payment-screenshot="${escapeHTML(order.paymentScreenshot)}" aria-label="Zoom payment screenshot"><img src="${escapeHTML(order.paymentScreenshot)}" alt="Customer payment screenshot" loading="lazy"></button></div>` : '<p class="muted">No payment screenshot uploaded.</p>'}
       <div class="order-actions">${actions}</div>
     </article>`;
 }
@@ -491,6 +491,33 @@ document.getElementById('admin-history-list').addEventListener('click', event =>
   const card = button?.closest('[data-order-id]');
   if (!button || !card) return;
   deleteHistory(card.dataset.orderId);
+});
+function openPaymentScreenshot(imageUrl) {
+  const modal = document.getElementById('payment-screenshot-modal');
+  const image = document.getElementById('payment-screenshot-preview');
+  image.src = imageUrl;
+  modal.hidden = false;
+}
+
+function closePaymentScreenshot() {
+  const modal = document.getElementById('payment-screenshot-modal');
+  const image = document.getElementById('payment-screenshot-preview');
+  modal.hidden = true;
+  image.removeAttribute('src');
+}
+
+document.querySelectorAll('#admin-orders-list, #admin-history-list').forEach(list => {
+  list.addEventListener('click', event => {
+    const button = event.target.closest('.payment-proof-trigger');
+    if (button) openPaymentScreenshot(button.dataset.paymentScreenshot);
+  });
+});
+document.getElementById('payment-screenshot-close').addEventListener('click', closePaymentScreenshot);
+document.getElementById('payment-screenshot-modal').addEventListener('click', event => {
+  if (event.target === event.currentTarget) closePaymentScreenshot();
+});
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && !document.getElementById('payment-screenshot-modal').hidden) closePaymentScreenshot();
 });
 document.getElementById('product-image-url-input').addEventListener('input', event => {
   editingImage = event.target.value.trim();
