@@ -2,7 +2,7 @@ const crypto = require('node:crypto');
 const { getOrdersCollection, getProductsCollection, getTransactionsCollection } = require('../lib/mongodb');
 const { getAdminPassword, isAdminRequest } = require('../lib/admin-auth');
 const { listProducts } = require('../lib/catalog');
-const { archiveTransaction } = require('../lib/transactions');
+const { archiveTransaction, getTransactionAmounts } = require('../lib/transactions');
 
 const ALLOWED_STATUSES = new Set([
   'Awaiting Payment',
@@ -40,8 +40,11 @@ function toOrder(row) {
 }
 
 function toTransaction(row) {
+  const amounts = getTransactionAmounts(row);
   return {
-    ...toOrder(row),
+    ...toOrder({ ...row, total: amounts.total }),
+    subtotal: amounts.subtotal,
+    serviceCharge: amounts.serviceCharge,
     confirmedAt: row.confirmedAt instanceof Date ? row.confirmedAt.toISOString() : row.confirmedAt
   };
 }

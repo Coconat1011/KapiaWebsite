@@ -105,6 +105,11 @@ function renderOrderCard(order, index, isHistory = false) {
     ? '<button type="button" class="button button-danger" data-action="delete-history">Delete history</button>'
     : `<button type="button" class="button button-primary" data-action="${isPaid ? 'mark-unpaid' : 'mark-paid'}">${isPaid ? 'Mark unpaid' : 'Confirm payment'}</button>
           <button type="button" class="button button-danger" data-action="delete-order">Delete order</button>`;
+  const totalDetails = isHistory
+    ? `<p><strong>Subtotal</strong><span class="product-price">${formatPrice(order.subtotal)}</span></p>
+        <p><strong>Service charge (5%)</strong><span class="product-price">${formatPrice(order.serviceCharge)}</span></p>
+        <p><strong>Total</strong><span class="product-price">${formatPrice(order.total)}</span></p>`
+    : `<p><strong>Total</strong><span class="product-price">${formatPrice(order.total)}</span></p>`;
   return `
     <article class="order-card" data-order-id="${escapeHTML(order.id || index)}">
       <header class="order-heading">
@@ -115,7 +120,7 @@ function renderOrderCard(order, index, isHistory = false) {
         <p><strong>Customer</strong>${escapeHTML(order.customerName || 'Guest')}</p>
         <p><strong>Email</strong>${escapeHTML(order.customerEmail || '—')}</p>
         <p><strong>Payment</strong>${escapeHTML(order.paymentMethod || 'Checkout')}</p>
-        <p><strong>Total</strong><span class="product-price">${formatPrice(order.total)}</span></p>
+        ${totalDetails}
       </div>
       <div class="ordered-items"><strong>Ordered items</strong><ul>${items}</ul></div>
       ${order.paymentScreenshot ? `<div class="payment-proof"><strong>Payment screenshot</strong><button type="button" class="payment-proof-trigger" aria-label="Zoom payment screenshot"><img src="${escapeHTML(order.paymentScreenshot)}" alt="Customer payment screenshot" loading="lazy"></button></div>` : '<p class="muted">No payment screenshot uploaded.</p>'}

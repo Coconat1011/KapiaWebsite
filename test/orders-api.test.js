@@ -196,6 +196,9 @@ test('admin confirmations are saved as separate, persistent transaction history'
   assert.equal(response.statusCode, 200);
   assert.equal(response.body.length, 1);
   assert.equal(response.body[0].confirmedAt, firstConfirmationAt.toISOString());
+  assert.equal(response.body[0].subtotal, 50);
+  assert.equal(response.body[0].serviceCharge, 2.5);
+  assert.equal(response.body[0].total, 52.5);
 
   response = await request('DELETE', { history: true, id: orderId }, { authorized: true });
   assert.equal(response.statusCode, 200);
