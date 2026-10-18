@@ -722,6 +722,14 @@
           <span data-template-id="subtotal-label" class="canva-text font-semibold text-gray-700" style="font-size:15px;">Subtotal</span>
           <span id="order-subtotal" class="font-bold text-xl" style="color:var(--ink);">₱0.00</span>
         </div>
+        <div class="flex justify-between items-center mb-2" style="font-size:14px;">
+          <span class="canva-text text-gray-700">Service charge (5%)</span>
+          <span id="order-service-charge" class="font-semibold" style="color:var(--ink);">₱0.00</span>
+        </div>
+        <div class="flex justify-between items-center mb-4" style="border-top:1px solid #e5ddd6;padding-top:10px;">
+          <span class="canva-text font-semibold text-gray-700">Total</span>
+          <span id="order-total" class="font-bold text-xl" style="color:var(--ink);">₱0.00</span>
+        </div>
         <div id="submit-error" class="hidden bg-red-50 border border-red-200 text-red-700 text-sm px-3 py-2 rounded-lg mb-3"></div>
         <div id="submit-success" class="hidden bg-green-50 border border-green-200 text-green-700 text-sm px-3 py-2 rounded-lg mb-3 flex items-center gap-2">
           <i data-lucide="check-circle" style="width:16px;height:16px;"></i><span>Order submitted successfully! ✓</span>
@@ -960,6 +968,7 @@
   <script src="/_sdk/ef0304cb8c7ed696.editing_sdk.js" integrity="sha512-kmL9L5Yuj57MQaequKbMA3aGpT/5lBUp10iGA3e3qnmMLs2ZZQ0poCcIfdd5rTgrhEvNPe4HK0ohePW7ZpgAFg=="></script>
   <script>
     const CURRENCY = '₱';
+    const SERVICE_CHARGE_RATE = 0.05;
     const DEFAULT_PLACEHOLDER_IMAGE = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="400" height="256" viewBox="0 0 400 256"><rect width="100%" height="100%" fill="#eee"/><text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" fill="#888" font-family="sans-serif" font-size="16">Ragsak Farm Cafe</text></svg>');
 
     const menuData = {
@@ -1386,14 +1395,23 @@
         const addonsPrice = item.addons.reduce((a, ad) => a + (Number(ad.price) || 0), 0);
         return s + (Number(item.basePrice) + addonsPrice) * item.qty;
       }, 0);
+      const serviceCharge = Math.round(subtotal * SERVICE_CHARGE_RATE * 100) / 100;
+
+      const total = subtotal + serviceCharge;
+
       const totalCount = order.reduce((s, item) => s + item.qty, 0);
+
       document.getElementById('order-subtotal').textContent = `${CURRENCY}${subtotal.toFixed(2)}`;
+
+      document.getElementById('order-service-charge').textContent = `${CURRENCY}${serviceCharge.toFixed(2)}`;
+
+      document.getElementById('order-total').textContent = `${CURRENCY}${total.toFixed(2)}`;
       document.getElementById('order-count').textContent = totalCount;
       document.getElementById('landing-order-count').textContent = totalCount;
       document.getElementById('products-order-count').textContent = totalCount;
-      document.getElementById('landing-order-total').textContent = `${CURRENCY}${subtotal.toFixed(2)}`;
-      document.getElementById('products-order-total').textContent = `${CURRENCY}${subtotal.toFixed(2)}`;
-      const cartLabel = `Open your cart, ${totalCount} items, total ${CURRENCY}${subtotal.toFixed(2)}`;
+      document.getElementById('landing-order-total').textContent = `${CURRENCY}${total.toFixed(2)}`;
+      document.getElementById('products-order-total').textContent = `${CURRENCY}${total.toFixed(2)}`;
+      const cartLabel = `Open your cart, ${totalCount} items, total ${CURRENCY}${total.toFixed(2)}`;
       document.getElementById('landing-cart-button').setAttribute('aria-label', cartLabel);
       document.getElementById('products-cart-button').setAttribute('aria-label', cartLabel);
     }

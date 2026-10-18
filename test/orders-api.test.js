@@ -149,13 +149,13 @@ test('order totals and item details come from the server catalog', async () => {
   assert.equal(response.statusCode, 201);
   assert.equal(response.body.order.items[0].name, 'Coffee');
   assert.equal(response.body.order.items[0].basePrice, 25);
-  assert.equal(response.body.order.total, 50);
+  assert.equal(response.body.order.total, 52.5);
   assert.equal(response.body.order.paymentMethod, 'InstaPay QR');
 
   order.items[0].addons = [{ name: 'Extra shot', price: 0.01 }];
   const addonOrder = await request('POST', order);
   assert.equal(addonOrder.statusCode, 201);
-  assert.equal(addonOrder.body.order.total, 70);
+  assert.equal(addonOrder.body.order.total, 73.5);
   assert.equal(addonOrder.body.order.items[0].addons[0].price, 10);
 
   const invalidProduct = await request('POST', {

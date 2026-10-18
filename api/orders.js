@@ -151,7 +151,8 @@ module.exports = async function orders(request, response) {
       } catch (error) {
         return sendError(response, 400, error.message);
       }
-      const totalCents = items.reduce((sum, item) => sum + Math.round(item.lineTotal * 100), 0);
+      const subtotalCents = items.reduce((sum, item) => sum + Math.round(item.lineTotal * 100), 0);
+      const amounts = getTransactionAmounts({ total: subtotalCents / 100 });
       const order = {
         id: `KAP-${Date.now()}-${crypto.randomBytes(3).toString('hex').toUpperCase()}`,
         createdAt: new Date(),
@@ -159,7 +160,9 @@ module.exports = async function orders(request, response) {
         customerEmail,
         paymentMethod: 'InstaPay QR',
         status: 'Awaiting Payment',
-        total: totalCents / 100,
+        subtotal: amounts.subtotal,
+        serviceCharge: amounts.serviceCharge,
+        total: amounts.total,
         items
       };
       await ordersCollection.insertOne(order);
