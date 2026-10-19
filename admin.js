@@ -1,5 +1,5 @@
 const CURRENCY = '\u20b1';
-const PLACEHOLDER_IMAGE = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="400" height="256" viewBox="0 0 400 256"><rect width="100%" height="100%" fill="#eee"/><text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" fill="#888" font-family="sans-serif" font-size="16">Ragsak Farm Cafe</text></svg>');
+const PLACEHOLDER_IMAGE = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="400" height="256" viewBox="0 0 400 256"><rect width="100%" height="100%" fill="#eee"/><text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" fill="#888" font-family="sans-serif" font-size="16">Ragsak Farm Village</text></svg>');
 const LEGACY_CATEGORY_ADDONS = [
   { id: 'ad1', name: 'Extra Shot', price: 25 },
   { id: 'ad2', name: 'Oat Milk', price: 30 },
